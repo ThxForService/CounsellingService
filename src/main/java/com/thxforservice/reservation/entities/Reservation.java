@@ -1,6 +1,9 @@
 package com.thxforservice.reservation.entities;
 
 import com.thxforservice.global.entities.BaseEntity;
+import com.thxforservice.reservation.constants.CCase;
+import com.thxforservice.reservation.constants.CReason;
+import com.thxforservice.reservation.constants.Status;
 import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -31,11 +34,11 @@ public class Reservation extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ReasonType cReason; //상담경위
+    private CReason cReason; //상담경위
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CaseType cCase;  //상담유형
+    private CCase cCase;  //상담유형
 
     @Column(length = 65)
     private String cCaseDetail; //기타상담유형
