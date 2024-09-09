@@ -1,8 +1,9 @@
 package com.thxforservice.reservation.constants;
 
 public enum Status {
-    APPLY("예약"),
-    CANCEL("취소");
+    APPLY("예약접수"),
+    CONFIRM("예약확인"),
+    CANCEL("예약취소");
 
     private final String title;
 
@@ -13,5 +14,4 @@ public enum Status {
     public String getTitle() {
         return title;
     }
-
-    }
+}
