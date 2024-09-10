@@ -1,6 +1,6 @@
-package com.thxforservice.reservation.validators;
+package com.thxforservice.counselling.validators;
 
-import com.thxforservice.reservation.entities.Reservation;
+import com.thxforservice.counselling.entities.Counselling;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -8,12 +8,12 @@ import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor
-public class ReservationValidator implements Validator {
+public class CounsellingValidator implements Validator {
 
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.isAssignableFrom(Reservation.class);
+        return clazz.isAssignableFrom(Counselling.class);
     }
 
     @Override

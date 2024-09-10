@@ -1,4 +1,4 @@
-package com.thxforservice.reservation.constants;
+package com.thxforservice.counselling.constants;
 
 public enum Status {
     APPLY("예약접수"),

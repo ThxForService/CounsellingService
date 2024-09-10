@@ -1,9 +1,9 @@
-package com.thxforservice.reservation.entities;
+package com.thxforservice.counselling.entities;
 
 import com.thxforservice.global.entities.BaseEntity;
-import com.thxforservice.reservation.constants.CCase;
-import com.thxforservice.reservation.constants.CReason;
-import com.thxforservice.reservation.constants.Status;
+import com.thxforservice.counselling.constants.CCase;
+import com.thxforservice.counselling.constants.CReason;
+import com.thxforservice.counselling.constants.Status;
 import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -13,25 +13,26 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Reservation extends BaseEntity {
+public class Counselling extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //GenerationType.IDENTITY-> 시퀀스 번호가 1부터 들어갈 수 있도록 함 but 보안에 취약하다는 문제가 있음
-    // 소규모 프로젝트이기 때문에 일단 보안보다는 보여지는 것이 중요하다고 판단
+    @GeneratedValue
     private Long cSeq;
+
+    @Column(length = 45, nullable = false)
+    private String gid; // 회기
 
     @Column(nullable = false)
     private LocalDate rDate;
 
     @Column(nullable = false)
-    private LocalDateTime rTime;
+    private LocalTime rTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -41,17 +42,17 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false)
     private CCase cCase;  //상담유형
 
-    @Column(length = 65)
-    private String cCaseDetail; //기타상담유형
+    @Column(length = 65, nullable = true)
+    private String cCaseDetail; // 기타 선택시 값 입력
 
     @Column(nullable = false)
-    private String memberID;
+    private String memberID; // 회원 구분 번호
 
     @Column(nullable = false, length = 65)
-    private String studentNo;
+    private String studentNo; // 학번
 
     @Column(nullable = false, length = 65)
-    private String empNo;
+    private String empNo; // 사번
 
     @Column(nullable = false, length = 65)
     private String mobile;
@@ -66,5 +67,8 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false, length = 65)
     @ColumnDefault("1") // 기본값 1 = true = 약관동의
     private Long agree;
+
+    @Lob
+    private String content; // 상담 내용
 }
 
