@@ -1,10 +1,16 @@
 package com.thxforservice.counselling.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupProgram {
 
     @Id
@@ -13,7 +19,7 @@ public class GroupProgram {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PGM_SEQ")
-    private GroupCounselling program;
+    private GroupCounseling program;
 
     private Boolean attend; // 참석 여부
 
@@ -23,6 +29,5 @@ public class GroupProgram {
     private String grade; // 학년
     private String department; // 학과
     /* 새로운 요청이 아니라 로그인 정보를 가지고 출력 E*/
-
 
 }

@@ -15,7 +15,7 @@ public class GroupSchedule extends BaseMemberEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PGM_SEQ")
-    private GroupCounselling program; // 프로그램번호
+    private GroupCounseling program; // 프로그램번호
 
     private LocalDate date; // 진행일자
 

@@ -1,6 +1,6 @@
 package com.thxforservice.counselling.validators;
 
-import com.thxforservice.counselling.entities.Counselling;
+import com.thxforservice.counselling.entities.Counseling;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -8,12 +8,12 @@ import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor
-public class CounsellingValidator implements Validator {
+public class CounselingValidator implements Validator {
 
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.isAssignableFrom(Counselling.class);
+        return clazz.isAssignableFrom(Counseling.class);
     }
 
     @Override

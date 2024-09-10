@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-public class GroupCounselling extends BaseMemberEntity {
+public class GroupCounseling extends BaseMemberEntity {
     @Id @GeneratedValue
     private Long pgmSeq;
 

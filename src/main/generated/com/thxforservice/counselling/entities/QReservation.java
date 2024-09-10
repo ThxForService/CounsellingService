@@ -13,7 +13,7 @@ import com.querydsl.core.types.Path;
  * QReservation is a Querydsl query type for Reservation
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QReservation extends EntityPathBase<Counselling> {
+public class QReservation extends EntityPathBase<Counseling> {
 
     private static final long serialVersionUID = 1639768780L;
 
@@ -57,15 +57,15 @@ public class QReservation extends EntityPathBase<Counselling> {
     public final StringPath studentNo = createString("studentNo");
 
     public QReservation(String variable) {
-        super(Counselling.class, forVariable(variable));
+        super(Counseling.class, forVariable(variable));
     }
 
-    public QReservation(Path<? extends Counselling> path) {
+    public QReservation(Path<? extends Counseling> path) {
         super(path.getType(), path.getMetadata());
     }
 
     public QReservation(PathMetadata metadata) {
-        super(Counselling.class, metadata);
+        super(Counseling.class, metadata);
     }
 
 }

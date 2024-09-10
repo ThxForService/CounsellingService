@@ -19,7 +19,7 @@ import java.time.LocalTime;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Counselling extends BaseEntity {
+public class Counseling extends BaseEntity {
 
     @Id
     @GeneratedValue

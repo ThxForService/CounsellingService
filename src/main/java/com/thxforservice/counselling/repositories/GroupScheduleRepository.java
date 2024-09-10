@@ -1,8 +1,7 @@
-package com.thxforservice.reservation.repositories;
+package com.thxforservice.counselling.repositories;
 
-import com.thxforservice.reservation.entities.GroupProgram;
-import com.thxforservice.reservation.entities.GroupSchedule;
-import com.thxforservice.reservation.entities.Reservation;
+import com.thxforservice.counselling.entities.GroupProgram;
+import com.thxforservice.counselling.entities.GroupSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
