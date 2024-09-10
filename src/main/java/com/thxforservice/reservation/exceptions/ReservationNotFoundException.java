@@ -1,4 +1,11 @@
 package com.thxforservice.reservation.exceptions;
 
-public class ReservationNotFoundException {
+import com.thxforservice.global.exceptions.CommonException;
+
+public class ReservationNotFoundException extends CommonException {
+
+    public ReservationNotFoundException() {
+        super("NotFound.reservation");
+        setErrorCode(true);
+    }
 }

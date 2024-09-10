@@ -4,5 +4,5 @@ public enum CCase {
     ACADEMIC,
     PSYCHOLOGICAL,
     EMPLOYMENT,
-    OTHER
+    OTHER // 기타
 }

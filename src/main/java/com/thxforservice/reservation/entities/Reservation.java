@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,6 +64,7 @@ public class Reservation extends BaseEntity {
     private Status status; //예약상태
 
     @Column(nullable = false, length = 65)
-    private String agree;
+    @ColumnDefault("1") // 기본값 1 = true = 약관동의
+    private Long agree;
 }
 
