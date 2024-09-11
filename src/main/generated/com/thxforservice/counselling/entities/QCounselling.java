@@ -58,7 +58,7 @@ public class QCounselling extends EntityPathBase<Counselling> {
 
     public final EnumPath<com.thxforservice.counselling.constants.Status> status = createEnum("status", com.thxforservice.counselling.constants.Status.class);
 
-    public final StringPath studentNo = createString("studentNo");
+    public final NumberPath<Long> studentNo = createNumber("studentNo", Long.class);
 
     public QCounselling(String variable) {
         super(Counselling.class, forVariable(variable));

@@ -20,8 +20,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -31,20 +38,22 @@ public class CounsellingInfoService {
     private final CounsellingRepository counsellingRepository;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
+    private final CounsellingInfoService counsellingInfoService;
+
 
     /**
      * 상담 예약 상세 정보 조회
      *
-     * @param seq 예약 고유 번호
+     * @param Cseq 예약 고유 번호
      * @return 상담 예약 정보
      */
-    public Counselling get(Long seq) {
-        Counselling counselling = counsellingRepository.findById(seq).orElseThrow(CounsellingNotFoundException::new);
+    public Counselling get(Long Cseq) {
+        Counselling counselling = counsellingRepository.findById(Cseq).orElseThrow(CounsellingNotFoundException::new);
         return counselling;
     }
 
-    public Counselling get(Long seq, boolean isMine) {
-        Counselling counselling = get(seq);
+    public Counselling get(Long Cseq, boolean isMine) {
+        Counselling counselling = get(Cseq);
 
         Member member = memberUtil.getMember();
         if (isMine && (!memberUtil.isLogin() || !member.getSeq().equals(counselling.getMemberID()))) {
@@ -91,25 +100,5 @@ public class CounsellingInfoService {
         Pagination pagination = new Pagination(page, (int) total, 10, limit, request);
 
         return new ListData<>(items, pagination);
-    }
-
-    // 중복 예약 확인 처리
-    public boolean checkForDuplicateReservation(LocalDate rDate, String studentNo) {
-        // 로그인 확인 및 날짜 유효성 검사
-        if (!memberUtil.isLogin() || rDate == null) {
-            return false;
-        }
-
-        QCounselling counselling = QCounselling.counselling;
-
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(counselling.studentNo.eq(studentNo))
-                .and(counselling.rDate.eq(rDate))
-                .and(counselling.status.eq(Status.APPLY));
-
-        List<Counselling> items = (List<Counselling>) counsellingRepository.findAll(builder);
-
-        // 중복 예약 여부 확인
-        return items != null && !items.isEmpty();
     }
 }

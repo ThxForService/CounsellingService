@@ -12,9 +12,9 @@ public class CounsellingStatusService {
     private final CounsellingRepository counsellingRepository;
     private final CounsellingInfoService counsellingInfoService;
 
-    public void change(Long seq, Status status) {
+    public void change(Long Cseq, Status status) {
         // Counselling 엔티티 가져오기
-        Counselling counselling = counsellingInfoService.get(seq);
+        Counselling counselling = counsellingInfoService.get(Cseq);
         Status prevStatus = counselling.getStatus();
 //        System.out.println("Previous Status: " + prevStatus);
 
