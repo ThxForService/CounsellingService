@@ -21,11 +21,7 @@ public class QCounseling extends EntityPathBase<Counseling> {
 
     public final com.thxforservice.global.entities.QBaseEntity _super = new com.thxforservice.global.entities.QBaseEntity(this);
 
-    public final NumberPath<Long> agree = createNumber("agree", Long.class);
-
     public final EnumPath<com.thxforservice.counseling.constants.CCase> cCase = createEnum("cCase", com.thxforservice.counseling.constants.CCase.class);
-
-    public final StringPath cCaseDetail = createString("cCaseDetail");
 
     public final StringPath content = createString("content");
 
@@ -52,11 +48,15 @@ public class QCounseling extends EntityPathBase<Counseling> {
 
     public final DatePath<java.time.LocalDate> rDate = createDate("rDate", java.time.LocalDate.class);
 
+    public final DateTimePath<java.time.LocalDateTime> rDateTime = createDateTime("rDateTime", java.time.LocalDateTime.class);
+
     public final TimePath<java.time.LocalTime> rTime = createTime("rTime", java.time.LocalTime.class);
 
     public final EnumPath<com.thxforservice.counseling.constants.Status> status = createEnum("status", com.thxforservice.counseling.constants.Status.class);
 
-    public final StringPath studentNo = createString("studentNo");
+    public final NumberPath<Long> studentNo = createNumber("studentNo", Long.class);
+
+    public final StringPath username = createString("username");
 
     public QCounseling(String variable) {
         super(Counseling.class, forVariable(variable));
