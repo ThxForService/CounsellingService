@@ -30,7 +30,7 @@ public class QGroupProgram extends EntityPathBase<GroupProgram> {
 
     public final NumberPath<Long> pgmRegSeq = createNumber("pgmRegSeq", Long.class);
 
-    public final QGroupCounselling program;
+    public final QGroupCounseling program;
 
     public final NumberPath<Long> studentNo = createNumber("studentNo", Long.class);
 
@@ -54,7 +54,7 @@ public class QGroupProgram extends EntityPathBase<GroupProgram> {
 
     public QGroupProgram(Class<? extends GroupProgram> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.program = inits.isInitialized("program") ? new QGroupCounselling(forProperty("program")) : null;
+        this.program = inits.isInitialized("program") ? new QGroupCounseling(forProperty("program")) : null;
     }
 
 }

@@ -21,7 +21,7 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Counselling extends BaseEntity {
+public class Counseling extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -47,9 +47,6 @@ public class Counselling extends BaseEntity {
     @Column(length = 65, nullable = true)
     private String cCaseDetail; // 기타 선택시 값 입력
 
-    @Column(nullable = false)
-    private String memberID; // 회원 구분 번호
-
     @Column(nullable = false, length = 65)
     private Long studentNo; // 학번
 
@@ -63,14 +60,13 @@ public class Counselling extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Status status; //예약상태
 
     @Column(nullable = false, length = 65)
-    @ColumnDefault("true") // 기본값 = true = 약관동의
-    private boolean agree;
+    @ColumnDefault("1") // 기본값 1 = true = 약관동의
+    private Long agree;
 
     @Lob
     private String content; // 상담 내용
 }
-

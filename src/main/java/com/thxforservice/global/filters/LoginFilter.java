@@ -77,7 +77,8 @@ public class LoginFilter extends GenericFilterBean {
                     List<Authorities> tmp = member.getAuthorities();
                     if (tmp == null || tmp.isEmpty()) {
                         Authorities authorities = new Authorities();
-                        authorities.setAuthority(Authority.USER);
+                        authorities.setAuthority(Authority.STUDENT);
+                        authorities.setAuthority(Authority.COUNSELOR);
                         tmp = List.of(authorities);
                     }
 

@@ -2,11 +2,12 @@ package com.thxforservice.counselling.services;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.thxforservice.counselling.constants.CCase;
 import com.thxforservice.counselling.constants.Status;
-import com.thxforservice.counselling.controllers.RequestCounselling;
-import com.thxforservice.counselling.entities.Counselling;
-import com.thxforservice.counselling.entities.QCounselling;
-import com.thxforservice.counselling.exceptions.CounsellingNotFoundException;
+import com.thxforservice.counselling.controllers.RequestCounselingApply;
+import com.thxforservice.counselling.entities.Counseling;
+import com.thxforservice.counselling.entities.QCounseling;
+import com.thxforservice.counselling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counselling.repositories.CounsellingRepository;
 import com.thxforservice.member.MemberUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,11 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Period;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -36,17 +33,17 @@ public class CounsellingApplyService {
 
 
     @Transactional
-    public Counselling apply(RequestCounselling form) {
+    public Counseling apply(RequestCounselingApply form) {
         // studentNo로 기존 상담이 있는지 확인
         Long studentNo = form.getStudentNo();
-        Counselling findCounselling = counsellingRepository.findById(studentNo).orElseThrow(CounsellingNotFoundException::new);
+        Counseling findCounseling = counsellingRepository.findById(studentNo).orElseThrow(CounselingNotFoundException::new);
 
         // 이미 존재하는 GID인지 확인 (studentNo 기준)
         String gid;
 
-        if (findCounselling != null) {
+        if (findCounseling != null) {
         // 상담이력이 있으면 기존 Gid 사용
-        gid = findCounselling.getGid();
+        gid = findCounseling.getGid();
         } else {
         // 없을때 Gid 생성
         gid = generateGID(studentNo);
@@ -59,31 +56,32 @@ public class CounsellingApplyService {
         }
 
         // 새로운 상담 예약 생성
-        Counselling counselling = Counselling.builder()
+        Counseling counseling = Counseling.builder()
                 .gid(gid)  // GID 설정
                 .email(form.getEmail())
                 .mobile(mobile)
                 .studentNo(studentNo) // 학번 설정
                 .rDate(form.getRDate()) // 예약일
                 .rTime(form.getRTime()) // 예약 시간
-                .cCase(form.getCCase()) // 상담 유형
+                .cCase(CCase.valueOf(form.getCCase())) // 상담 유형
 //                .cCaseDetail(form.getCCaseDetail()) // 기타 상담 유형 (선택사항)
-                .agree(true) // 약관 동의 상태
+                .agree(form.getAgree()) // 약관 동의 상태
                 .build();
 
         // DB에 저장 및 플러시
-        counsellingRepository.saveAndFlush(counselling);
+        counsellingRepository.saveAndFlush(counseling);
 
         // 상태 변경
-        counsellingStatusService.change(counselling.getCSeq(), Status.APPLY);
+        counsellingStatusService.change(counseling.getCSeq(), Status.APPLY);
 
-        return counselling;
+        return counseling;
     }
 
     // GID 생성 (studentNo를 기반으로 생성)
     private String generateGID(Long studentNo) {
         return UUID.randomUUID().toString();
     }
+
     // 중복 예약 확인 처리
     public boolean check(LocalDate rDate, Long studentNo) {
         // 로그인 확인 및 날짜 유효성 검사
@@ -91,14 +89,14 @@ public class CounsellingApplyService {
             return false;
         }
 
-        QCounselling counselling = QCounselling.counselling;
+        QCounseling counselling = QCounseling.counseling;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(counselling.studentNo.eq(studentNo))
                 .and(counselling.rDate.eq(rDate))
                 .and(counselling.status.eq(Status.APPLY));
 
-        List<Counselling> items = (List<Counselling>) counsellingRepository.findAll(builder);
+        List<Counseling> items = (List<Counseling>) counsellingRepository.findAll(builder);
 
         // 중복 예약 여부 확인
         return items != null && !items.isEmpty();
