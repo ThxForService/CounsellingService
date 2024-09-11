@@ -30,6 +30,4 @@ public class GroupCounselling extends BaseMemberEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     private ProgramStatus status; // 접수상태
-
-
 }

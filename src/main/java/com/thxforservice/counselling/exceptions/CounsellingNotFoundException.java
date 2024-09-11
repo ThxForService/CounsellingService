@@ -5,7 +5,8 @@ import com.thxforservice.global.exceptions.CommonException;
 public class CounsellingNotFoundException extends CommonException {
 
     public CounsellingNotFoundException() {
-        super("NotFound.reservation");
+        super("NotFound.counselling");
         setErrorCode(true);
+
     }
 }

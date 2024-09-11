@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -19,6 +20,7 @@ import java.time.LocalTime;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Counselling extends BaseEntity {
 
     @Id
@@ -49,7 +51,7 @@ public class Counselling extends BaseEntity {
     private String memberID; // 회원 구분 번호
 
     @Column(nullable = false, length = 65)
-    private String studentNo; // 학번
+    private Long studentNo; // 학번
 
     @Column(nullable = false, length = 65)
     private String empNo; // 사번
@@ -61,12 +63,12 @@ public class Counselling extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Status status; //예약상태
 
     @Column(nullable = false, length = 65)
-    @ColumnDefault("1") // 기본값 1 = true = 약관동의
-    private Long agree;
+    @ColumnDefault("true") // 기본값 = true = 약관동의
+    private boolean agree;
 
     @Lob
     private String content; // 상담 내용
