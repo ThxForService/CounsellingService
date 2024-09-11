@@ -1,15 +1,15 @@
 package com.thxforservice.counselling.controllers;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Data
-public class RequestGroupCounseling {
+public class RequestGroupCounselingxxxxxx {
     private Long programId; // 그룹 프로그램 ID -> 예약하려는 집단 상담 프로그램을 식별하기 위해 필요
 
     private Long studentNo; // 학번
@@ -23,7 +23,7 @@ public class RequestGroupCounseling {
     private Boolean attend; // 참석 여부
 
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate reservationDate;
 
     @Min(value = 5, message = "5명이상 신청 시에만 상담이 진행됩니다.")

@@ -1,6 +1,6 @@
 package com.thxforservice.counselling.services;
 
-import com.thxforservice.counselling.controllers.RequestGroupCounseling;
+import com.thxforservice.counselling.controllers.RequestGroupCounselingxxxxxx;
 import com.thxforservice.counselling.entities.GroupCounseling;
 import com.thxforservice.counselling.entities.GroupProgram;
 import com.thxforservice.counselling.exceptions.CounselingNotFoundException;
@@ -13,13 +13,13 @@ import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
-public class GroupCounselingApplyService {
+public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조회 + 신청 상세정보 조회
 
     private final GroupCounselingRepository counselingRepository;
     private final GroupProgramRepository programRepository;
     private final MemberUtil memberUtil;
 
-    public GroupProgram apply(RequestGroupCounseling form) {
+    public GroupProgram apply(RequestGroupCounselingxxxxxx form) {
 
         Long programId = form.getProgramId();
 

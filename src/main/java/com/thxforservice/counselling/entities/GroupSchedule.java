@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,4 +24,7 @@ public class GroupSchedule extends BaseMemberEntity {
     private String memo; // 상담일지
 
     private Double rate; // 참여율
+
+    @Transient
+    private List<GroupProgram> students;
 }
