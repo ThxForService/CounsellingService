@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class CounsellingReview extends BaseMemberEntity {
+public class CounselingReview extends BaseMemberEntity {
 
     @Id
     @Column(length = 45)

@@ -10,14 +10,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QReservation is a Querydsl query type for Reservation
+ * QCounseling is a Querydsl query type for Counseling
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QReservation extends EntityPathBase<Counseling> {
+public class QCounseling extends EntityPathBase<Counseling> {
 
-    private static final long serialVersionUID = 1639768780L;
+    private static final long serialVersionUID = 1733989612L;
 
-    public static final QReservation reservation = new QReservation("reservation");
+    public static final QCounseling counseling = new QCounseling("counseling");
 
     public final com.thxforservice.global.entities.QBaseEntity _super = new com.thxforservice.global.entities.QBaseEntity(this);
 
@@ -26,6 +26,8 @@ public class QReservation extends EntityPathBase<Counseling> {
     public final EnumPath<com.thxforservice.counselling.constants.CCase> cCase = createEnum("cCase", com.thxforservice.counselling.constants.CCase.class);
 
     public final StringPath cCaseDetail = createString("cCaseDetail");
+
+    public final StringPath content = createString("content");
 
     public final EnumPath<com.thxforservice.counselling.constants.CReason> cReason = createEnum("cReason", com.thxforservice.counselling.constants.CReason.class);
 
@@ -41,6 +43,8 @@ public class QReservation extends EntityPathBase<Counseling> {
 
     public final StringPath empNo = createString("empNo");
 
+    public final StringPath gid = createString("gid");
+
     public final StringPath memberID = createString("memberID");
 
     public final StringPath mobile = createString("mobile");
@@ -50,21 +54,21 @@ public class QReservation extends EntityPathBase<Counseling> {
 
     public final DatePath<java.time.LocalDate> rDate = createDate("rDate", java.time.LocalDate.class);
 
-    public final DateTimePath<java.time.LocalDateTime> rTime = createDateTime("rTime", java.time.LocalDateTime.class);
+    public final TimePath<java.time.LocalTime> rTime = createTime("rTime", java.time.LocalTime.class);
 
     public final EnumPath<com.thxforservice.counselling.constants.Status> status = createEnum("status", com.thxforservice.counselling.constants.Status.class);
 
     public final StringPath studentNo = createString("studentNo");
 
-    public QReservation(String variable) {
+    public QCounseling(String variable) {
         super(Counseling.class, forVariable(variable));
     }
 
-    public QReservation(Path<? extends Counseling> path) {
+    public QCounseling(Path<? extends Counseling> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QReservation(PathMetadata metadata) {
+    public QCounseling(PathMetadata metadata) {
         super(Counseling.class, metadata);
     }
 

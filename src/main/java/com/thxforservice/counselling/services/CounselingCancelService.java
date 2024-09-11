@@ -1,4 +1,4 @@
 package com.thxforservice.counselling.services;
 
-public class CounsellingCancelService {
+public class CounselingCancelService {
 }

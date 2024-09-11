@@ -6,7 +6,7 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@OpenAPIDefinition(info=@Info(title="논문 API", description = "논문 업로드, 승인 등 관리 기능 API"))
+@OpenAPIDefinition(info=@Info(title="상담 API", description = "..."))
 @Configuration
 public class SwaggerConfig {
 

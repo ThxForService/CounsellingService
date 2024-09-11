@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,7 +16,7 @@ public class GroupSchedule extends BaseMemberEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PGM_SEQ")
-    private GroupCounselling program; // 프로그램번호
+    private GroupCounseling program; // 프로그램번호
 
     private LocalDate date; // 진행일자
 
@@ -23,4 +24,7 @@ public class GroupSchedule extends BaseMemberEntity {
     private String memo; // 상담일지
 
     private Double rate; // 참여율
+
+    @Transient
+    private List<GroupProgram> students;
 }

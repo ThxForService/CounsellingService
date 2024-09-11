@@ -3,14 +3,21 @@ package com.thxforservice.counselling.entities;
 import com.thxforservice.global.entities.BaseMemberEntity;
 import com.thxforservice.counselling.constants.ProgramStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
-public class GroupCounselling extends BaseMemberEntity {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class GroupCounseling extends BaseMemberEntity {
     @Id @GeneratedValue
     private Long pgmSeq;
 
@@ -31,5 +38,8 @@ public class GroupCounselling extends BaseMemberEntity {
     @Column(length = 20, nullable = false)
     private ProgramStatus status; // 접수상태
 
+    /** 그룹 상담 스케쥴 목록 */
+    @Transient
+    private List<GroupSchedule> schedules;
 
 }

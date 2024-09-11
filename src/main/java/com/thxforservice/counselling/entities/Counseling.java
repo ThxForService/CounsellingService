@@ -19,7 +19,7 @@ import java.time.LocalTime;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Counselling extends BaseEntity {
+public class Counseling extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -44,9 +44,6 @@ public class Counselling extends BaseEntity {
 
     @Column(length = 65, nullable = true)
     private String cCaseDetail; // 기타 선택시 값 입력
-
-    @Column(nullable = false)
-    private String memberID; // 회원 구분 번호
 
     @Column(nullable = false, length = 65)
     private String studentNo; // 학번
