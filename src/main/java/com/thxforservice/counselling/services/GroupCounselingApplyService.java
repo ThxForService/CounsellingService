@@ -1,6 +1,7 @@
 package com.thxforservice.counselling.services;
 
 import com.thxforservice.counselling.controllers.RequestGroupCounseling;
+import com.thxforservice.counselling.entities.GroupCounseling;
 import com.thxforservice.counselling.entities.GroupProgram;
 import com.thxforservice.counselling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counselling.repositories.GroupCounselingRepository;
@@ -21,23 +22,31 @@ public class GroupCounselingApplyService {
     public GroupProgram apply(RequestGroupCounseling form) {
 
         Long programId = form.getProgramId();
-        GroupProgram program = programRepository.findById(programId)
+
+        GroupCounseling counseling = counselingRepository.findById(programId)
                 .orElseThrow(CounselingNotFoundException::new);
+
+//        GroupProgram program = programRepository.findById(programId)
+//                .orElseThrow(CounselingNotFoundException::new);
 
         String username = form.getUsername();
         if (StringUtils.hasText(username)) {
             username = username.trim();
         }
 
+
         GroupProgram reservation = GroupProgram.builder()
-                .program(program)
+                .program(counseling)
                 .studentNo(form.getStudentNo())
                 .username(username)
                 .grade(form.getGrade())
                 .department(form.getDepartment())
                 .attend(form.getAttend())
-                .capacity(Math.min(Math.max(form.getCapacity(), 5), 30))
                 .build();
+
+        int newCapacity = Math.min(Math.max(form.getCapacity(), 5), 30);
+        counseling.setCapacity(newCapacity);
+        counselingRepository.saveAndFlush(counseling);
 
         programRepository.saveAndFlush(reservation);
 

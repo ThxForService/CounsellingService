@@ -3,13 +3,19 @@ package com.thxforservice.counselling.entities;
 import com.thxforservice.global.entities.BaseMemberEntity;
 import com.thxforservice.counselling.constants.ProgramStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupCounseling extends BaseMemberEntity {
     @Id @GeneratedValue
     private Long pgmSeq;

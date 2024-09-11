@@ -9,5 +9,4 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface GroupScheduleRepository extends JpaRepository<GroupSchedule, Long>, QuerydslPredicateExecutor<GroupSchedule> {
-    List<GroupSchedule> findByProgramAndDate(GroupProgram program, LocalDate date);
 }
