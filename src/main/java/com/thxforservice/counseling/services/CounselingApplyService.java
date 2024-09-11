@@ -22,7 +22,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CounselingApplyService {
-
+//
     private final CounselingRepository counselingRepository;
     private final MemberUtil memberUtil;
     private final CounselingStatusService counselingStatusService;
