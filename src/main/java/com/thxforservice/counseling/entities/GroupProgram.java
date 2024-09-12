@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thxforservice.global.entities.BaseMemberEntity;
 import com.thxforservice.counseling.constants.ProgramStatus;
 import jakarta.persistence.*;
@@ -27,20 +28,22 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     @Lob
     private String Description; // 프로그램 설명
 
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate programStartDate; // 프로그램 수행일자
+
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate startDate; // 신청 시작일자
 
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate endDate; // 신청 종료일자
 
-    @ColumnDefault("1")
     private int capacity; // 신청 정원
+
+    private int currentCount; // 현재 인원
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     private ProgramStatus status; // 접수상태
-
-    /** 그룹 상담 스케쥴 목록 */
-    @Transient
-    private List<GroupSchedule> schedules;
 
 
 }

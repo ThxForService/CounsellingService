@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.controllers;
 
+import com.thxforservice.counseling.controllers.RequestGroupCounselingSave;
 import com.thxforservice.counseling.services.GroupCounselingDeleteService;
 import com.thxforservice.counseling.services.GroupCounselingSaveService;
 import com.thxforservice.global.rests.JSONData;
@@ -30,14 +31,11 @@ public class CounselingAdminController {
      *         수정 - PATCH /group/update/{pgmSeq}
      *         삭제 - DELETE /group/{pgmSeq}
      *
-     *     - 집단 상담 프로그램 목록 - GET /group
      *
-     *     - 집단 상담 신청 목록 - GET /group/apply
-     *     - 집단 상담 신청 하나 정보 - GET /group/apply/{pgmRegSeq}
      *
      * 2. 개별 상담 신청 관리
      *    - 개별 상담 신청 목록 - /apply
-     *    - 개별 상담 신청 정보 - /apply/{cSeq}
+     *    - 개별 상담  신청 정보 - /apply/{cSeq}
      *
      *
      */
@@ -51,12 +49,14 @@ public class CounselingAdminController {
         return save();
     }
 
-    @Operation(summary = "집단 상담 프로그램 수정", method = "PATCH")
-    @PatchMapping("/group/update/{pgmSeq}")
-    public ResponseEntity<Void> update(@PathVariable("pgmSeq") Long pgmSeq) {
-
-        return save();
-    }
+    //    @Operation(summary = "집단 상담 프로그램 수정", method = "PATCH")
+    //    @PatchMapping("/group/update/{pgmSeq}")
+    //    public ResponseEntity<Void> update(@PathVariable("pgmSeq") Long pgmSeq, @ModelAttribute RequestGroupCounselingSave form, Model model) {
+    //
+    //        counselingSaveService.updateProgram(pgmSeq, form);
+    //
+    //        return save();
+    //    }
 
     public ResponseEntity<Void> save() {
 
@@ -71,30 +71,6 @@ public class CounselingAdminController {
 
         deleteService.deleteProgram(pgmSeq);
     }
-
-    @Operation(summary = "집단 상담 프로그램 목록")
-    @GetMapping("/group")
-    public JSONData groupList() {
-
-        //페이지네이션
-
-
-        return null;
-    }
-
-    @Operation(summary = "집단 상담 신청 목록")
-    @GetMapping("/group/apply")
-    public JSONData applyList() {
-        return null;
-    }
-
-    @Operation(summary = "집단 상담 신청 정보 한개 조회")
-    @GetMapping("/group/apply/{pgmRegSeq}")
-    public JSONData applyInfo(@PathVariable("pgmRegSeq") Long pgmReqSeq) {
-
-        return null;
-    }
-
     // 집단 상담 E
 
     // 개별 상담 S

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class GroupCounselingDeleteService {
+
     private final GroupCounselingInfoService infoService;
     private final GroupCounselingRepository counselingRepository;
     private final GroupProgramRepository programRepository;
