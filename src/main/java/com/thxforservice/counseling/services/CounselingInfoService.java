@@ -19,6 +19,10 @@ import com.thxforservice.member.entities.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,6 +30,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.thxforservice.counseling.entities.QGroupProgram.groupProgram;
+import static org.springframework.data.domain.Sort.Order.desc;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +70,6 @@ public class CounselingInfoService {
 
         //예약 목록 조회
         public ListData<Counseling> getList(CounselingSearch search) {
-
             int page = Math.max(search.getPage(), 1);
             int limit = search.getLimit();
             limit = limit < 1 ? 10 : limit;
@@ -84,20 +88,19 @@ public class CounselingInfoService {
                 andBuilder.and(counseling.cSeq.in(cSeq));
             }
 
+            LocalDate startDate = search.getStartDate();
+            LocalDate endDate = search.getEndDate();
+            if (startDate != null) {
+                andBuilder.and(counseling.rDate.goe(startDate));
+            }
 
-            List<Counseling> items = queryFactory.selectFrom(counseling)
-                    .where(andBuilder)
-                    .fetchJoin()
-                    .offset(offset)
-                    .limit(limit)
-                    .orderBy(groupProgram.createdAt.desc())
-                    .fetch();
+            Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
 
-            long total = counselingRepository.count(andBuilder);
-            int ranges = 10;
-            Pagination pagination = new Pagination(page, (int) total, ranges, limit, request);
+            Page<Counseling> data = counselingRepository.findAll(andBuilder, pageable);
 
-            return new ListData<>(items, pagination);
+            Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
+
+            return new ListData<>(data.getContent(), pagination);
         }
 
         private void addInfo(Counseling counseling) {
