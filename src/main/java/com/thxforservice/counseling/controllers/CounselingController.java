@@ -1,5 +1,8 @@
 package com.thxforservice.counseling.controllers;
-
+import com.thxforservice.counseling.entities.GroupProgram;
+import com.thxforservice.counseling.services.GroupCounselingApplyService;
+import com.thxforservice.counseling.services.GroupCounselingInfoService;
+import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.JSONData;
@@ -20,22 +23,30 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class CounselingController {
+
+    private final GroupCounselingInfoService infoService;
+    private GroupCounselingApplyService groupCounselingApplyService;
+
     private final Utils utils;
     /**
      *  1. 개인 상담 신청  - POST /apply
-     *  2. 집단 상담 하나 정보  - GET /group/info/{pgmSeq}
-     *      - 집단 상담 정보(GroupCounseling)
-     *          - 그룹 상담 스케줄 목록(GroupSchedule)
-     *  3. 집단 상담 목록
-     *      - GET /group :
      *
-     *  4. 집단 상담 신청 처리
-     *          - 신청시 연락처, 이메일은 변경 가능
-     *          - POST /group/apply
-     *              - 집단 상픔 스케줄 등록 번호(GroupSchedule)
-     *              - 로그인한 회원의 학번
-     *              - 입력한 email, mobile이 필요
-     *              - 신청 가능 여부 체크 필요
+     * ------사용자---------
+     * 1. 집단 상담 프로그램 신청(예약) - POST program/apply
+     * 2. 집단 상담 프로그램 조회(단일)(every)  - GET program/info/{pgmSeq}
+     *    집단 상담 프로그램 조회(다중)(every)  - GET program/info
+     *
+     * 3. 집단 상담 프로그램 취소(사용자) - DELETE program/cancel/{pgmRegSeq}
+     *
+     * 4. 집단 상담 예약 조회(사용자)(다중) - GET program/res/info
+     *
+     * -------상담사 -------
+     *
+     * - 편성된 프로그램의 신청내역 다중조회(목록)  - GET /cs/group/list
+     *      - 편성된 프로그램의 신청내역 단일조회 - GET /cs/group/info/{schdlSeq}
+     *      - 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
+     *      - 참여율은 자동 계산
+     *----------------------
      *
      *  5. 개인 상담 일정 변경 (상담사)
      *      - 편성된 상담은 empNo로 조회된 상담
@@ -45,12 +56,6 @@ public class CounselingController {
      *
      *      - 상담사 : 상담사로 권한 제한
      *      - rDate, rTime
-     *
-     * 6. 집단 상담 (상담사)
-     *      - 편성된 그룹 상담 목록  - GET /cs/group/list
-     *      - 편성된 그룹 상담 하나 조회 - GET /cs/group/info/{schdlSeq}
-     *      - 편성된 그룹 상담 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
-     *          - 참여율은 자동 계산
      *
      */
     @Operation(summary = "개인 상담 신청", method="POST")
@@ -69,91 +74,101 @@ public class CounselingController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "집단 상담 정보 하나 조회", method = "GET")
+    @Operation(summary = "집단 상담(프로그램) 정보 단일 조회", method = "GET")
     @ApiResponse(responseCode = "200")
     @Parameter(name="pgmSeq", required = true, description = "경로변수, 집단 상담 정보 등록 번호")
-    @GetMapping("/group/info/{pgmSeq}")
+    @GetMapping("/program/info/{pgmSeq}")
     public JSONData groupInfo(@PathVariable("pgmSeq") Long pgmSeq) {
 
         return null;
     }
 
-    @Operation(summary = "집단 상담 정보 목록", method="GET")
+    @Operation(summary = "집단 상담(프로그램) 정보 목록", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/group")
+    @GetMapping("/program/info")
     public JSONData groupList(@ModelAttribute GroupCounselingSearch search) {
 
-        return null;
+        ListData<GroupProgram> listData = infoService.getGroupCounselingList(search);
+
+        return new JSONData(listData);
+
     }
 
     @Operation(summary = "집단 상담 신청", method = "POST")
     @ApiResponse(responseCode = "201")
     @Parameters({
-
+            @Parameter(name="schdlSeq", required = true, description = "집단 상담 스케쥴 번호", example = "1111"),
+            @Parameter(name="studentNo", required = true, description = "집단 상담 신청자의 학번", example = "20150411"),
+            @Parameter(name="username", required = true, description = "집단 상담 신청자의 이름", example = "홍길동"),
+            @Parameter(name="grade", required = true, description = "집단 상담 신청자의 학년", example = "1"),
+            @Parameter(name="department", required = true, description = "집단 상담 신청자의 학과", example = "치킨학과")
     })
-    @PostMapping("/group/apply")
-    public ResponseEntity<Void> groupApply(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+    @PostMapping("/program/apply")
+    public ResponseEntity<JSONData> groupApply(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
 
         // 추가 검증 - validator
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
-        // 서비스 연동 ..
+        // 서비스 연동
+        groupCounselingApplyService.apply(form);
+
+        HttpStatus status = HttpStatus.CREATED;
+        JSONData jsonData = new JSONData(form);
+
+        return ResponseEntity.status(status).body(jsonData);
+    }
+
+    //집단 상담 프로그램 취소(사용자)
+    @Operation(summary = "집단 상담 프로그램 취소(사용자)", method="DELETE")
+    @ApiResponse(responseCode = "200")
+    @DeleteMapping("program/cancel/{pgmRegSeq")
+    public ResponseEntity<JSONData> groupDelete(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
 
         return null;
     }
 
-    @Operation(summary = "편성된 상담 일정 목록", method="GET")
+    //집단 상담 예약 조회(사용자)(다중)
+    @Operation(summary = "집단 상담 예약 조회 목록 (사용자)", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/list")
+    @DeleteMapping("program/res/info")
+    public ResponseEntity<JSONData> groupApplyList(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+
+        return null;
+    }
+
+
+    @Operation(summary = "편성된 프로그램의 신청내역 목록", method="GET")
+    @ApiResponse(responseCode = "200")
+    @GetMapping("/cs/group/list")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData csList(@ModelAttribute CounselingSearch search) {
 
         return null;
     }
 
-    @Operation(summary = "편성된 상담 하나 조회", method="GET")
+    // 편성된 프로그램의 신청내역 단일 조회 - GET /cs/group/info/{schdlSeq}
+    @Operation(summary="편성된 프로그램의 신청내역 단일 조회", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/info/{cSeq}")
-    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public JSONData csInfo(@PathVariable("cSeq") Long cSeq) {
+    @GetMapping("/cs/group/info/{schdlSeq}")
+    public void csListOne() { // 메서드명 수정 각
+    }
 
-        return null;
+    // 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
+    @Operation(summary = "편성된 프로그램의 변경 처리",  description = "참석 여부 업데이트, 일지 작성", method = "PATCH")
+    @ApiResponse(responseCode = "200")
+    @PatchMapping("/cs/group/change")
+    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
+    public void csGroupChange() {
+
     }
 
     // 편성된 상담 변경 처리  PATCH /cs/change
-
     @Operation(summary="편성된 상담 변경 처리", method="PATCH")
     @ApiResponse(responseCode = "200")
     @PatchMapping("/cs/change")
     public void csChange() {
-
-    }
-
-    // 편성된 그룹 상담 목록  - GET /cs/group/list
-    @Operation(summary="편성된 그룹 상담 목록", method="GET")
-    @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/list")
-    public JSONData csGroupList() {
-
-        return null;
-    }
-
-    // 편성된 그룹 상담 하나 조회 - GET /cs/group/info/{schdlSeq}
-    @Operation(summary = "편성된 그룹 상담 하나 조회", method = "GET")
-    @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/info/{schdlSeq}")
-    public JSONData csGroupInfo(@PathVariable("schdlSeq") Long schdlSeq) {
-
-        return null;
-    }
-    // 편성된 그룹 상담 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
-    @Operation(summary = "편성된 그룹 상담 변경 처리",  description = "참석 여부 업데이트, 일지 작성", method = "PATCH")
-    @ApiResponse(responseCode = "200")
-    @PatchMapping("/cs/group/change")
-    public void csGroupChange() {
-
     }
 
     @Operation(summary = "상담사 평점 - 개인 상담, 집단 상담")

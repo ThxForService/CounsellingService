@@ -1,45 +1,33 @@
 package com.thxforservice.counseling.entities;
 
-import com.thxforservice.global.entities.BaseMemberEntity;
-import com.thxforservice.counseling.constants.ProgramStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
-@Entity
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupCounseling extends BaseMemberEntity { //상담 프로그램 정보
-    @Id @GeneratedValue
-    private Long pgmSeq;
+public class GroupCounseling { // 신청 결과
 
-    @Column(length = 100, nullable = false)
-    private String pgmNm; // 프로그램명
+    @Id
+    @GeneratedValue
+    private Long pgmRegSeq; // 신청 일련 번호
 
-    @Lob
-    private String Description; // 프로그램 설명
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="PGM_SEQ")
+    private GroupProgram program;
 
-    private LocalDate startDate; // 신청 시작일자
+    private Boolean attend; // 참석 여부
 
-    private LocalDate endDate; // 신청 종료일자
-
-    @ColumnDefault("1")
-    private int capacity; // 신청 정원
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
-    private ProgramStatus status; // 접수상태
-
-    /** 그룹 상담 스케쥴 목록 */
-    @Transient
-    private List<GroupSchedule> schedules;
+    /* 새로운 요청이 아니라 로그인 정보를 가지고 출력 S*/
+    private Long studentNo; // 학번
+    private String username; // 이름
+    private String grade; // 학년
+    private String department; // 학과
+    /* 새로운 요청이 아니라 로그인 정보를 가지고 출력 E*/
 
 }

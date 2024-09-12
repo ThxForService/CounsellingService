@@ -16,7 +16,7 @@ public class GroupSchedule extends BaseMemberEntity { // 신청 시 필요한 �
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PGM_SEQ")
-    private GroupCounseling program; // 프로그램번호
+    private GroupProgram program; // 프로그램번호
 
     private LocalDate date; // 진행일자
 
@@ -26,5 +26,5 @@ public class GroupSchedule extends BaseMemberEntity { // 신청 시 필요한 �
     private Double rate; // 참여율
 
     @Transient
-    private List<GroupProgram> students;
+    private List<GroupCounseling> students;
 }

@@ -43,7 +43,7 @@ public class QGroupSchedule extends EntityPathBase<GroupSchedule> {
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
 
-    public final QGroupCounseling program;
+    public final QGroupProgram program;
 
     public final NumberPath<Double> rate = createNumber("rate", Double.class);
 
@@ -67,7 +67,7 @@ public class QGroupSchedule extends EntityPathBase<GroupSchedule> {
 
     public QGroupSchedule(Class<? extends GroupSchedule> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.program = inits.isInitialized("program") ? new QGroupCounseling(forProperty("program")) : null;
+        this.program = inits.isInitialized("program") ? new QGroupProgram(forProperty("program")) : null;
     }
 
 }
