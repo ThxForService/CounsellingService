@@ -2,13 +2,9 @@ package com.thxforservice.counselling.services;
 
 
 import com.thxforservice.counselling.constants.ProgramStatus;
-import com.thxforservice.counselling.constants.Status;
-import com.thxforservice.counselling.entities.GroupCounseling;
 import com.thxforservice.counselling.entities.GroupProgram;
-import com.thxforservice.counselling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counselling.repositories.GroupCounselingRepository;
 import com.thxforservice.counselling.repositories.GroupProgramRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +18,7 @@ public class GroupCounselingStatusService {
 
     public void change(Long pgmRegSeq, Boolean attend, ProgramStatus status) {
 
-        GroupCounseling counseling = infoService.get(pgmRegSeq);
+        GroupProgram counseling = infoService.get(pgmRegSeq);
         ProgramStatus prevStatus = counseling.getStatus();
         if (prevStatus == status) { //기존 상태와 동일하면 처리x
             return;

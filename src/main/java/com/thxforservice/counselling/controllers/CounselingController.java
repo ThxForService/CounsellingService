@@ -27,17 +27,23 @@ public class CounselingController {
     private final Utils utils;
     /**
      *  1. 개인 상담 신청  - POST /apply
-     *  2. 집단 상담 하나 정보  - GET /group/info/{pgmSeq}
-     *      - 집단 상담 정보(GroupCounseling)
-     *          - 그룹 상담 스케줄 목록(GroupSchedule)
-     *  3. 집단 상담 목록
-     *      - GET /group :
      *
-     *  4. 집단 상담 신청 처리
-     *          - POST /group/apply
-     *              - 집단 상픔 스케줄 등록 번호(GroupSchedule)
-     *              - 로그인한 회원의 학번
-     *              - 신청 가능 여부 체크 필요
+     * ------사용자---------
+     * 1. 집단 상담 프로그램 신청(예약) - POST program/apply
+     * 2. 집단 상담 프로그램 조회(단일)(every)  - GET program/info/{pgmSeq}
+     *    집단 상담 프로그램 조회(다중)(every)  - GET program/info
+     *
+     * 3. 집단 상담 프로그램 취소(사용자) - DELETE program/cancel/{pgmRegSeq}
+     *
+     * 4. 집단 상담 예약 조회(사용자)(다중) - GET program/res/info
+     *
+     * -------상담사 -------
+     *
+     * - 편성된 프로그램의 신청내역 다중조회(목록)  - GET /cs/group/list
+     *      *      - 편성된 프로그램의 신청내역 단일조회 - GET /cs/group/info/{schdlSeq}
+     *      *      - 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
+     *      *          - 참여율은 자동 계산
+     *----------------------
      *
      *  5. 개인 상담 일정 변경 (상담사)
      *      - 편성된 상담은 empNo로 조회된 상담
@@ -47,12 +53,6 @@ public class CounselingController {
      *
      *      - 상담사 : 상담사로 권한 제한
      *      - rDate, rTime
-     *
-     * 6. 집단 상담 (상담사)
-     *      - 편성된 그룹 상담 목록  - GET /cs/group/list
-     *      - 편성된 그룹 상담 하나 조회 - GET /cs/group/info/{schdlSeq}
-     *      - 편성된 그룹 상담 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
-     *          - 참여율은 자동 계산
      *
      */
     @Operation(summary = "개인 상담 신청", method="POST")
@@ -71,7 +71,7 @@ public class CounselingController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "집단 상담 정보 하나 조회", method = "GET")
+    @Operation(summary = "집단 상담(프로그램) 정보 하나 조회", method = "GET")
     @ApiResponse(responseCode = "200")
     @Parameter(name="pgmSeq", required = true, description = "경로변수, 집단 상담 정보 등록 번호")
     @GetMapping("/group/info/{pgmSeq}")
@@ -80,7 +80,7 @@ public class CounselingController {
         return null;
     }
 
-    @Operation(summary = "집단 상담 정보 목록", method="GET")
+    @Operation(summary = "집단 상담(프로그램) 정보 목록", method="GET")
     @ApiResponse(responseCode = "200")
     @GetMapping("/group")
     public JSONData groupList(@ModelAttribute GroupCounselingSearch search) {
@@ -123,45 +123,21 @@ public class CounselingController {
         return null;
     }
 
-    @Operation(summary = "편성된 상담 하나 조회", method="GET")
-    @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/info/{cSeq}")
-    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public JSONData csInfo(@PathVariable("cSeq") Long cSeq) {
-
-        return null;
-    }
 
     // 편성된 상담 변경 처리  PATCH /cs/change
-
     @Operation(summary="편성된 상담 변경 처리", method="PATCH")
     @ApiResponse(responseCode = "200")
     @PatchMapping("/cs/change")
     public void csChange() {
-
     }
 
-    // 편성된 그룹 상담 목록  - GET /cs/group/list
-    @Operation(summary="편성된 그룹 상담 목록", method="GET")
-    @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/list")
-    public JSONData csGroupList() {
 
-        return null;
-    }
 
-    // 편성된 그룹 상담 하나 조회 - GET /cs/group/info/{schdlSeq}
-    @Operation(summary = "편성된 그룹 상담 하나 조회", method = "GET")
-    @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/info/{schdlSeq}")
-    public JSONData csGroupInfo(@PathVariable("schdlSeq") Long schdlSeq) {
-
-        return null;
-    }
     // 편성된 그룹 상담 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
     @Operation(summary = "편성된 그룹 상담 변경 처리",  description = "참석 여부 업데이트, 일지 작성", method = "PATCH")
     @ApiResponse(responseCode = "200")
     @PatchMapping("/cs/group/change")
+    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public void csGroupChange() {
 
     }

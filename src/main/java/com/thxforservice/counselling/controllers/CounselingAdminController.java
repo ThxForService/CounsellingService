@@ -1,6 +1,5 @@
 package com.thxforservice.counselling.controllers;
 
-import com.thxforservice.counselling.entities.GroupCounseling;
 import com.thxforservice.counselling.services.GroupCounselingDeleteService;
 import com.thxforservice.counselling.services.GroupCounselingSaveService;
 import com.thxforservice.global.rests.JSONData;
@@ -12,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name="CounselingAdmin", description = "상담 관리자 API")
 @RestController
@@ -33,10 +30,7 @@ public class CounselingAdminController {
      *         수정 - PATCH /group/update/{pgmSeq}
      *         삭제 - DELETE /group/{pgmSeq}
      *
-     *     - 집단 상담 프로그램 목록 - GET /group
      *
-     *     - 집단 상담 신청 목록 - GET /group/apply
-     *     - 집단 상담 신청 하나 정보 - GET /group/apply/{pgmRegSeq}
      *
      * 2. 개별 상담 신청 관리
      *    - 개별 상담 신청 목록 - /apply
@@ -75,28 +69,7 @@ public class CounselingAdminController {
         deleteService.deleteProgram(pgmSeq);
     }
 
-    @Operation(summary = "집단 상담 프로그램 목록")
-    @GetMapping("/group")
-    public JSONData groupList() {
 
-        //페이지네이션
-
-
-        return null;
-    }
-
-    @Operation(summary = "집단 상담 신청 목록")
-    @GetMapping("/group/apply")
-    public JSONData applyList() {
-        return null;
-    }
-
-    @Operation(summary = "집단 상담 신청 정보 한개 조회")
-    @GetMapping("/group/apply/{pgmRegSeq}")
-    public JSONData applyInfo(@PathVariable("pgmRegSeq") Long pgmReqSeq) {
-
-        return null;
-    }
 
     // 집단 상담 E
 

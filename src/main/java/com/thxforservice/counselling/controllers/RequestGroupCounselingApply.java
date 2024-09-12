@@ -10,8 +10,9 @@ import lombok.Data;
  */
 @Data
 public class RequestGroupCounselingApply { // GroupProgram 과 연동
+
     @NotNull
-    private Long schdlSeq; //그룹 스케쥴 번호
+    private Long pgmSeq;
 
     @NotNull
     private Long studentNo; // 학번

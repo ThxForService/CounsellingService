@@ -21,9 +21,9 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
     private final GroupProgramRepository programRepository;
     private final MemberUtil memberUtil;
 
-    public GroupProgram apply(RequestGroupCounselingApply form) {
+    public GroupCounseling apply(RequestGroupCounselingApply form) {
 
-        Long schdlSeq = form.getSchdlSeq();
+        Long schdlSeq = form.getPgmSeq();
 
         /**
          * [검증]
@@ -32,7 +32,7 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
          */
 
         //1. 신청자가 신청한 프로그램의 스케줄이 존재하는지 검증
-        GroupCounseling counseling = counselingRepository.findById(schdlSeq)
+        GroupProgram counseling = counselingRepository.findById(schdlSeq)
                 .orElseThrow(CounselingNotFoundException::new);
 
         //2. 해당 스케줄의 신청인원이 꽉차있는지 검증 후. 신청인원 + 1
@@ -42,7 +42,7 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
         counselingRepository.saveAndFlush(counseling);
 
 
-        GroupProgram reservation = GroupProgram.builder()
+        GroupCounseling reservation = GroupCounseling.builder()
                 .program(counseling)
                 .studentNo(form.getStudentNo())
                 .username(form.getUsername())

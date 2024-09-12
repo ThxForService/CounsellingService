@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -18,43 +17,59 @@ public class QGroupProgram extends EntityPathBase<GroupProgram> {
 
     private static final long serialVersionUID = -1465098588L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QGroupProgram groupProgram = new QGroupProgram("groupProgram");
 
-    public final BooleanPath attend = createBoolean("attend");
+    public final com.thxforservice.global.entities.QBaseMemberEntity _super = new com.thxforservice.global.entities.QBaseMemberEntity(this);
 
-    public final StringPath department = createString("department");
+    public final NumberPath<Integer> capacity = createNumber("capacity", Integer.class);
 
-    public final StringPath grade = createString("grade");
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final NumberPath<Long> pgmRegSeq = createNumber("pgmRegSeq", Long.class);
+    //inherited
+    public final StringPath createdBy = _super.createdBy;
 
-    public final QGroupCounseling program;
+    public final NumberPath<Integer> currentCount = createNumber("currentCount", Integer.class);
 
-    public final NumberPath<Long> studentNo = createNumber("studentNo", Long.class);
+    public final DatePath<java.time.LocalDate> date = createDate("date", java.time.LocalDate.class);
 
-    public final StringPath username = createString("username");
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
+
+    public final StringPath Description = createString("Description");
+
+    public final NumberPath<Long> empNo = createNumber("empNo", Long.class);
+
+    public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
+
+    public final StringPath memo = createString("memo");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
+
+    //inherited
+    public final StringPath modifiedBy = _super.modifiedBy;
+
+    public final StringPath pgmNm = createString("pgmNm");
+
+    public final NumberPath<Long> pgmSeq = createNumber("pgmSeq", Long.class);
+
+    public final NumberPath<Double> rate = createNumber("rate", Double.class);
+
+    public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
+
+    public final EnumPath<com.thxforservice.counselling.constants.ProgramStatus> status = createEnum("status", com.thxforservice.counselling.constants.ProgramStatus.class);
 
     public QGroupProgram(String variable) {
-        this(GroupProgram.class, forVariable(variable), INITS);
+        super(GroupProgram.class, forVariable(variable));
     }
 
     public QGroupProgram(Path<? extends GroupProgram> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QGroupProgram(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QGroupProgram(PathMetadata metadata, PathInits inits) {
-        this(GroupProgram.class, metadata, inits);
-    }
-
-    public QGroupProgram(Class<? extends GroupProgram> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.program = inits.isInitialized("program") ? new QGroupCounseling(forProperty("program")) : null;
+        super(GroupProgram.class, metadata);
     }
 
 }

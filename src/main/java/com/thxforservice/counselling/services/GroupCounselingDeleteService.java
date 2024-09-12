@@ -1,6 +1,6 @@
 package com.thxforservice.counselling.services;
 
-import com.thxforservice.counselling.entities.GroupCounseling;
+import com.thxforservice.counselling.entities.GroupProgram;
 import com.thxforservice.counselling.repositories.GroupCounselingRepository;
 import com.thxforservice.counselling.repositories.GroupProgramRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ public class GroupCounselingDeleteService {
     private final GroupProgramRepository programRepository;
 
     // 집단 상담 프로그램 삭제
-    public GroupCounseling deleteProgram(Long pgmSeq) {
-        GroupCounseling program = infoService.get(pgmSeq);
+    public GroupProgram deleteProgram(Long pgmSeq) {
+        GroupProgram program = infoService.get(pgmSeq);
         program.setDeletedAt(LocalDateTime.now());
 
         counselingRepository.saveAndFlush(program);
