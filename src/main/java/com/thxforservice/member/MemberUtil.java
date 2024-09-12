@@ -26,6 +26,7 @@ public class MemberUtil {
         return false;
     }
 
+
     public Member getMember() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

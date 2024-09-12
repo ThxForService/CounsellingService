@@ -6,7 +6,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.controllers.CounselingSearch;
 import com.thxforservice.counseling.entities.Counseling;
+import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.entities.QCounseling;
+import com.thxforservice.counseling.entities.QGroupProgram;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.repositories.CounselingRepository;
 import com.thxforservice.global.ListData;
@@ -22,6 +24,8 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.thxforservice.counseling.entities.QGroupProgram.groupProgram;
 
 @Service
 @RequiredArgsConstructor
@@ -61,81 +65,37 @@ public class CounselingInfoService {
 
         //예약 목록 조회
         public ListData<Counseling> getList(CounselingSearch search) {
-            int page = Math.max(search.getPage(), 1);
-            // limit 처리
-            int limit = search.getLimit() > 0 ? search.getLimit() : 20;
-//            limit = limit < 1 ? 20 : limit;
 
+            int page = Math.max(search.getPage(), 1);
+            int limit = search.getLimit();
+            limit = limit < 1 ? 10 : limit;
             int offset = (page - 1) * limit;
 
-            String sopt = search.getSopt();
-            String skey = search.getSkey();
-
-            LocalDate sDate = search.getStartDate();
-            LocalDate eDate = search.getEndDate();
-
-            QCounseling counseling = QCounseling.counseling;
             BooleanBuilder andBuilder = new BooleanBuilder();
+            QCounseling counseling = QCounseling.counseling;
 
-            // 학생번호로 조회(본인의 예약 정보만 조회), 근데 멤버키로 해야 상담사도 이걸로 조회 하지 않나?
-            List<Long> studentNo = search.getStudentNo();
-            if (studentNo != null && !studentNo.isEmpty()) {
-                andBuilder.and(counseling.studentNo.in(studentNo));
+            String skey = search.getSkey(); // 검색 키워드
+            if (StringUtils.hasText(skey)) {
+                andBuilder.and(counseling.cSeq.eq(Long.valueOf(skey.trim())));
             }
 
-            String status = search.getStatus();
-            status = StringUtils.hasText(status) ? status : "ALL";
-
-            // 상태 필터링 (예약 상태에 따라)
-            if (!"ALL".equals(status)) {
-                andBuilder.and(counseling.status.eq(Status.valueOf(status)));
-            }
-
-            sopt = sopt != null && StringUtils.hasText(sopt.trim()) ? sopt.trim() : "ALL"; //통합 검색
-            if (skey != null && StringUtils.hasText(skey.trim())) {
-                   skey = skey.trim();
-                StringExpression expression = null;
-                if (sopt.equals("ALL")) { //통합 검색
-                    expression = counseling.email
-                            .concat(counseling.mobile)
-                            .concat(counseling.empNo)
-                            .concat(counseling.cCase.stringValue())
-                            .concat(counseling.cReason.stringValue())
-                            .concat(String.valueOf(counseling.studentNo));
-                } else if (sopt.equals("USERNAME")) {
-                    expression = counseling.username;
-                } else if (sopt.equals("C_CASE")) {
-                    expression = counseling.cCase.stringValue();
-                }
-                if (expression != null) {
-                    andBuilder.and(expression.contains(skey)); //포함 조건
-                }
+            List<Long> cSeq = search.getCSeq();
+            if (cSeq != null && !cSeq.isEmpty()) {
+                andBuilder.and(counseling.cSeq.in(cSeq));
             }
 
 
-            // 날짜 필터링 (시작일, 종료일)
-            if (sDate != null) {
-                andBuilder.and(counseling.rDate.goe(sDate));
-            }
-            if (eDate != null) {
-                andBuilder.and(counseling.rDate.loe(eDate));
-            }
-
-            //목록 데이터 가져오기
             List<Counseling> items = queryFactory.selectFrom(counseling)
-                    .where(andBuilder) // 멤버 기본키로 해야하는데
-                    .fetchJoin()
                     .where(andBuilder)
+                    .fetchJoin()
                     .offset(offset)
                     .limit(limit)
-                    .orderBy(counseling.createdAt.desc()) // 예약 등록일자 기준 정렬
+                    .orderBy(groupProgram.createdAt.desc())
                     .fetch();
 
-            // 총 레코드 수 계산
             long total = counselingRepository.count(andBuilder);
-
-            // pagination 객체 생성
-            Pagination pagination = new Pagination(page, (int) total, 10, limit, request);
+            int ranges = 10;
+            Pagination pagination = new Pagination(page, (int) total, ranges, limit, request);
 
             return new ListData<>(items, pagination);
         }

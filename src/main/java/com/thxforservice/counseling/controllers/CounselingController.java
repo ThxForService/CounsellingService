@@ -1,8 +1,11 @@
 package com.thxforservice.counseling.controllers;
 import com.thxforservice.counseling.entities.Counseling;
 import com.thxforservice.counseling.entities.GroupProgram;
+import com.thxforservice.counseling.repositories.CounselingRepository;
+import com.thxforservice.counseling.services.CounselingApplyService;
 import com.thxforservice.counseling.services.GroupCounselingApplyService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
+import com.thxforservice.counseling.validators.CounselingValidator;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
@@ -24,11 +27,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class CounselingController {
-
-    private final GroupCounselingInfoService infoService;
-    private GroupCounselingApplyService groupCounselingApplyService;
-
-    private final Utils utils;
     /**
      *  1. 개인 상담 신청  - POST /apply
      *
@@ -59,13 +57,19 @@ public class CounselingController {
      *      - rDate, rTime
      *
      */
+    private final GroupCounselingInfoService infoService;
+    private final GroupCounselingApplyService groupCounselingApplyService;
+    private final Utils utils;
+    private final CounselingRepository counselingRepository;
+    private final CounselingValidator counselingValidator;
+    private final CounselingApplyService counselingApplyService;
     @Operation(summary = "개인 상담 신청", method="POST")
     @ApiResponse(responseCode = "201")
     @PostMapping("/apply")
     public ResponseEntity<Void> apply(@Valid @RequestBody RequestCounselingApply form, Errors errors) {
 
         // 추가 검증 - validator
-        validator.validate(form, errors);
+        counselingValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
