@@ -9,22 +9,29 @@ import com.thxforservice.counseling.entities.QGroupCounseling;
 import com.thxforservice.counseling.entities.QGroupProgram;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
+import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Pagination;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import static org.springframework.data.domain.Sort.Order.desc;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class GroupCounselingInfoService {
 
-    private final JPAQueryFactory queryFactory;
     private final GroupCounselingRepository counselingRepository;
     private final HttpServletRequest request;
 
@@ -65,20 +72,23 @@ public class GroupCounselingInfoService {
             andBuilder.and(groupProgram.pgmSeq.in(pgmSeq));
         }
 
+        LocalDate startDate = search.getStartDate();
+        LocalDate endDate = search.getEndDate();
+        if (startDate != null) {
+            andBuilder.and(groupProgram.startDate.goe(startDate));
+        }
 
-        List<GroupProgram> items = queryFactory.selectFrom(groupProgram)
-                .where(andBuilder)
-                .fetchJoin()
-                .offset(offset)
-                .limit(limit)
-                .orderBy(groupProgram.createdAt.desc())
-                .fetch();
+        if (endDate != null) {
+            andBuilder.and(groupProgram.endDate.loe(endDate));
+        }
 
-        long total = counselingRepository.count(andBuilder);
-        int ranges = 10;
-        Pagination pagination = new Pagination(page, (int) total, ranges, limit, request);
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
 
-        return new ListData<>(items, pagination);
+        Page<GroupProgram> data = counselingRepository.findAll(andBuilder, pageable);
+
+        Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
+
+        return new ListData<>(data.getContent(), pagination);
     }
 
 

@@ -1,7 +1,6 @@
 package com.thxforservice.counseling.validators;
 
-import com.thxforservice.counseling.entities.GroupCounseling;
-import com.thxforservice.counseling.entities.GroupProgram;
+import com.thxforservice.counseling.controllers.RequestGroupCounselingSave;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -12,7 +11,7 @@ import org.springframework.validation.Validator;
 public class GroupCounselingValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.isAssignableFrom(GroupProgram.class);
+        return clazz.isAssignableFrom(RequestGroupCounselingSave.class);
     }
 
     @Override
@@ -21,7 +20,7 @@ public class GroupCounselingValidator implements Validator {
             return;
         }
 
-        GroupProgram form = (GroupProgram) target;
+        RequestGroupCounselingSave form = (RequestGroupCounselingSave) target;
         int capacity = form.getCapacity();
 
 //      1. 집단 상담 프로그램 정원 5명~30명
