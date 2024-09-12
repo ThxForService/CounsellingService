@@ -45,8 +45,6 @@ public class QCounseling extends EntityPathBase<Counseling> {
 
     public final StringPath gid = createString("gid");
 
-    public final StringPath memberID = createString("memberID");
-
     public final StringPath mobile = createString("mobile");
 
     //inherited

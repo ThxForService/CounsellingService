@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupCounseling extends BaseMemberEntity {
+public class GroupCounseling extends BaseMemberEntity { //상담 프로그램 정보
     @Id @GeneratedValue
     private Long pgmSeq;
 

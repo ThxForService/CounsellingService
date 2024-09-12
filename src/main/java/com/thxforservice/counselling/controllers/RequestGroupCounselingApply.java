@@ -7,7 +7,7 @@ import lombok.Data;
  *
  */
 @Data
-public class RequestGroupCounselingApply {
+public class RequestGroupCounselingApply { // GroupProgram 과 연동
     private Long schdlSeq; //그룹 스케쥴 번호
     private Long studentNo; // 학번
     private String username; // 이름
