@@ -6,6 +6,7 @@ import com.thxforservice.counseling.services.GroupCounselingDeleteService;
 import com.thxforservice.counseling.services.GroupCounselingSaveService;
 import com.thxforservice.counseling.validators.GroupCounselingValidator;
 import com.thxforservice.global.Utils;
+import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.JSONData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,14 +59,8 @@ public class CounselingAdminController {
 
         if (errors.hasErrors()) {
 
-            String errorMessage = errors.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .findFirst()
-                    .orElse("정원 초과");
-
-            throw new CounselingNotFoundException();
+            throw new BadRequestException(utils.getErrorMessages(errors));
         }
-
         counselingSaveService.addProgram(form);
 
         return save();
