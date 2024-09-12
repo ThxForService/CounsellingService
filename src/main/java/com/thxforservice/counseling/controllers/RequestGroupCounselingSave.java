@@ -13,7 +13,7 @@ public class RequestGroupCounselingSave {
     private LocalDate programStartDate;  //프로그램 수행 날자.
     private LocalDate startDate; // 신청 시작일자
     private LocalDate endDate; // 신청 종료일자
-    private int capacity; // 신청 정원
+    private Integer capacity; // 신청 정원
     private ProgramStatus status; // 접수상태
 
 }

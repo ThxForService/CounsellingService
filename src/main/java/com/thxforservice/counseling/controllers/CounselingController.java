@@ -134,7 +134,7 @@ public class CounselingController {
     //집단 상담 프로그램 취소(사용자)
     @Operation(summary = "집단 상담 프로그램 취소(사용자)", method="DELETE")
     @ApiResponse(responseCode = "200")
-    @DeleteMapping("program/cancel/{pgmRegSeq")
+    @DeleteMapping("program/cancel/{pgmRegSeq}")
     public ResponseEntity<JSONData> groupDelete(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
 
         return null;

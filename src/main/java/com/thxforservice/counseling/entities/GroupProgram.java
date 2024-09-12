@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -28,8 +29,8 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     @Lob
     private String Description; // 프로그램 설명
 
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private LocalDate programStartDate; // 프로그램 수행일자
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
+    private LocalDateTime programStartDate; // 프로그램 수행일자
 
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate startDate; // 신청 시작일자

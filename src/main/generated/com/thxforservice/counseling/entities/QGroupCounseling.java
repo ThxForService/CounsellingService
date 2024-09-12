@@ -26,7 +26,11 @@ public class QGroupCounseling extends EntityPathBase<GroupCounseling> {
 
     public final StringPath department = createString("department");
 
+    public final StringPath email = createString("email");
+
     public final StringPath grade = createString("grade");
+
+    public final StringPath mobile = createString("mobile");
 
     public final NumberPath<Long> pgmRegSeq = createNumber("pgmRegSeq", Long.class);
 
