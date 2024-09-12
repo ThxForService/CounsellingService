@@ -29,6 +29,9 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     private String Description; // 프로그램 설명
 
     @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate programStartDate; // 프로그램 수행일자
+
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate startDate; // 신청 시작일자
 
     @JsonFormat(pattern="yyyy-MM-dd")
@@ -42,8 +45,5 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     @Column(length = 20, nullable = false)
     private ProgramStatus status; // 접수상태
 
-    /** 그룹 상담 스케쥴 목록 */
-    @Transient
-    private List<GroupSchedule> schedules;
 
 }
