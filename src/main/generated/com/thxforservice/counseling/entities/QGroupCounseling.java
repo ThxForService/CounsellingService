@@ -13,7 +13,7 @@ import com.querydsl.core.types.Path;
  * QGroupCounseling is a Querydsl query type for GroupCounseling
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QGroupCounseling extends EntityPathBase<GroupCounseling> {
+public class QGroupCounseling extends EntityPathBase<GroupProgram> {
 
     private static final long serialVersionUID = 1328819605L;
 
@@ -51,15 +51,15 @@ public class QGroupCounseling extends EntityPathBase<GroupCounseling> {
     public final EnumPath<com.thxforservice.counseling.constants.ProgramStatus> status = createEnum("status", com.thxforservice.counseling.constants.ProgramStatus.class);
 
     public QGroupCounseling(String variable) {
-        super(GroupCounseling.class, forVariable(variable));
+        super(GroupProgram.class, forVariable(variable));
     }
 
-    public QGroupCounseling(Path<? extends GroupCounseling> path) {
+    public QGroupCounseling(Path<? extends GroupProgram> path) {
         super(path.getType(), path.getMetadata());
     }
 
     public QGroupCounseling(PathMetadata metadata) {
-        super(GroupCounseling.class, metadata);
+        super(GroupProgram.class, metadata);
     }
 
 }

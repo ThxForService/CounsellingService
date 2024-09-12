@@ -35,11 +35,11 @@ public class CounselingInfoService {
         /**
          * 예약 상세 정보 조회
          *
-         * @param seq
+         * @param cSeq
          * @return
          */
-        public Counseling get(Long seq) {
-            Counseling counseling = counselingRepository.findById(seq).orElseThrow(CounselingNotFoundException::new);
+        public Counseling get(Long cSeq) {
+            Counseling counseling = counselingRepository.findById(cSeq).orElseThrow(CounselingNotFoundException::new);
 
             //추가 정보 처리
             addInfo(counseling);

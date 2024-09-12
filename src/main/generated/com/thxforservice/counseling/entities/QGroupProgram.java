@@ -14,7 +14,7 @@ import com.querydsl.core.types.dsl.PathInits;
  * QGroupProgram is a Querydsl query type for GroupProgram
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QGroupProgram extends EntityPathBase<GroupProgram> {
+public class QGroupProgram extends EntityPathBase<GroupCounseling> {
 
     private static final long serialVersionUID = 1375030140L;
 
@@ -37,10 +37,10 @@ public class QGroupProgram extends EntityPathBase<GroupProgram> {
     public final StringPath username = createString("username");
 
     public QGroupProgram(String variable) {
-        this(GroupProgram.class, forVariable(variable), INITS);
+        this(GroupCounseling.class, forVariable(variable), INITS);
     }
 
-    public QGroupProgram(Path<? extends GroupProgram> path) {
+    public QGroupProgram(Path<? extends GroupCounseling> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
@@ -49,10 +49,10 @@ public class QGroupProgram extends EntityPathBase<GroupProgram> {
     }
 
     public QGroupProgram(PathMetadata metadata, PathInits inits) {
-        this(GroupProgram.class, metadata, inits);
+        this(GroupCounseling.class, metadata, inits);
     }
 
-    public QGroupProgram(Class<? extends GroupProgram> type, PathMetadata metadata, PathInits inits) {
+    public QGroupProgram(Class<? extends GroupCounseling> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.program = inits.isInitialized("program") ? new QGroupCounseling(forProperty("program")) : null;
     }

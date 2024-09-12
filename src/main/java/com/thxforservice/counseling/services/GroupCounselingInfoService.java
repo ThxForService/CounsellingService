@@ -1,7 +1,7 @@
 package com.thxforservice.counseling.services;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.thxforservice.counseling.entities.GroupCounseling;
+import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import jakarta.transaction.Transactional;
@@ -22,8 +22,8 @@ public class GroupCounselingInfoService {
      * @param id
      * @return
      */
-    public GroupCounseling get(Long id) {
-        GroupCounseling counseling = counselingRepository.findById(id)
+    public GroupProgram get(Long id) {
+        GroupProgram counseling = counselingRepository.findById(id)
                 .orElseThrow(CounselingNotFoundException::new);
 
         //추가 정보 처리
@@ -34,7 +34,7 @@ public class GroupCounselingInfoService {
 
 
 
-    private void addInfo(GroupCounseling counseling) {
+    private void addInfo(GroupProgram counseling) {
 
     }
 }

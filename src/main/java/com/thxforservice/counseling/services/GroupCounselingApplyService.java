@@ -19,11 +19,11 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
     private final GroupProgramRepository programRepository;
     private final MemberUtil memberUtil;
 
-    public GroupProgram apply(RequestGroupCounseling form) {
+    public GroupCounseling apply(RequestGroupCounseling form) {
 
         Long programId = form.getProgramId();
 
-        GroupCounseling counseling = counselingRepository.findById(programId)
+        GroupProgram counseling = counselingRepository.findById(programId)
                 .orElseThrow(CounselingNotFoundException::new);
 
 //        GroupProgram program = programRepository.findById(programId)
@@ -35,7 +35,7 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
         }
 
 
-        GroupProgram reservation = GroupProgram.builder()
+        GroupCounseling reservation = GroupCounseling.builder()
                 .program(counseling)
                 .studentNo(form.getStudentNo())
                 .username(username)
