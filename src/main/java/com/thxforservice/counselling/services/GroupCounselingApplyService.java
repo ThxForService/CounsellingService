@@ -1,17 +1,19 @@
 package com.thxforservice.counselling.services;
 
-import com.thxforservice.counselling.controllers.RequestGroupCounselingxxxxxx;
+import com.thxforservice.counselling.controllers.RequestGroupCounselingApply;
 import com.thxforservice.counselling.entities.GroupCounseling;
 import com.thxforservice.counselling.entities.GroupProgram;
+import com.thxforservice.counselling.exceptions.CounselingCapacityFullException;
 import com.thxforservice.counselling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counselling.repositories.GroupCounselingRepository;
 import com.thxforservice.counselling.repositories.GroupProgramRepository;
 import com.thxforservice.member.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조회 + 신청 상세정보 조회
 
@@ -19,34 +21,34 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
     private final GroupProgramRepository programRepository;
     private final MemberUtil memberUtil;
 
-    public GroupProgram apply(RequestGroupCounselingxxxxxx form) {
+    public GroupProgram apply(RequestGroupCounselingApply form) {
 
-        Long programId = form.getProgramId();
+        Long schdlSeq = form.getSchdlSeq();
 
-        GroupCounseling counseling = counselingRepository.findById(programId)
+        /**
+         * [검증]
+         * 1. 신청자가 신청한 프로그램의 스케줄이 존재하는지 검증
+         * 2. 해당 스케줄이 예약 마감인지 검증 후. 인원 + 1
+         */
+
+        //1. 신청자가 신청한 프로그램의 스케줄이 존재하는지 검증
+        GroupCounseling counseling = counselingRepository.findById(schdlSeq)
                 .orElseThrow(CounselingNotFoundException::new);
 
-//        GroupProgram program = programRepository.findById(programId)
-//                .orElseThrow(CounselingNotFoundException::new);
-
-        String username = form.getUsername();
-        if (StringUtils.hasText(username)) {
-            username = username.trim();
-        }
+        //2. 해당 스케줄의 신청인원이 꽉차있는지 검증 후. 신청인원 + 1
+        int capacity = counseling.getCapacity();
+        if(capacity > 30) throw new CounselingCapacityFullException();
+        counseling.setCapacity(capacity + 1);
+        counselingRepository.saveAndFlush(counseling);
 
 
         GroupProgram reservation = GroupProgram.builder()
                 .program(counseling)
                 .studentNo(form.getStudentNo())
-                .username(username)
+                .username(form.getUsername())
                 .grade(form.getGrade())
                 .department(form.getDepartment())
-                .attend(form.getAttend())
                 .build();
-
-        int newCapacity = Math.min(Math.max(form.getCapacity(), 5), 30);
-        counseling.setCapacity(newCapacity);
-        counselingRepository.saveAndFlush(counseling);
 
         programRepository.saveAndFlush(reservation);
 

@@ -1,5 +1,6 @@
 package com.thxforservice.counselling.controllers;
 
+import com.thxforservice.counselling.services.GroupCounselingApplyService;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.JSONData;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class CounselingController {
+
+    private GroupCounselingApplyService groupCounselingApplyService;
+
     private final Utils utils;
     /**
      *  1. 개인 상담 신청  - POST /apply
@@ -30,11 +34,9 @@ public class CounselingController {
      *      - GET /group :
      *
      *  4. 집단 상담 신청 처리
-     *          - 신청시 연락처, 이메일은 변경 가능
      *          - POST /group/apply
      *              - 집단 상픔 스케줄 등록 번호(GroupSchedule)
      *              - 로그인한 회원의 학번
-     *              - 입력한 email, mobile이 필요
      *              - 신청 가능 여부 체크 필요
      *
      *  5. 개인 상담 일정 변경 (상담사)
@@ -89,19 +91,27 @@ public class CounselingController {
     @Operation(summary = "집단 상담 신청", method = "POST")
     @ApiResponse(responseCode = "201")
     @Parameters({
-
+            @Parameter(name="schdlSeq", required = true, description = "집단 상담 스케쥴 번호", example = "1111"),
+            @Parameter(name="studentNo", required = true, description = "집단 상담 신청자의 학번", example = "20150411"),
+            @Parameter(name="username", required = true, description = "집단 상담 신청자의 이름", example = "홍길동"),
+            @Parameter(name="grade", required = true, description = "집단 상담 신청자의 학년", example = "1"),
+            @Parameter(name="department", required = true, description = "집단 상담 신청자의 학과", example = "치킨학과")
     })
     @PostMapping("/group/apply")
-    public ResponseEntity<Void> groupApply(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+    public ResponseEntity<JSONData> groupApply(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
 
         // 추가 검증 - validator
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
-        // 서비스 연동 ..
+        // 서비스 연동
+        groupCounselingApplyService.apply(form);
 
-        return null;
+        HttpStatus status = HttpStatus.CREATED;
+        JSONData jsonData = new JSONData(form);
+
+        return ResponseEntity.status(status).body(jsonData);
     }
 
     @Operation(summary = "편성된 상담 일정 목록", method="GET")
