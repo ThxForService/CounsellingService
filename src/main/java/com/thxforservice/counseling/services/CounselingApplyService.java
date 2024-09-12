@@ -33,7 +33,7 @@ public class CounselingApplyService {
     @Transactional
     public Counseling apply(RequestCounselingApply form) {
 
-        // 로그인 확인 및 날짜 유효성 검사
+//         로그인 확인 및 날짜 유효성 검사
         if (!memberUtil.isLogin() || form.getRDate() == null || form.getRDate().isBefore(LocalDate.now())) {
             throw new BadRequestException("올바른 접근이 아닙니다.");
         }

@@ -1,6 +1,7 @@
 package com.thxforservice.counseling.services;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.controllers.CounselingSearch;
@@ -90,29 +91,27 @@ public class CounselingInfoService {
                 andBuilder.and(counseling.status.eq(Status.valueOf(status)));
             }
 
-            // 검색 필터링 (sopt 및 skey에 따른 처리)
-            if (StringUtils.hasText(sopt) && StringUtils.hasText(skey)) {
-                switch (sopt.toUpperCase()) {
-                    case "NAME":
-                        andBuilder.and(counseling.username.contains(skey));
-                        break;
-                    case "EMAIL":
-                        andBuilder.and(counseling.email.contains(skey));
-                        break;
-                    case "MOBILE":
-                        andBuilder.and(counseling.mobile.contains(skey));
-                        break;
-                    case "STUDENT_NO":
-//                        andBuilder.and(counseling.studentNo.eq((Long)skey));
-                        // 강사님께 물어볼것
-                        break;
-                    default:
-                        andBuilder.and(counseling.username.contains(skey)
-                                .or(counseling.email.contains(skey))
-                                .or(counseling.mobile.contains(skey)));
-                        break;
+            sopt = sopt != null && StringUtils.hasText(sopt.trim()) ? sopt.trim() : "ALL"; //통합 검색
+            if (skey != null && StringUtils.hasText(skey.trim())) {
+                   skey = skey.trim();
+                StringExpression expression = null;
+                if (sopt.equals("ALL")) { //통합 검색
+                    expression = counseling.email
+                            .concat(counseling.mobile)
+                            .concat(counseling.empNo)
+                            .concat(counseling.cCase.stringValue())
+                            .concat(counseling.cReason.stringValue())
+                            .concat(String.valueOf(counseling.studentNo));
+                } else if (sopt.equals("USERNAME")) {
+                    expression = counseling.username;
+                } else if (sopt.equals("C_CASE")) {
+                    expression = counseling.cCase.stringValue();
+                }
+                if (expression != null) {
+                    andBuilder.and(expression.contains(skey)); //포함 조건
                 }
             }
+
 
             // 날짜 필터링 (시작일, 종료일)
             if (sDate != null) {
