@@ -9,7 +9,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class RequestGroupCounseling {
+public class RequestGroupCounselingxxxxxx {
     private Long programId; // 그룹 프로그램 ID -> 예약하려는 집단 상담 프로그램을 식별하기 위해 필요
 
     private Long studentNo; // 학번
