@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class GroupSchedule extends BaseMemberEntity {
+public class GroupSchedule extends BaseMemberEntity { // 신청 시 필요한 정보
 // 프로그램 일정으로 신청을 해야함
     @Id @GeneratedValue
     private Long schdlSeq;

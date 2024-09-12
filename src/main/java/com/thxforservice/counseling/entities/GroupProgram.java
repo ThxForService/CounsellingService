@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupProgram {
+public class GroupProgram { // 신청 결과
 
     @Id
     @GeneratedValue

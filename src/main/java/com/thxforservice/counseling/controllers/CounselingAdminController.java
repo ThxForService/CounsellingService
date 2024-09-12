@@ -1,5 +1,8 @@
 package com.thxforservice.counseling.controllers;
 
+import com.thxforservice.counselling.entities.GroupCounseling;
+import com.thxforservice.counselling.services.GroupCounselingDeleteService;
+import com.thxforservice.counselling.services.GroupCounselingSaveService;
 import com.thxforservice.global.rests.JSONData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -7,7 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name="CounselingAdmin", description = "상담 관리자 API")
 @RestController
@@ -15,7 +21,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CounselingAdminController {
 
+    private final GroupCounselingSaveService saveService;
+    private final GroupCounselingDeleteService deleteService;
     private final HttpServletRequest request;
+    private final GroupCounselingSaveService counselingSaveService;
 
     /**
      * 1. 집단 상담 프로그램 관리
@@ -38,13 +47,17 @@ public class CounselingAdminController {
     // 집단 상담 S
     @Operation(summary = "집단 상담 프로그램 추가", method = "POST")
     @PostMapping("/group")
-    public ResponseEntity<Void> register() {
+    public ResponseEntity<Void> register(@ModelAttribute RequestGroupCounselingSave form, Model model) {
+
+        counselingSaveService.addProgram(form);
+
         return save();
     }
 
     @Operation(summary = "집단 상담 프로그램 수정", method = "PATCH")
     @PatchMapping("/group/update/{pgmSeq}")
     public ResponseEntity<Void> update(@PathVariable("pgmSeq") Long pgmSeq) {
+
         return save();
     }
 
@@ -59,6 +72,7 @@ public class CounselingAdminController {
     @DeleteMapping("/group/{pgmSeq}")
     public void delete(@PathVariable("pgmSeq") Long pgmSeq) {
 
+        deleteService.deleteProgram(pgmSeq);
     }
 
     @Operation(summary = "집단 상담 프로그램 목록")
@@ -66,6 +80,7 @@ public class CounselingAdminController {
     public JSONData groupList() {
 
         //페이지네이션
+
 
         return null;
     }
