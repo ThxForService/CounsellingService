@@ -56,7 +56,9 @@ public class CounselingAdminController {
 
     @Operation(summary = "집단 상담 프로그램 수정", method = "PATCH")
     @PatchMapping("/group/update/{pgmSeq}")
-    public ResponseEntity<Void> update(@PathVariable("pgmSeq") Long pgmSeq) {
+    public ResponseEntity<Void> update(@PathVariable("pgmSeq") Long pgmSeq, @ModelAttribute RequestGroupCounselingSave form, Model model) {
+
+        counselingSaveService.updateProgram(pgmSeq, form);
 
         return save();
     }

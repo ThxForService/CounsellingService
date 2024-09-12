@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 public class GroupCounselingSaveService {
 
+    private final GroupCounselingInfoService infoService;
     private final GroupCounselingRepository counselingRepository;
     private final GroupProgramRepository programRepository;
 
@@ -30,7 +31,34 @@ public class GroupCounselingSaveService {
                 .status(form.getStatus())
                 .build();
 
-        counselingRepository.save(program);
+        counselingRepository.saveAndFlush(program);
+    }
+
+    // 집단 상담 프로그램 수정
+    public void updateProgram(Long pgmSeq, RequestGroupCounselingSave form) {
+        GroupCounseling program = counselingRepository.findById(pgmSeq)
+                .orElseThrow(CounselingNotFoundException::new + "pgmSeq");
+
+        if (form.getPgmNm() != null) {
+            program.setPgmNm(form.getPgmNm());
+        }
+        if (form.getDescription() != null) {
+            program.setDescription(form.getDescription());
+        }
+        if (form.getStartDate() != null) {
+            program.setStartDate(form.getStartDate());
+        }
+        if (form.getEndDate() != null) {
+            program.setEndDate(form.getEndDate());
+        }
+        if (form.getCapacity() != null) {
+            program.setCapacity(Math.min(Math.max(form.getCapacity(), 5), 30));
+        }
+        if (form.getStatus() != null) {
+            program.setStatus(form.getStatus());
+        }
+
+        counselingRepository.saveAndFlush(program);
     }
 
 }
