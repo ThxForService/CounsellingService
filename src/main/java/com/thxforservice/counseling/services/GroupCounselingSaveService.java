@@ -1,15 +1,10 @@
-package com.thxforservice.counselling.services;
+package com.thxforservice.counseling.services;
 
-import com.thxforservice.counselling.controllers.RequestGroupCounselingSave;
-import com.thxforservice.counselling.entities.GroupCounseling;
-import com.thxforservice.counselling.exceptions.CounselingNotFoundException;
-import com.thxforservice.counselling.repositories.GroupCounselingRepository;
-import com.thxforservice.counselling.repositories.GroupProgramRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.thxforservice.counseling.entities.GroupProgram;
+import com.thxforservice.counseling.repositories.GroupCounselingRepository;
+import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +14,9 @@ public class GroupCounselingSaveService {
     private final GroupProgramRepository programRepository;
 
     // 집단 상담 프로그램 추가
-    public void addProgram(RequestGroupCounselingSave form) {
+    public void addProgram(com.thxforservice.counseling.controllers.RequestGroupCounselingSave form) {
 
-        GroupCounseling program = GroupCounseling.builder()
+        GroupProgram program = GroupProgram.builder()
                 .pgmNm(form.getPgmNm())
                 .Description(form.getDescription())
                 .startDate(form.getStartDate())

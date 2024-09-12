@@ -8,6 +8,7 @@ import com.thxforservice.counseling.entities.Counseling;
 import com.thxforservice.counseling.entities.QCounseling;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.repositories.CounselingRepository;
+import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.member.MemberUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CounselingApplyService {
-//
+    //
     private final CounselingRepository counselingRepository;
     private final MemberUtil memberUtil;
     private final CounselingStatusService counselingStatusService;
@@ -31,6 +32,12 @@ public class CounselingApplyService {
 
     @Transactional
     public Counseling apply(RequestCounselingApply form) {
+
+        // 로그인 확인 및 날짜 유효성 검사
+        if (!memberUtil.isLogin() || form.getRDate() == null || form.getRDate().isBefore(LocalDate.now())) {
+            throw new BadRequestException("올바른 접근이 아닙니다.");
+        }
+
         // studentNo로 기존 상담이 있는지 확인
         Long studentNo = form.getStudentNo();
         Counseling findCounseling = counselingRepository.findById(studentNo).orElseThrow(CounselingNotFoundException::new);
@@ -68,6 +75,7 @@ public class CounselingApplyService {
         // DB에 저장 및 플러시
         counselingRepository.saveAndFlush(counseling);
 
+        counselingStatusService.change(counseling.getCSeq(), Status.APPLY);
 
         return counseling;
     }
@@ -75,25 +83,5 @@ public class CounselingApplyService {
     // GID 생성 (studentNo를 기반으로 생성)
     private String generateGID(Long studentNo) {
         return UUID.randomUUID().toString();
-    }
-
-    // 중복 예약 확인 처리
-    public boolean check(LocalDate rDate, Long studentNo) {
-        // 로그인 확인 및 날짜 유효성 검사
-        if (!memberUtil.isLogin() || rDate == null) {
-            return false;
-        }
-
-        QCounseling Counseling = QCounseling.counseling;
-
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(Counseling.studentNo.eq(studentNo))
-                .and(Counseling.rDate.eq(rDate))
-                .and(Counseling.status.eq(Status.APPLY));
-
-        List<Counseling> items = (List<Counseling>) counselingRepository.findAll(builder);
-
-        // 중복 예약 여부 확인
-        return items != null && !items.isEmpty();
     }
 }

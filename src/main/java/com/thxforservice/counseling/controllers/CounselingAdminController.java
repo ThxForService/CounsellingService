@@ -1,8 +1,7 @@
 package com.thxforservice.counseling.controllers;
 
-import com.thxforservice.counselling.entities.GroupCounseling;
-import com.thxforservice.counselling.services.GroupCounselingDeleteService;
-import com.thxforservice.counselling.services.GroupCounselingSaveService;
+import com.thxforservice.counseling.services.GroupCounselingDeleteService;
+import com.thxforservice.counseling.services.GroupCounselingSaveService;
 import com.thxforservice.global.rests.JSONData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name="CounselingAdmin", description = "상담 관리자 API")
 @RestController
@@ -40,7 +37,7 @@ public class CounselingAdminController {
      *
      * 2. 개별 상담 신청 관리
      *    - 개별 상담 신청 목록 - /apply
-     *    - 개별 상담  신청 정보 - /apply/{cSeq}
+     *    - 개별 상담 신청 정보 - /apply/{cSeq}
      *
      *
      */

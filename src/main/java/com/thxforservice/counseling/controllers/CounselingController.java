@@ -1,5 +1,8 @@
 package com.thxforservice.counseling.controllers;
 
+import com.thxforservice.counseling.entities.Counseling;
+import com.thxforservice.counseling.services.CounselingApplyService;
+import com.thxforservice.counseling.validators.CounselingValidator;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.JSONData;
@@ -22,49 +25,59 @@ import org.springframework.web.bind.annotation.*;
 public class CounselingController {
     private final Utils utils;
     /**
-     *  1. 개인 상담 신청  - POST /apply
-     *  2. 집단 상담 하나 정보  - GET /group/info/{pgmSeq}
-     *      - 집단 상담 정보(GroupCounseling)
-     *          - 그룹 상담 스케줄 목록(GroupSchedule)
-     *  3. 집단 상담 목록
-     *      - GET /group :
-     *
-     *  4. 집단 상담 신청 처리
-     *          - 신청시 연락처, 이메일은 변경 가능
-     *          - POST /group/apply
-     *              - 집단 상픔 스케줄 등록 번호(GroupSchedule)
-     *              - 로그인한 회원의 학번
-     *              - 입력한 email, mobile이 필요
-     *              - 신청 가능 여부 체크 필요
-     *
-     *  5. 개인 상담 일정 변경 (상담사)
-     *      - 편성된 상담은 empNo로 조회된 상담
-     *      - 편성된 상담 일정 목록  GET /cs/list
-     *      - 편성된 상담 하나 조회  GET /cs/info/{cSeq}
-     *      - 편성된 상담 변경 처리(일정, 일지)  PATCH /cs/change
-     *
-     *      - 상담사 : 상담사로 권한 제한
-     *      - rDate, rTime
-     *
+     * 1. 개인 상담 신청  - POST /apply
+     * - 본인 상담 목록 조회
+     * 2. 집단 상담 하나 정보  - GET /group/info/{pgmSeq}
+     * - 집단 상담 정보(GroupCounseling)
+     * - 그룹 상담 스케줄 목록(GroupSchedule)
+     * 3. 집단 상담 목록
+     * - GET /group :
+     * <p>
+     * 4. 집단 상담 신청 처리
+     * - 신청시 연락처, 이메일은 변경 가능
+     * - POST /group/apply
+     * - 집단 상픔 스케줄 등록 번호(GroupSchedule)
+     * - 로그인한 회원의 학번
+     * - 입력한 email, mobile이 필요
+     * - 신청 가능 여부 체크 필요
+     * <p>
+     * 5. 개인 상담 일정 변경 (상담사)
+     * - 편성된 상담은 empNo로 조회된 상담
+     * - 편성된 상담 일정 목록  GET /cs/list
+     * - 편성된 상담 하나 조회  GET /cs/info/{cSeq}
+     * - 편성된 상담 변경 처리(일정, 일지)  PATCH /cs/change
+     * <p>
+     * - 상담사 : 상담사로 권한 제한
+     * - rDate, rTime
+     * <p>
      * 6. 집단 상담 (상담사)
-     *      - 편성된 그룹 상담 목록  - GET /cs/group/list
-     *      - 편성된 그룹 상담 하나 조회 - GET /cs/group/info/{schdlSeq}
-     *      - 편성된 그룹 상담 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
-     *          - 참여율은 자동 계산
-     *
+     * - 편성된 그룹 상담 목록  - GET /cs/group/list
+     * - 편성된 그룹 상담 하나 조회 - GET /cs/group/info/{schdlSeq}
+     * - 편성된 그룹 상담 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
+     * - 참여율은 자동 계산
      */
+
+    private final CounselingApplyService counselingApplyService;
+    private final CounselingValidator validator;
+
     @Operation(summary = "개인 상담 신청", method="POST")
     @ApiResponse(responseCode = "201")
     @PostMapping("/apply")
     public ResponseEntity<Void> apply(@Valid @RequestBody RequestCounselingApply form, Errors errors) {
 
         // 추가 검증 - validator
+        validator.validate(form, errors);
 
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
         // 서비스 추가
+        Counseling counseling = counselingApplyService.apply(form);
+
+        HttpStatus status = HttpStatus.CREATED;
+        JSONData jsonData = new JSONData(counseling);
+        jsonData.setStatus(status);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

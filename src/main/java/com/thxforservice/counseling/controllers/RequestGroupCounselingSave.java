@@ -1,6 +1,6 @@
-package com.thxforservice.counselling.controllers;
+package com.thxforservice.counseling.controllers;
 
-import com.thxforservice.counselling.constants.ProgramStatus;
+import com.thxforservice.counseling.constants.ProgramStatus;
 import lombok.Data;
 
 import java.time.LocalDate;
