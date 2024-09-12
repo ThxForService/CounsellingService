@@ -43,9 +43,9 @@ public class CounselingController {
      * -------상담사 -------
      *
      * - 편성된 프로그램의 신청내역 다중조회(목록)  - GET /cs/group/list
-     *      *      - 편성된 프로그램의 신청내역 단일조회 - GET /cs/group/info/{schdlSeq}
-     *      *      - 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
-     *      *          - 참여율은 자동 계산
+     *      - 편성된 프로그램의 신청내역 단일조회 - GET /cs/group/info/{schdlSeq}
+     *      - 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
+     *      - 참여율은 자동 계산
      *----------------------
      *
      *  5. 개인 상담 일정 변경 (상담사)
@@ -74,10 +74,10 @@ public class CounselingController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "집단 상담(프로그램) 정보 하나 조회", method = "GET")
+    @Operation(summary = "집단 상담(프로그램) 정보 단일 조회", method = "GET")
     @ApiResponse(responseCode = "200")
     @Parameter(name="pgmSeq", required = true, description = "경로변수, 집단 상담 정보 등록 번호")
-    @GetMapping("/group/info/{pgmSeq}")
+    @GetMapping("/program/info/{pgmSeq}")
     public JSONData groupInfo(@PathVariable("pgmSeq") Long pgmSeq) {
 
         return null;
@@ -85,7 +85,7 @@ public class CounselingController {
 
     @Operation(summary = "집단 상담(프로그램) 정보 목록", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/group")
+    @GetMapping("/program/info")
     public JSONData groupList(@ModelAttribute GroupCounselingSearch search) {
 
         ListData<GroupProgram> listData = infoService.getGroupCounselingList(search);
@@ -103,7 +103,7 @@ public class CounselingController {
             @Parameter(name="grade", required = true, description = "집단 상담 신청자의 학년", example = "1"),
             @Parameter(name="department", required = true, description = "집단 상담 신청자의 학과", example = "치킨학과")
     })
-    @PostMapping("/group/apply")
+    @PostMapping("/program/apply")
     public ResponseEntity<JSONData> groupApply(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
 
         // 추가 검증 - validator
@@ -120,32 +120,55 @@ public class CounselingController {
         return ResponseEntity.status(status).body(jsonData);
     }
 
-    @Operation(summary = "편성된 상담 일정 목록", method="GET")
+    //집단 상담 프로그램 취소(사용자)
+    @Operation(summary = "집단 상담 프로그램 취소(사용자)", method="DELETE")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/list")
+    @DeleteMapping("program/cancel/{pgmRegSeq")
+    public ResponseEntity<JSONData> groupDelete(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+
+        return null;
+    }
+
+    //집단 상담 예약 조회(사용자)(다중)
+    @Operation(summary = "집단 상담 예약 조회 목록 (사용자)", method="GET")
+    @ApiResponse(responseCode = "200")
+    @DeleteMapping("program/res/info")
+    public ResponseEntity<JSONData> groupApplyList(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+
+        return null;
+    }
+
+
+    @Operation(summary = "편성된 프로그램의 신청내역 목록", method="GET")
+    @ApiResponse(responseCode = "200")
+    @GetMapping("/cs/group/list")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData csList(@ModelAttribute CounselingSearch search) {
 
         return null;
     }
 
+    // 편성된 프로그램의 신청내역 단일 조회 - GET /cs/group/info/{schdlSeq}
+    @Operation(summary="편성된 프로그램의 신청내역 단일 조회", method="GET")
+    @ApiResponse(responseCode = "200")
+    @GetMapping("/cs/group/info/{schdlSeq}")
+    public void csListOne() { // 메서드명 수정 각
+    }
+
+    // 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
+    @Operation(summary = "편성된 프로그램의 변경 처리",  description = "참석 여부 업데이트, 일지 작성", method = "PATCH")
+    @ApiResponse(responseCode = "200")
+    @PatchMapping("/cs/group/change")
+    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
+    public void csGroupChange() {
+
+    }
 
     // 편성된 상담 변경 처리  PATCH /cs/change
     @Operation(summary="편성된 상담 변경 처리", method="PATCH")
     @ApiResponse(responseCode = "200")
     @PatchMapping("/cs/change")
     public void csChange() {
-    }
-
-
-
-    // 편성된 그룹 상담 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
-    @Operation(summary = "편성된 그룹 상담 변경 처리",  description = "참석 여부 업데이트, 일지 작성", method = "PATCH")
-    @ApiResponse(responseCode = "200")
-    @PatchMapping("/cs/group/change")
-    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public void csGroupChange() {
-
     }
 
     @Operation(summary = "상담사 평점 - 개인 상담, 집단 상담")
