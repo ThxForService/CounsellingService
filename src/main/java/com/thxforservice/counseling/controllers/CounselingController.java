@@ -142,7 +142,7 @@ public class CounselingController {
         Member member = memberUtil.getMember();
         search.setPgmRegSeq(List.of(member.getSeq()));
 
-        GroupCounseling counseling = groupCounselingInfoService.getCounseling(pgmRegSeq, true);
+//        GroupCounseling counseling = groupCounselingInfoService.getCounseling(pgmRegSeq, true);
 
         ListData<GroupCounseling> CounselinglistData = groupCounselingInfoService.getGroupCounselingList(search);
 
