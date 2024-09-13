@@ -57,7 +57,7 @@ public class CounselingApplyService {
             mobile = mobile.replaceAll("\\D", ""); // 전화번호에서 숫자만 추출
         }
 
-        // 새로운 상담 예약 생성
+        // 새로운 상담 예약 생성, 수업에선 세터 게터 썻는데 아마 상담프로그램 생성이라 그런가?
         Counseling counseling = Counseling.builder()
                 .gid(gid)  // GID 설정
                 .username(form.getUsername()) // 내담자 이름

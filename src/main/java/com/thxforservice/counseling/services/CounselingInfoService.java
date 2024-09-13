@@ -74,8 +74,9 @@ public class CounselingInfoService {
      */
     public ListData<Counseling> getList(CounselingSearch search) {
         int page = Math.max(search.getPage(), 1);
-        int limit = search.getLimit();
-        limit = limit < 1 ? 10 : limit;
+//        int limit = search.getLimit();
+//        limit = limit < 1 ? 10 : limit;
+        int limit = search.getLimit() > 0 ? 10 : search.getLimit();
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         QCounseling counseling = QCounseling.counseling;
