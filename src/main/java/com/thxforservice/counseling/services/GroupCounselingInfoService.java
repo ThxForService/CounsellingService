@@ -77,7 +77,7 @@ public class GroupCounselingInfoService {
         LocalDateTime programStartDate = search.getProgramStartDate();
 
         if (programStartDate != null) {
-            andBuilder.and(groupProgram.programStartDate.goe(programStartDate));
+            andBuilder.and(groupProgram.pgmStartDate.goe(programStartDate));
         }
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));

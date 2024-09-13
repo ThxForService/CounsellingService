@@ -1,21 +1,24 @@
 package com.thxforservice.counseling.controllers;
+
+import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.entities.Counseling;
 import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.repositories.CounselingRepository;
-import com.thxforservice.counseling.services.CounselingApplyService;
-import com.thxforservice.counseling.services.GroupCounselingApplyService;
-import com.thxforservice.counseling.services.GroupCounselingInfoService;
+import com.thxforservice.counseling.services.*;
 import com.thxforservice.counseling.validators.CounselingValidator;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.JSONData;
+import com.thxforservice.member.MemberUtil;
+import com.thxforservice.member.entities.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,60 +26,51 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name="Counseling", description = "상담 API")
+import java.util.List;
+
+@Tag(name = "Counseling", description = "개인 상담 API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/counseling")
 public class CounselingController {
     /**
      * ------사용자---------
      * 1. 개인 상담 신청  - POST /apply
-     *      - 개인 상담 목록 조회 ( 다중 )
-     * 1. 집단 상담 프로그램 신청(예약) - POST program/apply
-     * 2. 집단 상담 프로그램 조회(단일)(every)  - GET program/info/{pgmSeq}
-     *    집단 상담 프로그램 조회(다중)(every)  - GET program/info
-     *
-     * 3. 집단 상담 프로그램 취소(사용자) - DELETE program/cancel/{pgmRegSeq}
-     *
-     * 4. 집단 상담 예약 조회(사용자)(다중) - GET program/res/info
-     *
+     * - 개인 상담 목록 조회 ( 다중 )
+     * - 개인 상담 목록 조회 ( 단일 )
      * -------상담사 -------
-     *
-     * - 편성된 프로그램의 신청내역 다중조회(목록)  - GET /cs/group/list
-     *      - 편성된 프로그램의 신청내역 단일조회 - GET /cs/group/info/{schdlSeq}
-     *      - 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
-     *      - 참여율은 자동 계산
-     *----------------------
-     *
-     *  5. 개인 상담 일정 변경 (상담사)
-     *      - 편성된 상담은 empNo로 조회된 상담
-     *      - 편성된 상담 일정 목록  GET /cs/list
-     *      - 편성된 상담 하나 조회  GET /cs/info/{cSeq}
-     *      - 편성된 상담 변경 처리(일정, 일지)  PATCH /cs/change
-     *
-     *      - 상담사 : 상담사로 권한 제한
-     *      - rDate, rTime
-     *
+     * 1. 개인 상담 목록 조회 ( 다중 )
+     * 2. 개인 상담 목록 조회 ( 단일 )
+     * 5. 개인 상담 일정 변경 (상담사)
+     * - 편성된 상담은 empNo로 조회된 상담
+     * - 편성된 상담 일정 목록  GET /cs/list
+     * - 편성된 상담 하나 조회  GET /cs/info/{cSeq}
+     * - 편성된 상담 변경 처리(일정, 일지)  PATCH /cs/change
+     * - rDate, rTime
+     * ----------------------
      */
-    private final GroupCounselingInfoService infoService;
-    private final GroupCounselingApplyService groupCounselingApplyService;
+
     private final Utils utils;
-    private final CounselingRepository counselingRepository;
-    private final CounselingValidator counselingValidator;
-    private final CounselingApplyService counselingApplyService;
-    @Operation(summary = "개인 상담 신청", method="POST")
+    private final CounselingValidator validate;
+    private final CounselingApplyService applyService;
+    private final CounselingInfoService infoService;
+    private final MemberUtil memberUtil;
+    private final CounselingStatusService statusService;
+
+    @Operation(summary = "개인 상담 신청", method = "POST")
     @ApiResponse(responseCode = "201")
     @PostMapping("/apply")
     public ResponseEntity<Void> apply(@Valid @RequestBody RequestCounselingApply form, Errors errors) {
 
         // 추가 검증 - validator
-        counselingValidator.validate(form, errors);
+        validate.validate(form, errors);
 
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
         // 서비스 추가
-        Counseling counseling = counselingApplyService.apply(form);
+        Counseling counseling = applyService.apply(form);
 
         HttpStatus status = HttpStatus.CREATED;
         JSONData jsonData = new JSONData(counseling);
@@ -85,101 +79,68 @@ public class CounselingController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "집단 상담(프로그램) 정보 단일 조회", method = "GET")
+    @Operation(summary = "개인 상담 예약 조회", method = "GET")
     @ApiResponse(responseCode = "200")
-    @Parameter(name="pgmSeq", required = true, description = "경로변수, 집단 상담 정보 등록 번호")
-    @GetMapping("/program/info/{pgmSeq}")
-    public JSONData groupInfo(@PathVariable("pgmSeq") Long pgmSeq) {
+    @GetMapping("/list")
+    public JSONData List(CounselingSearch search) {
 
-        return null;
-    }
+        Member member = memberUtil.getMember();
+        search.setStudentNo(List.of(member.getSeq()));
 
-    @Operation(summary = "집단 상담(프로그램) 정보 목록", method="GET")
-    @ApiResponse(responseCode = "200")
-    @GetMapping("/program/info")
-    public JSONData groupList(@ModelAttribute GroupCounselingSearch search) {
-
-        ListData<GroupProgram> listData = infoService.getGroupCounselingList(search);
+        ListData<Counseling> listData = infoService.getList(search);
 
         return new JSONData(listData);
 
     }
 
-    @Operation(summary = "집단 상담 신청", method = "POST")
+    @Operation(summary = "개인 상담 예약 상세 조회", method = "GET")
     @ApiResponse(responseCode = "201")
-    @Parameters({
-            @Parameter(name="schdlSeq", required = true, description = "집단 상담 스케쥴 번호", example = "1111"),
-            @Parameter(name="studentNo", required = true, description = "집단 상담 신청자의 학번", example = "20150411"),
-            @Parameter(name="username", required = true, description = "집단 상담 신청자의 이름", example = "홍길동"),
-            @Parameter(name="grade", required = true, description = "집단 상담 신청자의 학년", example = "1"),
-            @Parameter(name="department", required = true, description = "집단 상담 신청자의 학과", example = "치킨학과")
-    })
-    @PostMapping("/program/apply")
-    public ResponseEntity<JSONData> groupApply(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+    @GetMapping("/cs/info")
+    public JSONData info(@PathVariable("cSeq") Long cSeq) {
 
-        // 추가 검증 - validator
-        if (errors.hasErrors()) {
+        Counseling counseling = infoService.get(cSeq, true);
+
+        return new JSONData(counseling);
+    }
+
+    @Operation(summary = "개인 상담 예약 취소", method = "POST")
+    @ApiResponse(responseCode = "201")
+    @PostMapping("/cancel/{cSeq}")
+    public JSONData cancel (@PathVariable("cSeq") Long cSeq) {
+       Counseling item = infoService.cancel(cSeq);
+
+        return new JSONData(item);
+    }
+
+    @Operation(summary = "상담사의 학생 예약 조회", method = "GET")
+    @GetMapping("/cs/list")
+    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
+    public JSONData csList(CounselingSearch search) {
+
+        ListData<Counseling> data = infoService.getList(search);
+
+        return new JSONData(data);
+    }
+
+    @Operation(summary = "상담사의 학생 예약 상세 조회", method = "GET")
+    @ApiResponse(responseCode = "201")
+    @GetMapping("/cs/info")
+    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
+    public JSONData csInfo(@PathVariable("cSeq") Long cSeq) {
+
+        Counseling counseling = infoService.get(cSeq);
+
+        return new JSONData(counseling);
+    }
+
+    @Operation(summary = "상담사의 학생 예약 상태 변경", method = "POST")
+    @PostMapping("/cs/status")
+    @PreAuthorize("hasAnyAuthority(('COUNSELOR'))")
+    public void CsChangeStatus(@Valid @RequestBody RequestCsChange form, Errors errors){
+        if(errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
-
-        // 서비스 연동
-        groupCounselingApplyService.apply(form);
-
-        HttpStatus status = HttpStatus.CREATED;
-        JSONData jsonData = new JSONData(form);
-
-        return ResponseEntity.status(status).body(jsonData);
-    }
-
-    //집단 상담 프로그램 취소(사용자)
-    @Operation(summary = "집단 상담 프로그램 취소(사용자)", method="DELETE")
-    @ApiResponse(responseCode = "200")
-    @DeleteMapping("program/cancel/{pgmRegSeq}")
-    public ResponseEntity<JSONData> groupDelete(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
-
-        return null;
-    }
-
-    //집단 상담 예약 조회(사용자)(다중)
-    @Operation(summary = "집단 상담 예약 조회 목록 (사용자)", method="GET")
-    @ApiResponse(responseCode = "200")
-    @DeleteMapping("program/res/info")
-    public ResponseEntity<JSONData> groupApplyList(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
-
-        return null;
-    }
-
-
-    @Operation(summary = "편성된 프로그램의 신청내역 목록", method="GET")
-    @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/list")
-    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public JSONData csList(@ModelAttribute CounselingSearch search) {
-
-        return null;
-    }
-
-    // 편성된 프로그램의 신청내역 단일 조회 - GET /cs/group/info/{schdlSeq}
-    @Operation(summary="편성된 프로그램의 신청내역 단일 조회", method="GET")
-    @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/info/{schdlSeq}")
-    public void csListOne() { // 메서드명 수정 각
-    }
-
-    // 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
-    @Operation(summary = "편성된 프로그램의 변경 처리",  description = "참석 여부 업데이트, 일지 작성", method = "PATCH")
-    @ApiResponse(responseCode = "200")
-    @PatchMapping("/cs/group/change")
-    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public void csGroupChange() {
-
-    }
-
-    // 편성된 상담 변경 처리  PATCH /cs/change
-    @Operation(summary="편성된 상담 변경 처리", method="PATCH")
-    @ApiResponse(responseCode = "200")
-    @PatchMapping("/cs/change")
-    public void csChange() {
+        statusService.change(form.getCSeq(), Status.valueOf(form.getStatus()));
     }
 
     @Operation(summary = "상담사 평점 - 개인 상담, 집단 상담")
