@@ -63,6 +63,9 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
 
         counselingRepository.saveAndFlush(groupCounseling);
 
+        program.setCurrentCount(currentCount + 1);
+        programRepository.saveAndFlush(program);
+
 
         return groupCounseling;
     }
