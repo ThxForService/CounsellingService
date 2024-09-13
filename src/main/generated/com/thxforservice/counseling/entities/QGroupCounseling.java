@@ -22,7 +22,15 @@ public class QGroupCounseling extends EntityPathBase<GroupCounseling> {
 
     public static final QGroupCounseling groupCounseling = new QGroupCounseling("groupCounseling");
 
+    public final com.thxforservice.global.entities.QBaseEntity _super = new com.thxforservice.global.entities.QBaseEntity(this);
+
     public final BooleanPath attend = createBoolean("attend");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 
     public final StringPath department = createString("department");
 
@@ -31,6 +39,9 @@ public class QGroupCounseling extends EntityPathBase<GroupCounseling> {
     public final StringPath grade = createString("grade");
 
     public final StringPath mobile = createString("mobile");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     public final NumberPath<Long> pgmRegSeq = createNumber("pgmRegSeq", Long.class);
 

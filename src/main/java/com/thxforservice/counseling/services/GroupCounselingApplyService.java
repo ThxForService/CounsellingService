@@ -22,6 +22,7 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
     private final GroupProgramRepository programRepository;
     private final MemberUtil memberUtil;
     private final GroupCounselingRepository counselingRepository;
+    private final GroupCounselingResInfoService counselingResInfoService;
 
     public GroupCounseling apply(RequestGroupCounselingApply form) {
 
@@ -37,10 +38,9 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
 
         //2. 제한인원을 초과했는지 확인
         int capacity = program.getCapacity();
-        int currentCount = program.getCurrentCount();
-        if (currentCount >= capacity) {
-            throw new GroupProgramFullException();
-        }
+        int currentCount = counselingResInfoService.count(program.getPgmSeq());
+        if(currentCount >= currentCount) throw new GroupProgramFullException();
+
 
         //3. 이미 예약을 했는지 확인(추후 넣어야함)
 
@@ -63,7 +63,6 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
 
         counselingRepository.saveAndFlush(groupCounseling);
 
-        program.setCurrentCount(currentCount + 1);
         programRepository.saveAndFlush(program);
 
 
