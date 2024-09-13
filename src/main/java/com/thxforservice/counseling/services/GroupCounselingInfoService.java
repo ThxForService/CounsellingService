@@ -2,9 +2,12 @@ package com.thxforservice.counseling.services;
 
 import com.querydsl.core.BooleanBuilder;
 import com.thxforservice.counseling.controllers.GroupCounselingSearch;
+import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
+import com.thxforservice.counseling.entities.QGroupCounseling;
 import com.thxforservice.counseling.entities.QGroupProgram;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
+import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Pagination;
@@ -29,26 +32,46 @@ import static org.springframework.data.domain.Sort.Order.desc;
 public class GroupCounselingInfoService {
 
     private final GroupProgramRepository programRepository;
+    private final GroupCounselingRepository counselingRepository;
     private final HttpServletRequest request;
 
     /**
      * 프로그램 상세 정보
      *
-     * @param id
+     * @param pgmSeq
      * @return
      */
-    public GroupProgram get(Long id) {
-        GroupProgram counseling = programRepository.findById(id)
+    public GroupProgram get(Long pgmSeq) {
+        GroupProgram program = programRepository.findById(pgmSeq)
                 .orElseThrow(CounselingNotFoundException::new);
 
         //추가 정보 처리
-        addInfo(counseling);
+        addInfo(program);
+
+        return program;
+    }
+
+    public GroupCounseling getCounseling(Long pgmRegSeq) {
+        GroupCounseling counseling = counselingRepository.findById(pgmRegSeq)
+                .orElseThrow(CounselingNotFoundException::new);
+
+        //추가 정보 처리
+        addInfoCounseling(counseling);
 
         return counseling;
     }
 
-    // 집단 상담 프로그램 목록 + 페이지네이션
-    public ListData<GroupProgram> getGroupCounselingList(GroupCounselingSearch search) {
+    private void addInfo(GroupProgram program) {
+
+    }
+
+    private void addInfoCounseling(GroupCounseling counseling) {
+
+    }
+
+    // 집단 상담 프로그램 목록 + 페이지네이션 + 검색
+    // 검색 가능 키워드 : 프로그램 이름, 프로그램 진행일
+    public ListData<GroupProgram> getGroupProgramList(GroupCounselingSearch search) {
 
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
@@ -83,8 +106,40 @@ public class GroupCounselingInfoService {
         return new ListData<>(data.getContent(), pagination);
     }
 
+    //집단 상담 예약 건에 대한 목록
+    public ListData<GroupCounseling> getGroupCounselingList(GroupCounselingSearch search) {
 
-    private void addInfo(GroupProgram counseling) {
+        int page = Math.max(search.getPage(), 1);
+        int limit = search.getLimit();
+        limit = limit < 1 ? 10 : limit;
+        int offset = (page - 1) * limit;
 
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        QGroupCounseling groupCounseling = QGroupCounseling.groupCounseling;
+
+        String skey = search.getSkey(); // 검색 키워드
+
+        List<Long> pgmSeq = search.getPgmSeq(); // 신청 번호로 조회
+        if (pgmSeq != null && !pgmSeq.isEmpty()) {
+            andBuilder.and(groupCounseling.pgmRegSeq.in(pgmSeq));
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
+
+        Page<GroupCounseling> data = counselingRepository.findAll(andBuilder, pageable);
+
+        Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
+
+        return new ListData<>(data.getContent(), pagination);
+    }
+
+    // 집단 상담 프로그램 삭제
+    public GroupProgram deleteProgram(Long pgmSeq) {
+        GroupProgram program = get(pgmSeq);
+        program.setDeletedAt(LocalDateTime.now());
+
+        programRepository.saveAndFlush(program);
+
+        return program;
     }
 }

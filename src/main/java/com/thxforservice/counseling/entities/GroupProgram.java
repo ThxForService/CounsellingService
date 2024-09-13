@@ -43,7 +43,7 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     private int currentCount; // 현재 인원
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private ProgramStatus status; // 접수상태
 
 

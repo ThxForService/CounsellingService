@@ -16,7 +16,7 @@ public class CounselingStatusService {
     private final CounselingRepository repository;
 
 //    public void change(Long seq, Status status) {
-//        Counseling counseling = infoService.get(seq);
+//        Counseling counseling = infoService.getCounseling(seq);
 //        Status prevStatus = counseling.getStatus();
 //
 //        if (prevStatus != status) { //기존 상태와 동일하면 처리 x

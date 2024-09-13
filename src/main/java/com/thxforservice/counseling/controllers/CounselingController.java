@@ -80,7 +80,9 @@ public class CounselingController {
     @GetMapping("/program/info/{pgmSeq}")
     public JSONData groupInfo(@PathVariable("pgmSeq") Long pgmSeq) {
 
-        return null;
+        GroupProgram groupProgram = infoService.get(pgmSeq);
+
+        return new JSONData(groupProgram);
     }
 
     @Operation(summary = "집단 상담(프로그램) 정보 목록", method="GET")
@@ -88,7 +90,7 @@ public class CounselingController {
     @GetMapping("/program/info")
     public JSONData groupList(@ModelAttribute GroupCounselingSearch search) {
 
-        ListData<GroupProgram> listData = infoService.getGroupCounselingList(search);
+        ListData<GroupProgram> listData = infoService.getGroupProgramList(search);
 
         return new JSONData(listData);
 

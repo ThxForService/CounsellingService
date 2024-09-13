@@ -2,7 +2,7 @@ package com.thxforservice.counseling.controllers;
 
 import com.thxforservice.counseling.controllers.RequestGroupCounselingSave;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
-import com.thxforservice.counseling.services.GroupCounselingDeleteService;
+import com.thxforservice.counseling.services.GroupCounselingInfoService;
 import com.thxforservice.counseling.services.GroupCounselingSaveService;
 import com.thxforservice.counseling.validators.GroupCounselingValidator;
 import com.thxforservice.global.Utils;
@@ -28,12 +28,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CounselingAdminController {
 
-    private final GroupCounselingDeleteService deleteService;
     private final HttpServletRequest request;
     private final GroupCounselingSaveService counselingSaveService;
     private final GroupCounselingValidator validator;
 
     private final Utils utils;
+    private final GroupCounselingInfoService groupCounselingInfoService;
 
     /**
      * 1. 집단 상담 프로그램 관리
@@ -86,7 +86,7 @@ public class CounselingAdminController {
     @DeleteMapping("/group/{pgmSeq}")
     public void delete(@PathVariable("pgmSeq") Long pgmSeq) {
 
-        deleteService.deleteProgram(pgmSeq);
+        groupCounselingInfoService.deleteProgram(pgmSeq);
     }
     // 집단 상담 E
 
