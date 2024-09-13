@@ -18,7 +18,7 @@ public class GroupCounseling { // 신청 결과
     private Long pgmRegSeq; // 신청 일련 번호
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="PGM_SEQ")
+    @JoinColumn(name="pgmSeq")
     private GroupProgram program;
 
     private Boolean attend; // 참석 여부

@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.controllers;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -8,6 +9,10 @@ import lombok.Data;
  */
 @Data
 public class RequestGroupCounselingApply { // GroupProgram 과 연동
+
+    @NotBlank
+    private Long pgmSeq; //프로그램 id
+
     private Long studentNo; // 학번
     private String username; // 이름
     private String grade; // 학년

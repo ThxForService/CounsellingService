@@ -1,19 +1,17 @@
 package com.thxforservice.counseling.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.thxforservice.global.entities.BaseMemberEntity;
 import com.thxforservice.counseling.constants.ProgramStatus;
+import com.thxforservice.global.entities.BaseMemberEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
@@ -42,7 +40,8 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     @Min(5)
     private int capacity; // 신청 정원
 
-    private int currentCount; // 현재 인원
+    @Column(columnDefinition = "int default 0")
+    private int currentCount = 0; // 현재 인원
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
