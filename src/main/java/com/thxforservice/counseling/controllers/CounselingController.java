@@ -1,7 +1,11 @@
 package com.thxforservice.counseling.controllers;
+import com.thxforservice.counseling.entities.Counseling;
 import com.thxforservice.counseling.entities.GroupProgram;
+import com.thxforservice.counseling.repositories.CounselingRepository;
+import com.thxforservice.counseling.services.CounselingApplyService;
 import com.thxforservice.counseling.services.GroupCounselingApplyService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
+import com.thxforservice.counseling.validators.CounselingValidator;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
@@ -23,15 +27,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class CounselingController {
-
-    private final GroupCounselingInfoService infoService;
-    private GroupCounselingApplyService groupCounselingApplyService;
-
-    private final Utils utils;
     /**
-     *  1. 개인 상담 신청  - POST /apply
-     *
      * ------사용자---------
+     * 1. 개인 상담 신청  - POST /apply
+     *      - 개인 상담 목록 조회 ( 다중 )
      * 1. 집단 상담 프로그램 신청(예약) - POST program/apply
      * 2. 집단 상담 프로그램 조회(단일)(every)  - GET program/info/{pgmSeq}
      *    집단 상담 프로그램 조회(다중)(every)  - GET program/info
@@ -58,18 +57,30 @@ public class CounselingController {
      *      - rDate, rTime
      *
      */
+    private final GroupCounselingInfoService infoService;
+    private final GroupCounselingApplyService groupCounselingApplyService;
+    private final Utils utils;
+    private final CounselingRepository counselingRepository;
+    private final CounselingValidator counselingValidator;
+    private final CounselingApplyService counselingApplyService;
     @Operation(summary = "개인 상담 신청", method="POST")
     @ApiResponse(responseCode = "201")
     @PostMapping("/apply")
     public ResponseEntity<Void> apply(@Valid @RequestBody RequestCounselingApply form, Errors errors) {
 
         // 추가 검증 - validator
+        counselingValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
         // 서비스 추가
+        Counseling counseling = counselingApplyService.apply(form);
+
+        HttpStatus status = HttpStatus.CREATED;
+        JSONData jsonData = new JSONData(counseling);
+        jsonData.setStatus(status);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

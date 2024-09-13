@@ -1,5 +1,6 @@
 package com.thxforservice.member.constants;
 
+
 public enum Status {
     EMPLOYED, // 재직중
     LEAVE, // 휴직중
@@ -9,3 +10,4 @@ public enum Status {
     POSTGRADUATE, // 대학원생
     GRADUATE // 졸업생
 }
+

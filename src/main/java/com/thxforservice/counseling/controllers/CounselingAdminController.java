@@ -42,12 +42,9 @@ public class CounselingAdminController {
      *         수정 - PATCH /group/update/{pgmSeq}
      *         삭제 - DELETE /group/{pgmSeq}
      *
-     *
-     *
      * 2. 개별 상담 신청 관리
      *    - 개별 상담 신청 목록 - /apply
      *    - 개별 상담  신청 정보 - /apply/{cSeq}
-     *
      *
      */
     // 집단 상담 S

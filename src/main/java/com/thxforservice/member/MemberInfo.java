@@ -11,7 +11,6 @@ import java.util.Collection;
 @Data
 @Builder
 public class MemberInfo implements UserDetails {
-
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;

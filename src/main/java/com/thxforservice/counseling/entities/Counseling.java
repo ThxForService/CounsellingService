@@ -38,9 +38,6 @@ public class Counseling extends BaseEntity {
     @Column(nullable = false)
     private LocalTime rTime;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime rDateTime; // 예약 일시
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CReason cReason; //상담경위

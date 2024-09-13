@@ -2,6 +2,10 @@ package com.thxforservice.member.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.thxforservice.member.constants.Authority;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import com.thxforservice.member.constants.Authority;
 import lombok.Data;
 
 @Data

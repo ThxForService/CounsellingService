@@ -47,7 +47,13 @@ public class GroupCounselingInfoService {
         return counseling;
     }
 
-    // 집단 상담 프로그램 목록 + 페이지네이션
+    /**
+     * 집단 상담 프로그램 목록 조회,
+     *      페이지네이션
+     *
+     * @param search
+     * @return
+     */
     public ListData<GroupProgram> getGroupCounselingList(GroupCounselingSearch search) {
 
         int page = Math.max(search.getPage(), 1);

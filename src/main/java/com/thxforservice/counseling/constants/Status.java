@@ -1,9 +1,9 @@
 package com.thxforservice.counseling.constants;
 
 public enum Status {
-    APPLY("예약접수"),
-    CONFIRM("예약확인"),
-    CANCEL("예약취소");
+    APPLY("예약완료"),
+    CANCEL("예약취소"),
+    END("상담종료");
 
     private final String title;
 

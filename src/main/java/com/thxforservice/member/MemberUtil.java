@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MemberUtil {
 
-
     public boolean isLogin() {
         return getMember() != null;
     }
@@ -28,6 +27,7 @@ public class MemberUtil {
         return isLogin() && getMember().getAuthority() == Authority.STUDENT;
     }
 
+
     public <T extends Member> T getMember() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -39,4 +39,5 @@ public class MemberUtil {
 
         return null;
     }
+
 }
