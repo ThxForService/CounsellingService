@@ -48,7 +48,7 @@ public class QGroupProgram extends EntityPathBase<GroupProgram> {
 
     public final NumberPath<Long> pgmSeq = createNumber("pgmSeq", Long.class);
 
-    public final DateTimePath<java.time.LocalDateTime> programStartDate = createDateTime("programStartDate", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> pgmStartDate = createDateTime("pgmStartDate", java.time.LocalDateTime.class);
 
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 

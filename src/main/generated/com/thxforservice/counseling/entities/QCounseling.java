@@ -48,8 +48,6 @@ public class QCounseling extends EntityPathBase<Counseling> {
 
     public final DatePath<java.time.LocalDate> rDate = createDate("rDate", java.time.LocalDate.class);
 
-    public final DateTimePath<java.time.LocalDateTime> rDateTime = createDateTime("rDateTime", java.time.LocalDateTime.class);
-
     public final TimePath<java.time.LocalTime> rTime = createTime("rTime", java.time.LocalTime.class);
 
     public final EnumPath<com.thxforservice.counseling.constants.Status> status = createEnum("status", com.thxforservice.counseling.constants.Status.class);

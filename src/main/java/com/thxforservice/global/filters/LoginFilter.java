@@ -57,6 +57,7 @@ public class LoginFilter extends GenericFilterBean {
      */
     private void loginProcess(String token) {
 
+
         try {
             String apiUrl = utils.url("/account", "member-service");
             // api서버 주소/account
@@ -74,11 +75,12 @@ public class LoginFilter extends GenericFilterBean {
                     Member member = om.readValue(json, Member.class);
 
                     Authority authority = member.getAuthority();
-                    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority.name()));
+                    List<SimpleGrantedAuthority> authorities =
+                            List.of(new SimpleGrantedAuthority(authority.name()));
+
                     if (authority == Authority.COUNSELOR) {
                         authorities.add(new SimpleGrantedAuthority(Authority.COUNSELOR.name()));
                     }
-
 
                     MemberInfo memberInfo = MemberInfo.builder()
                             .email(member.getEmail())
@@ -122,4 +124,3 @@ public class LoginFilter extends GenericFilterBean {
         return null;
     }
 }
-

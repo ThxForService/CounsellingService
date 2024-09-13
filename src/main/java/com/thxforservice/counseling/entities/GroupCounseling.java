@@ -32,4 +32,6 @@ public class GroupCounseling { // 신청 결과
     private String mobile;
     /* 새로운 요청이 아니라 로그인 정보를 가지고 출력 E*/
 
+
+
 }
