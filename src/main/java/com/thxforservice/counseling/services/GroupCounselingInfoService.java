@@ -11,6 +11,9 @@ import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Pagination;
+import com.thxforservice.global.exceptions.UnAuthorizedException;
+import com.thxforservice.member.MemberUtil;
+import com.thxforservice.member.entities.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ public class GroupCounselingInfoService {
     private final GroupProgramRepository programRepository;
     private final GroupCounselingRepository counselingRepository;
     private final HttpServletRequest request;
+    private final MemberUtil memberUtil;
 
     /**
      * 프로그램 상세 정보
@@ -41,7 +45,7 @@ public class GroupCounselingInfoService {
      * @param pgmSeq
      * @return
      */
-    public GroupProgram get(Long pgmSeq) {
+    public GroupProgram getProgram(Long pgmSeq) {
         GroupProgram program = programRepository.findById(pgmSeq)
                 .orElseThrow(CounselingNotFoundException::new);
 
@@ -57,6 +61,17 @@ public class GroupCounselingInfoService {
 
         //추가 정보 처리
         addInfoCounseling(counseling);
+
+        return counseling;
+    }
+
+    public GroupCounseling getCounseling(Long pgmRegSeq, boolean isMine) {
+        GroupCounseling counseling = getCounseling(pgmRegSeq);
+
+        Member member = memberUtil.getMember();
+        if (isMine && (!memberUtil.isLogin() || member.getSeq().equals(counseling.getPgmRegSeq()))) {
+            throw new UnAuthorizedException();
+        }
 
         return counseling;
     }
@@ -135,7 +150,7 @@ public class GroupCounselingInfoService {
 
     // 집단 상담 프로그램 삭제
     public GroupProgram deleteProgram(Long pgmSeq) {
-        GroupProgram program = get(pgmSeq);
+        GroupProgram program = getProgram(pgmSeq);
         program.setDeletedAt(LocalDateTime.now());
 
         programRepository.saveAndFlush(program);

@@ -1,4 +1,5 @@
 package com.thxforservice.counseling.controllers;
+import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.services.GroupCounselingApplyService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
@@ -6,6 +7,8 @@ import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.JSONData;
+import com.thxforservice.member.MemberUtil;
+import com.thxforservice.member.entities.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -19,12 +22,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name="Counseling", description = "상담 API")
 @RestController
 @RequiredArgsConstructor
 public class CounselingController {
 
-    private final GroupCounselingInfoService infoService;
+    private final GroupCounselingInfoService groupCounselingInfoService;
+    private final MemberUtil memberUtil;
     private GroupCounselingApplyService groupCounselingApplyService;
 
     private final Utils utils;
@@ -80,7 +86,7 @@ public class CounselingController {
     @GetMapping("/program/info/{pgmSeq}")
     public JSONData groupInfo(@PathVariable("pgmSeq") Long pgmSeq) {
 
-        GroupProgram groupProgram = infoService.get(pgmSeq);
+        GroupProgram groupProgram = groupCounselingInfoService.getProgram(pgmSeq);
 
         return new JSONData(groupProgram);
     }
@@ -90,7 +96,7 @@ public class CounselingController {
     @GetMapping("/program/info")
     public JSONData groupList(@ModelAttribute GroupCounselingSearch search) {
 
-        ListData<GroupProgram> listData = infoService.getGroupProgramList(search);
+        ListData<GroupProgram> listData = groupCounselingInfoService.getGroupProgramList(search);
 
         return new JSONData(listData);
 
@@ -130,13 +136,20 @@ public class CounselingController {
     //집단 상담 예약 조회(사용자)(다중)
     @Operation(summary = "집단 상담 예약 조회 목록 (사용자)", method="GET")
     @ApiResponse(responseCode = "200")
-    @DeleteMapping("program/res/info")
-    public ResponseEntity<JSONData> groupApplyList(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+    @GetMapping("program/res/info")
+    public JSONData groupApplyList(@ModelAttribute GroupCounselingSearch search) {
 
-        return null;
+        Member member = memberUtil.getMember();
+        search.setPgmRegSeq(List.of(member.getSeq()));
+
+        GroupCounseling counseling = groupCounselingInfoService.getCounseling(pgmRegSeq, true);
+
+        ListData<GroupCounseling> CounselinglistData = groupCounselingInfoService.getGroupCounselingList(search);
+
+        return new JSONData(CounselinglistData);
     }
 
-
+/* 집단 상담의 상담사 S */
     @Operation(summary = "편성된 프로그램의 신청내역 목록", method="GET")
     @ApiResponse(responseCode = "200")
     @GetMapping("/cs/group/list")
@@ -161,6 +174,7 @@ public class CounselingController {
     public void csGroupChange() {
 
     }
+/* 집단 상담의 상담사 E */
 
     // 편성된 상담 변경 처리  PATCH /cs/change
     @Operation(summary="편성된 상담 변경 처리", method="PATCH")
