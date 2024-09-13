@@ -6,7 +6,6 @@ import com.thxforservice.global.Utils;
 import com.thxforservice.global.rests.JSONData;
 import com.thxforservice.member.MemberInfo;
 import com.thxforservice.member.constants.Authority;
-import com.thxforservice.member.entities.Authorities;
 import com.thxforservice.member.entities.Member;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -25,7 +25,7 @@ public class GroupCounselingValidator implements Validator {
 
 //      1. 집단 상담 프로그램 정원 5명~30명
         if (capacity < 5 || capacity > 30) {
-            errors.rejectValue("capacity", "capacity.outOfRange", "프로그램 정원은 5명 이상 30명 이하여야만 합니다.");
+            errors.rejectValue("capacity", "capacity.outOfRange");
         }
     }
 }

@@ -5,9 +5,8 @@ import com.thxforservice.member.constants.Authority;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import com.thxforservice.member.constants.Authority;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
