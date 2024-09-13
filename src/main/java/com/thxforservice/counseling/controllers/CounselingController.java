@@ -99,11 +99,7 @@ public class CounselingController {
     @Operation(summary = "집단 상담 신청", method = "POST")
     @ApiResponse(responseCode = "201")
     @Parameters({
-            @Parameter(name="schdlSeq", required = true, description = "집단 상담 스케쥴 번호", example = "1111"),
-            @Parameter(name="studentNo", required = true, description = "집단 상담 신청자의 학번", example = "20150411"),
-            @Parameter(name="username", required = true, description = "집단 상담 신청자의 이름", example = "홍길동"),
-            @Parameter(name="grade", required = true, description = "집단 상담 신청자의 학년", example = "1"),
-            @Parameter(name="department", required = true, description = "집단 상담 신청자의 학과", example = "치킨학과")
+            @Parameter(name="pgmSeq", required = true, description = "집단 상담 프로그램 번호", example = "1111"),
     })
     @PostMapping("/program/apply")
     public ResponseEntity<JSONData> groupApply(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
