@@ -1,9 +1,11 @@
 package com.thxforservice.counseling.controllers;
+
 import com.thxforservice.counseling.entities.Counseling;
+import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
-import com.thxforservice.counseling.repositories.CounselingRepository;
 import com.thxforservice.counseling.services.CounselingApplyService;
 import com.thxforservice.counseling.services.GroupCounselingApplyService;
+import com.thxforservice.counseling.services.GroupCounselingCancelService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
 import com.thxforservice.counseling.validators.CounselingValidator;
 import com.thxforservice.global.ListData;
@@ -59,10 +61,13 @@ public class CounselingController {
      */
     private final GroupCounselingInfoService infoService;
     private final GroupCounselingApplyService groupCounselingApplyService;
-    private final Utils utils;
-    private final CounselingRepository counselingRepository;
+    private final GroupCounselingCancelService groupCounselingCancelService;
+
     private final CounselingValidator counselingValidator;
     private final CounselingApplyService counselingApplyService;
+
+    private final Utils utils;
+
     @Operation(summary = "개인 상담 신청", method="POST")
     @ApiResponse(responseCode = "201")
     @PostMapping("/apply")
@@ -90,6 +95,8 @@ public class CounselingController {
     @Parameter(name="pgmSeq", required = true, description = "경로변수, 집단 상담 정보 등록 번호")
     @GetMapping("/program/info/{pgmSeq}")
     public JSONData groupInfo(@PathVariable("pgmSeq") Long pgmSeq) {
+
+
 
         return null;
     }
@@ -130,10 +137,15 @@ public class CounselingController {
     //집단 상담 프로그램 취소(사용자)
     @Operation(summary = "집단 상담 프로그램 취소(사용자)", method="DELETE")
     @ApiResponse(responseCode = "200")
+    @Parameters({
+            @Parameter(name="pgmRegSeq", required = true, description = "집단상담 예약 취소", example = "1111"),
+    })
     @DeleteMapping("program/cancel/{pgmRegSeq}")
-    public ResponseEntity<JSONData> groupDelete(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+    public JSONData groupDelete(@PathVariable("pgmRegSeq") Long pgmRegSeq) {
 
-        return null;
+        GroupCounseling counseling = groupCounselingCancelService.cancel(pgmRegSeq);
+
+        return new JSONData(counseling);
     }
 
     //집단 상담 예약 조회(사용자)(다중)

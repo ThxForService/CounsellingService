@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.entities;
 
+import com.thxforservice.global.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupCounseling { // 신청 결과
+public class GroupCounseling extends BaseEntity { // 신청 결과
 
     @Id
     @GeneratedValue
