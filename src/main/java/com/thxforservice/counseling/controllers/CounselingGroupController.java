@@ -123,41 +123,40 @@ public class CounselingGroupController {
     }
 
     /* 집단 상담의 상담사 S */
-    @Operation(summary = "편성된 프로그램의 신청내역 목록", method="GET")
+    @Operation(summary = "편성된 프로그램의 신청내역 목록(프로그램번호를 경로변수로 받아서 조회)", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/list")
+    @GetMapping("/cs/group/list/{pgmSeq}")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public JSONData csList(@ModelAttribute CounselingSearch search) {
+    public JSONData csList(@PathVariable("pgmSeq") Long pgmSeq,@ModelAttribute GroupCounselingSearch search) {
 
-        return null;
+        ListData<GroupCounseling> listData = groupCounselingInfoService.getCounselorGroupList(search);
+
+        return new JSONData(listData);
     }
 
     // 편성된 프로그램의 신청내역 단일 조회 - GET /cs/group/info/{schdlSeq}
-    @Operation(summary="편성된 프로그램의 신청내역 단일 조회", method="GET")
+    @Operation(summary="편성된 프로그램의 신청내역 단일 조회(신청번호로)", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/info/{schdlSeq}")
-    public void csListOne() { // 메서드명 수정 각
+    @GetMapping("/cs/group/info/{pgmRegSeq}")
+    public JSONData csListOne(@PathVariable("pgmRegSeq") Long pgmRegSeq) {
+
+        GroupCounseling counseling = groupCounselingInfoService.getGroupCounselingById(pgmRegSeq);
+
+        return new JSONData(counseling);
     }
 
     // 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
     @Operation(summary = "편성된 프로그램의 변경 처리",  description = "참석 여부 업데이트, 일지 작성", method = "PATCH")
     @ApiResponse(responseCode = "200")
-    @PatchMapping("/cs/group/change")
+    @PatchMapping("/cs/group/change/{pgmRegSeq}")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public void csGroupChange() {
 
     }
     /* 집단 상담의 상담사 E */
 
-    // 편성된 상담 변경 처리  PATCH /cs/change
-    @Operation(summary="편성된 상담 변경 처리", method="PATCH")
-    @ApiResponse(responseCode = "200")
-    @PatchMapping("/cs/change")
-    public void csChange() {
-    }
-
-    @Operation(summary = "상담사 평점 - 개인 상담, 집단 상담")
-    @GetMapping("/rating")
+    @Operation(summary = "상담사 평점 - 집단 상담")
+    @GetMapping("/group/rating")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData getRating() {
 

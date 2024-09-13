@@ -1,6 +1,7 @@
 package com.thxforservice.counseling.services;
 
 import com.querydsl.core.BooleanBuilder;
+import com.thxforservice.counseling.controllers.CounselingSearch;
 import com.thxforservice.counseling.controllers.GroupCounselingSearch;
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
@@ -156,4 +157,51 @@ public class GroupCounselingInfoService {
 
         return program;
     }
+
+    /* 상담사 S */
+
+    public GroupCounseling getGroupCounselingById(Long pgmRegSeq) {
+        GroupCounseling counseling = counselingRepository.findById(pgmRegSeq)
+                .orElseThrow(CounselingNotFoundException::new);
+
+        //추가 정보 처리
+        addCounselorInfo(counseling);
+
+        return counseling;
+    }
+
+    private void addCounselorInfo(GroupCounseling counseling) {
+
+    }
+
+    // 편성된 프로그램의 신청내역 목록(프로그램번호를 경로변수로 받아서 조회)
+    public ListData<GroupCounseling> getCounselorGroupList(GroupCounselingSearch search) {
+
+        int page = Math.max(search.getPage(), 1);
+        int limit = search.getLimit();
+        limit = limit < 1 ? 10 : limit;
+
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        QGroupCounseling groupCounseling = QGroupCounseling.groupCounseling;
+
+        List<Long> pgmSeqList = search.getPgmSeq();
+        if (pgmSeqList != null && !pgmSeqList.isEmpty()) {
+            andBuilder.and(groupCounseling.pgmRegSeq.in(pgmSeqList));
+        }
+
+        String skey = search.getSkey(); // 검색 키워드
+        if (StringUtils.hasText(skey)) {
+            andBuilder.and(groupCounseling.studentNo.like("%" + skey + "%"));
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(Sort.Order.desc("createdAt")));
+        Page<GroupCounseling> data = counselingRepository.findAll(andBuilder, pageable);
+
+        Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
+
+        return new ListData<>(data.getContent(), pagination);
+    }
+
+
+    /* 상담사 E */
 }
