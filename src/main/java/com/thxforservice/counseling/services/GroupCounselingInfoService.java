@@ -1,15 +1,11 @@
 package com.thxforservice.counseling.services;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.StringExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.thxforservice.counseling.controllers.GroupCounselingSearch;
 import com.thxforservice.counseling.entities.GroupProgram;
-import com.thxforservice.counseling.entities.QGroupCounseling;
 import com.thxforservice.counseling.entities.QGroupProgram;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
-import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Pagination;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,7 +47,13 @@ public class GroupCounselingInfoService {
         return counseling;
     }
 
-    // 집단 상담 프로그램 목록 + 페이지네이션
+    /**
+     * 집단 상담 프로그램 목록 조회,
+     *      페이지네이션
+     *
+     * @param search
+     * @return
+     */
     public ListData<GroupProgram> getGroupCounselingList(GroupCounselingSearch search) {
 
         int page = Math.max(search.getPage(), 1);

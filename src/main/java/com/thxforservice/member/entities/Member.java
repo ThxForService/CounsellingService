@@ -25,5 +25,5 @@ public class Member {
 
     private String mobile;
 
-    private List<Authorities> authorities;
+    private Authority authority;
 }

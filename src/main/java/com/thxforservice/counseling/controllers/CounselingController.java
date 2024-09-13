@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CounselingController {
     /**
-     *  1. 개인 상담 신청  - POST /apply
-     *
      * ------사용자---------
+     * 1. 개인 상담 신청  - POST /apply
+     *      - 개인 상담 목록 조회 ( 다중 )
      * 1. 집단 상담 프로그램 신청(예약) - POST program/apply
      * 2. 집단 상담 프로그램 조회(단일)(every)  - GET program/info/{pgmSeq}
      *    집단 상담 프로그램 조회(다중)(every)  - GET program/info

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thxforservice.global.entities.BaseMemberEntity;
 import com.thxforservice.counseling.constants.ProgramStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +31,7 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     private String Description; // 프로그램 설명
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm")
-    private LocalDateTime programStartDate; // 프로그램 수행일자
+    private LocalDateTime pgmStartDate; // 프로그램 수행일자
 
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate startDate; // 신청 시작일자
@@ -38,6 +39,7 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate endDate; // 신청 종료일자
 
+    @Min(5)
     private int capacity; // 신청 정원
 
     private int currentCount; // 현재 인원
