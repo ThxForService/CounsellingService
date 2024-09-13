@@ -38,7 +38,7 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     private LocalDate endDate; // 신청 종료일자
 
     @Min(5)
-    private int capacity; // 신청 정원
+    private int capacity; // 제한 신청 정원
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
