@@ -3,6 +3,7 @@ package com.thxforservice;
 import com.thxforservice.counseling.constants.ProgramStatus;
 import com.thxforservice.counseling.controllers.RequestGroupCounselingSave;
 import com.thxforservice.counseling.entities.GroupProgram;
+import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.services.GroupCounselingSaveService;
 import com.thxforservice.counseling.validators.GroupCounselingValidator;
 import com.thxforservice.global.exceptions.BadRequestException;
@@ -18,10 +19,12 @@ import java.time.LocalDate;
 public class GroupProgramSaveTest {
 
    @Autowired
-   private GroupCounselingSaveService groupCounselingSaveService;
+   private GroupCounselingSaveService counselingSaveService;
 
    @Autowired
    private GroupCounselingValidator validator;
+
+   private Errors errors;
 
     @Test
     void testAddProgram() {
@@ -34,24 +37,6 @@ public class GroupProgramSaveTest {
         form.setCapacity(50);
         form.setStatus(ProgramStatus.READY);
 
-        GroupProgram program = GroupProgram.builder()
-                .pgmNm(form.getPgmNm())
-                .Description(form.getDescription())
-                .startDate(form.getStartDate())
-                .endDate(form.getEndDate())
-                .capacity(form.getCapacity())
-                .status(form.getStatus())
-                .build();
-
-        Errors errors = new BeanPropertyBindingResult(form, "form");
-        validator.validate(form, errors);
-
-        if (errors.hasErrors()) {
-            throw new BadRequestException("capacity");
-        }
-
-        groupCounselingSaveService.addProgram(form);
-
+        counselingSaveService.addProgram(form);
     }
-
 }

@@ -1,14 +1,10 @@
 package com.thxforservice.counseling.services;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.StringExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.thxforservice.counseling.controllers.GroupCounselingSearch;
 import com.thxforservice.counseling.entities.GroupProgram;
-import com.thxforservice.counseling.entities.QGroupCounseling;
 import com.thxforservice.counseling.entities.QGroupProgram;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
-import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Pagination;
@@ -22,7 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.data.domain.Sort.Order.desc;
@@ -32,7 +28,7 @@ import static org.springframework.data.domain.Sort.Order.desc;
 @RequiredArgsConstructor
 public class GroupCounselingInfoService {
 
-    private final GroupCounselingRepository counselingRepository;
+    private final GroupProgramRepository programRepository;
     private final HttpServletRequest request;
 
     /**
@@ -42,7 +38,7 @@ public class GroupCounselingInfoService {
      * @return
      */
     public GroupProgram get(Long id) {
-        GroupProgram counseling = counselingRepository.findById(id)
+        GroupProgram counseling = programRepository.findById(id)
                 .orElseThrow(CounselingNotFoundException::new);
 
         //추가 정보 처리
@@ -72,19 +68,15 @@ public class GroupCounselingInfoService {
             andBuilder.and(groupProgram.pgmSeq.in(pgmSeq));
         }
 
-        LocalDate startDate = search.getStartDate();
-        LocalDate endDate = search.getEndDate();
-        if (startDate != null) {
-            andBuilder.and(groupProgram.startDate.goe(startDate));
-        }
+        LocalDateTime programStartDate = search.getProgramStartDate();
 
-        if (endDate != null) {
-            andBuilder.and(groupProgram.endDate.loe(endDate));
+        if (programStartDate != null) {
+            andBuilder.and(groupProgram.programStartDate.goe(programStartDate));
         }
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
 
-        Page<GroupProgram> data = counselingRepository.findAll(andBuilder, pageable);
+        Page<GroupProgram> data = programRepository.findAll(andBuilder, pageable);
 
         Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
 
