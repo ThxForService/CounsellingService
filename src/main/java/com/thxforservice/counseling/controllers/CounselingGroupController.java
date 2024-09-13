@@ -1,8 +1,9 @@
 package com.thxforservice.counseling.controllers;
 
+import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
-import com.thxforservice.counseling.repositories.CounselingRepository;
 import com.thxforservice.counseling.services.GroupCounselingApplyService;
+import com.thxforservice.counseling.services.GroupCounselingCancelService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
@@ -47,6 +48,7 @@ public class CounselingGroupController {
  */
     private final GroupCounselingInfoService groupCounselingInfoService;
     private final GroupCounselingApplyService groupCounselingApplyService;
+    private final GroupCounselingCancelService groupCounselingCancelService;
     private final Utils utils;
 
     @Operation(summary = "집단 상담(프로그램) 정보 단일 조회", method = "GET")
@@ -94,10 +96,15 @@ public class CounselingGroupController {
     //집단 상담 프로그램 취소(사용자)
     @Operation(summary = "집단 상담 프로그램 취소(사용자)", method="DELETE")
     @ApiResponse(responseCode = "200")
-    @DeleteMapping("program/cancel/{pgmRegSeq}")
-    public ResponseEntity<JSONData> groupDelete(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+    @Parameters({
+            @Parameter(name="pgmSeq", required = true, description = "집단 상담 프로그램 번호", example = "1111"),
+    })
+    @DeleteMapping("program/cancel/{pgmSeq}")
+    public JSONData groupDelete(@PathVariable("pgmSeq") Long pgmSeq) {
 
-        return null;
+        GroupCounseling groupCounseling = groupCounselingCancelService.cancel(pgmSeq);
+
+        return new JSONData(groupCounseling);
     }
 
     //집단 상담 예약 조회(사용자)(다중)

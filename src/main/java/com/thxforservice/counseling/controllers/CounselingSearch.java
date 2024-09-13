@@ -1,11 +1,6 @@
 package com.thxforservice.counseling.controllers;
 
-import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.global.CommonSearch;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Lob;
 import lombok.Data;
 
 import java.time.LocalDate;

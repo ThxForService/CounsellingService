@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.entities;
 
+import com.thxforservice.global.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +12,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupCounseling { // 신청 결과
+public class GroupCounseling extends BaseEntity { // 신청 결과
 
     @Id
     @GeneratedValue
     private Long pgmRegSeq; // 신청 일련 번호
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="PGM_SEQ")
+    @JoinColumn(name="pgmSeq")
     private GroupProgram program;
 
     private Boolean attend; // 참석 여부
@@ -31,7 +32,5 @@ public class GroupCounseling { // 신청 결과
     private String email;
     private String mobile;
     /* 새로운 요청이 아니라 로그인 정보를 가지고 출력 E*/
-
-
 
 }
