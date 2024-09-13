@@ -1,11 +1,6 @@
 package com.thxforservice.counseling.controllers;
 
-import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.entities.Counseling;
-import com.thxforservice.counseling.services.CounselingApplyService;
-import com.thxforservice.counseling.services.CounselingCancelService;
-import com.thxforservice.counseling.services.CounselingInfoService;
-import com.thxforservice.counseling.services.CounselingStatusService;
 import com.thxforservice.counseling.services.*;
 import com.thxforservice.counseling.validators.CounselingValidator;
 import com.thxforservice.global.ListData;

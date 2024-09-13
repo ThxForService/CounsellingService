@@ -20,7 +20,7 @@ public class Member {
 
     private String password;
 
-    private String username;
+    private String userName;
 
     private String mobile;
 
