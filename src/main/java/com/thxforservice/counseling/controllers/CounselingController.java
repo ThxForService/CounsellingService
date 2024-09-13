@@ -1,6 +1,5 @@
 package com.thxforservice.counseling.controllers;
 
-import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.entities.Counseling;
 import com.thxforservice.counseling.services.*;
 import com.thxforservice.counseling.validators.CounselingValidator;
@@ -33,6 +32,7 @@ public class CounselingController {
      * 1. 개인 상담 신청  - POST /apply
      * - 개인 상담 목록 조회 ( 다중 )
      * - 개인 상담 목록 조회 ( 단일 )
+     * - 개인 상담 예약 취소
      * -------상담사 -------
      * 1. 개인 상담 목록 조회 ( 다중 )
      * 2. 개인 상담 목록 조회 ( 단일 )
@@ -51,6 +51,7 @@ public class CounselingController {
     private final CounselingInfoService infoService;
     private final MemberUtil memberUtil;
     private final CounselingStatusService statusService;
+    private final CounselingCancelService cancelService;
 
     @Operation(summary = "개인 상담 신청", method = "POST")
     @ApiResponse(responseCode = "201")
@@ -101,41 +102,10 @@ public class CounselingController {
     @Operation(summary = "개인 상담 예약 취소", method = "POST")
     @ApiResponse(responseCode = "201")
     @PostMapping("/cancel/{cSeq}")
-    public JSONData cancel (@PathVariable("cSeq") Long cSeq) {
-       Counseling item = infoService.cancel(cSeq);
+    public JSONData cancel(@PathVariable("cSeq") Long cSeq) {
+        Counseling item = cancelService.cancel(cSeq);
 
         return new JSONData(item);
-    }
-
-    @Operation(summary = "상담사의 학생 예약 조회", method = "GET")
-    @GetMapping("/cs/list")
-    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public JSONData csList(CounselingSearch search) {
-
-        ListData<Counseling> data = infoService.getList(search);
-
-        return new JSONData(data);
-    }
-
-    @Operation(summary = "상담사의 학생 예약 상세 조회", method = "GET")
-    @ApiResponse(responseCode = "201")
-    @GetMapping("/cs/info")
-    @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public JSONData csInfo(@PathVariable("cSeq") Long cSeq) {
-
-        Counseling counseling = infoService.get(cSeq);
-
-        return new JSONData(counseling);
-    }
-
-    @Operation(summary = "상담사의 학생 예약 상태 변경", method = "POST")
-    @PostMapping("/cs/status")
-    @PreAuthorize("hasAnyAuthority(('COUNSELOR'))")
-    public void CsChangeStatus(@Valid @RequestBody RequestCsChange form, Errors errors){
-        if(errors.hasErrors()) {
-            throw new BadRequestException(utils.getErrorMessages(errors));
-        }
-        statusService.change(form.getCSeq(), Status.valueOf(form.getStatus()));
     }
 
     @Operation(summary = "상담사 평점 - 개인 상담, 집단 상담")
