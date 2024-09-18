@@ -30,19 +30,10 @@ import java.util.List;
 public class CounselingController {
     /**
      * ------사용자---------
-     * 1. 개인 상담 신청  - POST /apply
-     * - 개인 상담 목록 조회 ( 다중 )
-     * - 개인 상담 목록 조회 ( 단일 )
-     * - 개인 상담 예약 취소
-     * -------상담사 -------
-     * 1. 개인 상담 목록 조회 ( 다중 )
-     * 2. 개인 상담 목록 조회 ( 단일 )
-     * 5. 개인 상담 일정 변경 (상담사)
-     * - 편성된 상담은 empNo로 조회된 상담
-     * - 편성된 상담 일정 목록  GET /cs/list
-     * - 편성된 상담 하나 조회  GET /cs/info/{cSeq}
-     * - 편성된 상담 변경 처리(일정, 일지)  PATCH /cs/change
-     * - rDate, rTime
+     * 1. 개인 상담 신청  - POST /apply | Gooooood
+     * - 개인 상담 목록 조회 ( 다중 ) | Goooood
+     * - 개인 상담 목록 조회 ( 단일 ) | Gooood
+     * - 개인 상담 예약 취소 | Goood
      * ----------------------
      */
 
@@ -95,7 +86,7 @@ public class CounselingController {
     public JSONData List(CounselingSearch search) {
 
         Member member = memberUtil.getMember();
-        search.setStudentNo(List.of(member.getSeq()));
+        search.setStudentNo(List.of(member.getMemberSeq()));
 
         ListData<Counseling> listData = infoService.getList(search);
 

@@ -61,6 +61,6 @@ public class Counseling extends BaseEntity {
     private Status status; // 예약 상태
 
     @Lob
-    private String content; // 상담 내용
+    private String content; // 상담 일지
 }
 

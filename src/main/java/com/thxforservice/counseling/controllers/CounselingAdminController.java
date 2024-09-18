@@ -53,11 +53,20 @@ public class CounselingAdminController {
      *         삭제 - DELETE /group/{pgmSeq}
      *
      * 2. 개별 상담 신청 관리
-     *    - 개별 상담 신청 목록 - /apply
-     *    - 개별 상담  신청 정보 - /apply/{cSeq}
-     *
+     *     * -------상담사 -------
+     *      * 1. 개인 상담 목록 조회 ( 다중 )
+     *      * 2. 개인 상담 목록 조회 ( 단일 )
+     *      * 5. 개인 상담 일정 변경 (상담사)
+     *      * - 편성된 상담은 empNo로 조회된 상담
+     *      * - 편성된 상담 일정 목록  GET /cs/list ( 다중 )
+     *      * - 편성된 상담 하나 조회  GET /cs/info/{cSeq} ( 단일 )
+     *      * - 편성된 상담 변경 처리(상태)  POST /cs/status
+     *      * - 편성된 상담 변경 처리(일정, 일지)  PATCH /cs/change
+     *      * - rDate, rTime
+     *     * --------------------
      */
-    // 집단 상담 S
+
+    /* 집단 상담 S */
     @Operation(summary = "집단 상담 프로그램 추가", method = "POST")
     @PostMapping("/group")
     public ResponseEntity<Void> register(@ModelAttribute RequestGroupCounselingSave form, Errors errors) {
@@ -95,10 +104,10 @@ public class CounselingAdminController {
 
         deleteService.deleteProgram(pgmSeq);
     }
-    // 집단 상담 E
+    /* 집단 상담 E */
 
-    // 개별 상담 S
-    @Operation(summary = "상담사의 학생 예약 조회", method = "GET")
+    /* 개별 상담 S */
+    @Operation(summary = "상담사 예약 조회", method = "GET")
     @GetMapping("/cs/list")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData csList(CounselingSearch search) {
@@ -108,9 +117,9 @@ public class CounselingAdminController {
         return new JSONData(data);
     }
 
-    @Operation(summary = "상담사의 학생 예약 상세 조회", method = "GET")
+    @Operation(summary = "상담사 예약 상세 조회", method = "GET")
     @ApiResponse(responseCode = "201")
-    @GetMapping("/cs/info")
+    @GetMapping("/cs/info/{cSeq}")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData csInfo(@PathVariable("cSeq") Long cSeq) {
 
@@ -119,7 +128,7 @@ public class CounselingAdminController {
         return new JSONData(counseling);
     }
 
-    @Operation(summary = "상담사의 학생 예약 상태 변경", method = "POST")
+    @Operation(summary = "상담사 예약 상태 변경", method = "POST")
     @PostMapping("/cs/status")
     @PreAuthorize("hasAnyAuthority(('COUNSELOR'))")
     public void CsChangeStatus(@Valid @RequestBody RequestCsChange form, Errors errors) {
@@ -128,6 +137,8 @@ public class CounselingAdminController {
         }
         counselingStatusService.change(form.getCSeq(), Status.valueOf(form.getStatus()));
     }
-    // 개별 상담 E
+
+
+    /* 개별 상담 E */
 
 }

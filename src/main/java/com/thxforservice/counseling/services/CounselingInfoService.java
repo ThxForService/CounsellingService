@@ -59,7 +59,7 @@ public class CounselingInfoService {
         Counseling counseling = get(cSeq);
 
         Member member = memberUtil.getMember();
-        if (isMine && (!memberUtil.isLogin() || !member.getSeq().equals(counseling.getStudentNo()))) {
+        if (isMine && (!memberUtil.isLogin() || !member.getMemberSeq().equals(counseling.getStudentNo()))) {
             throw new UnAuthorizedException();
         }
 
