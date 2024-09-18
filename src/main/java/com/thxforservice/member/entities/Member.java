@@ -13,7 +13,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Member {
 
-    private Long seq; // 멤버 기본 키
+    private Long memberSeq; // 멤버 기본 키
 
     private String gid;
 
