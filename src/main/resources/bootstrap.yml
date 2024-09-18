@@ -1,6 +1,6 @@
 spring:
   application:
-    name: reservationservice
+    name: reservationservice2
   cloud:
     config:
       uri: ${configServerUrl}

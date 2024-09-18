@@ -13,12 +13,8 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class GroupCounselingCancelService {
-
     private final GroupCounselingRepository repository;
     private final MemberUtil memberUtil;
-
-
-
     public GroupCounseling cancel(Long pgmRegSeq) {
 
         /**
