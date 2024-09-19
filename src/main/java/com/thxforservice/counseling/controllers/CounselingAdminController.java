@@ -1,9 +1,7 @@
 package com.thxforservice.counseling.controllers;
 
 import com.thxforservice.counseling.constants.Status;
-import com.thxforservice.counseling.controllers.RequestGroupCounselingSave;
 import com.thxforservice.counseling.entities.Counseling;
-import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.services.CounselingInfoService;
 import com.thxforservice.counseling.services.CounselingStatusService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
@@ -24,11 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name="CounselingAdmin", description = "상담 관리자 API")
 @RestController

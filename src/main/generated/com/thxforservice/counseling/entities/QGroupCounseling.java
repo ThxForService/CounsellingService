@@ -26,6 +26,8 @@ public class QGroupCounseling extends EntityPathBase<GroupCounseling> {
 
     public final BooleanPath attend = createBoolean("attend");
 
+    public final StringPath counselorLog = createString("counselorLog");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -46,6 +48,8 @@ public class QGroupCounseling extends EntityPathBase<GroupCounseling> {
     public final NumberPath<Long> pgmRegSeq = createNumber("pgmRegSeq", Long.class);
 
     public final QGroupProgram program;
+
+    public final NumberPath<Integer> rating = createNumber("rating", Integer.class);
 
     public final NumberPath<Long> studentNo = createNumber("studentNo", Long.class);
 

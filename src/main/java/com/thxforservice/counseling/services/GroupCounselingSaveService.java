@@ -1,13 +1,9 @@
 package com.thxforservice.counseling.services;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.thxforservice.counseling.controllers.RequestGroupCounselingSave;
 import com.thxforservice.counseling.entities.GroupProgram;
-import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.exceptions.GroupProgramNotFoundException;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
-import com.thxforservice.counseling.repositories.GroupCounselingRepository;
-import com.thxforservice.counseling.validators.GroupCounselingValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GroupCounselingSaveService {
 
-    private final GroupCounselingValidator validator;
-    private final JPAQueryFactory queryFactory;
     private final GroupProgramRepository programRepository;
-
-
 
     // 집단 상담 프로그램 추가
     public void addProgram(RequestGroupCounselingSave form) {

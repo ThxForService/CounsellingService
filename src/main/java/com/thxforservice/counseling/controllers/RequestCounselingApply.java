@@ -3,7 +3,6 @@ package com.thxforservice.counseling.controllers;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thxforservice.counseling.constants.CCase;
 import com.thxforservice.counseling.constants.CReason;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
