@@ -8,6 +8,8 @@ import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.entities.QGroupCounseling;
 import com.thxforservice.counseling.entities.QGroupProgram;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
+import com.thxforservice.counseling.exceptions.GroupCounselingNotFoundException;
+import com.thxforservice.counseling.exceptions.GroupProgramNotFoundException;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.global.ListData;
@@ -49,7 +51,7 @@ public class GroupCounselingInfoService {
      */
     public GroupProgram getProgram(Long pgmSeq) {
         GroupProgram program = programRepository.findById(pgmSeq)
-                .orElseThrow(CounselingNotFoundException::new);
+                .orElseThrow(GroupProgramNotFoundException::new);
 
         //추가 정보 처리
         addInfo(program);
@@ -59,7 +61,7 @@ public class GroupCounselingInfoService {
 
     public GroupCounseling getCounseling(Long pgmRegSeq) {
         GroupCounseling counseling = counselingRepository.findById(pgmRegSeq)
-                .orElseThrow(CounselingNotFoundException::new);
+                .orElseThrow(GroupCounselingNotFoundException::new);
 
         //추가 정보 처리
         addInfoCounseling(counseling);
@@ -158,11 +160,11 @@ public class GroupCounselingInfoService {
         return program;
     }
 
-    /* 상담사 S */
+/* 상담사 S */
 
     public GroupCounseling getGroupCounselingById(Long pgmRegSeq) {
         GroupCounseling counseling = counselingRepository.findById(pgmRegSeq)
-                .orElseThrow(CounselingNotFoundException::new);
+                .orElseThrow(GroupCounselingNotFoundException::new);
 
         //추가 정보 처리
         addCounselorInfo(counseling);
@@ -203,5 +205,5 @@ public class GroupCounselingInfoService {
     }
 
 
-    /* 상담사 E */
+/* 상담사 E */
 }

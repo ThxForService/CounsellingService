@@ -5,6 +5,7 @@ import com.thxforservice.counseling.constants.ProgramStatus;
 import com.thxforservice.counseling.controllers.RequestProgramUpdate;
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
+import com.thxforservice.counseling.exceptions.GroupCounselingNotFoundException;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class GroupCounselingStatusService {
 
     // 상담사 - 참석 여부 수정 + 상담 일지
     public void updateAttendAndLog(Long pgmRegSeq, RequestProgramUpdate programUpdate) {
-        GroupCounseling counseling = counselingRepository.findById(pgmRegSeq).orElseThrow(CounselingNotFoundException::new);
+        GroupCounseling counseling = counselingRepository.findById(pgmRegSeq).orElseThrow(GroupCounselingNotFoundException::new);
 
         //참석 여부
         counseling.setAttend(programUpdate.getAttended());

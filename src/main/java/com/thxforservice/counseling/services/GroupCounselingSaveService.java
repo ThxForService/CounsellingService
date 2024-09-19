@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.thxforservice.counseling.controllers.RequestGroupCounselingSave;
 import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
+import com.thxforservice.counseling.exceptions.GroupProgramNotFoundException;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import com.thxforservice.counseling.validators.GroupCounselingValidator;
@@ -38,7 +39,7 @@ public class GroupCounselingSaveService {
     // 집단 상담 프로그램 수정
     public void updateProgram(Long pgmSeq, RequestGroupCounselingSave form) {
         GroupProgram program = programRepository.findById(pgmSeq)
-                .orElseThrow(CounselingNotFoundException::new);
+                .orElseThrow(GroupProgramNotFoundException::new);
 
             program.setPgmNm(form.getPgmNm());
 
