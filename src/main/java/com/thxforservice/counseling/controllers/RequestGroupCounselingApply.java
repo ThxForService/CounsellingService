@@ -8,15 +8,23 @@ import lombok.Data;
  *
  */
 @Data
-public class RequestGroupCounselingApply { // GroupProgram 과 연동
+public class RequestGroupCounselingApply {
 
     @NotBlank
     private Long pgmSeq; //프로그램 id
 
+    @NotBlank
     private Long studentNo; // 학번
+
+    @NotBlank
     private String username; // 이름
+
+    @NotBlank
     private String grade; // 학년
+
+    @NotBlank
     private String department; // 학과
+
     private String email;
     private String mobile;
 }
