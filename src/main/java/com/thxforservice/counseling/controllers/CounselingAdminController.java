@@ -6,7 +6,7 @@ import com.thxforservice.counseling.entities.Counseling;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.services.CounselingInfoService;
 import com.thxforservice.counseling.services.CounselingStatusService;
-import com.thxforservice.counseling.services.GroupCounselingDeleteService;
+import com.thxforservice.counseling.services.GroupCounselingInfoService;
 import com.thxforservice.counseling.services.GroupCounselingSaveService;
 import com.thxforservice.counseling.validators.GroupCounselingValidator;
 import com.thxforservice.global.ListData;
@@ -36,10 +36,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CounselingAdminController {
 
-    private final GroupCounselingDeleteService deleteService;
     private final HttpServletRequest request;
-    private final GroupCounselingSaveService counselingSaveService;
-    private final GroupCounselingValidator validator;
+    private final GroupCounselingSaveService groupCounselingSaveService;
+    private final GroupCounselingValidator groupCounselingValidator;
+    private final GroupCounselingInfoService groupCounselingInfoService;
+
     private final CounselingStatusService counselingStatusService;
     private final CounselingInfoService counselingInfoService;
 
@@ -71,13 +72,13 @@ public class CounselingAdminController {
     @PostMapping("/group")
     public ResponseEntity<Void> register(@ModelAttribute RequestGroupCounselingSave form, Errors errors) {
 
-        validator.validate(form, errors);
+        groupCounselingValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
 
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
-        counselingSaveService.addProgram(form);
+        groupCounselingSaveService.addProgram(form);
 
         return save();
     }
@@ -86,9 +87,9 @@ public class CounselingAdminController {
     @PatchMapping("/group/update/{pgmSeq}")
     public ResponseEntity<Void> update(@PathVariable("pgmSeq") Long pgmSeq, @ModelAttribute RequestGroupCounselingSave form, Model model) {
 
-         counselingSaveService.updateProgram(pgmSeq, form);
+        groupCounselingSaveService.updateProgram(pgmSeq, form);
 
-         return save();
+        return save();
     }
 
     public ResponseEntity<Void> save() {
@@ -102,7 +103,7 @@ public class CounselingAdminController {
     @DeleteMapping("/group/{pgmSeq}")
     public void delete(@PathVariable("pgmSeq") Long pgmSeq) {
 
-        deleteService.deleteProgram(pgmSeq);
+        groupCounselingInfoService.deleteProgram(pgmSeq);
     }
     /* 집단 상담 E */
 
