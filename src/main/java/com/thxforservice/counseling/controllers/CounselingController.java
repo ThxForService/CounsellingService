@@ -81,7 +81,7 @@ public class CounselingController {
     public JSONData List(CounselingSearch search) {
 
         Member member = memberUtil.getMember();
-        search.setStudentNo(List.of(member.getSeq()));
+        search.setStudentNo(List.of(member.getMemberSeq()));
 
         ListData<Counseling> listData = infoService.getList(search);
 
