@@ -29,8 +29,6 @@ public class QGroupProgram extends EntityPathBase<GroupProgram> {
     //inherited
     public final StringPath createdBy = _super.createdBy;
 
-    public final NumberPath<Integer> currentCount = createNumber("currentCount", Integer.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 

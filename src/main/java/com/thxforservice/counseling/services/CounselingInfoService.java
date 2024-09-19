@@ -38,8 +38,6 @@ public class CounselingInfoService {
     private final CounselingRepository repository;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
-    private final CounselingInfoService infoService;
-    private final CounselingStatusService statusService;
 
     /**
      * 예약 상세 정보 조회
@@ -105,25 +103,6 @@ public class CounselingInfoService {
         Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
 
         return new ListData<>(data.getContent(), pagination);
-    }
-
-    /**
-     * 개인 상담 예약 취소
-     *
-     * @param cSeq
-     * @return
-     */
-    public Counseling cancel(Long cSeq) {
-        Counseling data = infoService.get(cSeq);
-
-        data.setDeletedAt(LocalDateTime.now());
-
-        // 취소 상태 변경
-        statusService.change(data.getCSeq(), Status.CANCEL);
-
-        repository.saveAndFlush(data);
-
-        return data;
     }
 
     private void addInfo(Counseling counseling) {

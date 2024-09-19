@@ -1,21 +1,16 @@
 package com.thxforservice.counseling.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.thxforservice.global.entities.BaseEntity;
 import com.thxforservice.counseling.constants.CCase;
 import com.thxforservice.counseling.constants.CReason;
 import com.thxforservice.counseling.constants.Status;
+import com.thxforservice.global.entities.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -33,10 +28,10 @@ public class Counseling extends BaseEntity {
     private String gid; // 회기
 
     @Column(nullable = false)
-    private LocalDate rDate;
+    private LocalDate rDate; // 예약 일자
 
     @Column(nullable = false)
-    private LocalTime rTime;
+    private LocalTime rTime; // 예약 시간
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -56,14 +51,14 @@ public class Counseling extends BaseEntity {
     private String empNo; // 사번
 
     @Column(nullable = false, length = 65)
-    private String mobile;
+    private String mobile; // 전화번호
 
     @Column(length = 65)
-    private String email;
+    private String email; // 이메일
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status; //예약상태
+    private Status status; // 예약 상태
 
     @Lob
     private String content; // 상담 내용

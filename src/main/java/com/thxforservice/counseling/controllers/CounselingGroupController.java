@@ -2,16 +2,13 @@ package com.thxforservice.counseling.controllers;
 
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
-import com.thxforservice.counseling.repositories.CounselingRepository;
 import com.thxforservice.counseling.services.GroupCounselingApplyService;
+import com.thxforservice.counseling.services.GroupCounselingCancelService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
-import com.thxforservice.counseling.services.GroupCounselingStatusService;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.JSONData;
-import com.thxforservice.member.MemberUtil;
-import com.thxforservice.member.entities.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -25,10 +22,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-
-@Tag(name = "GroupCounseling", description = "집단 상담 API")
+@Tag(name = "GroupCounseling", description = "그룹 상담 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/Group")
@@ -52,21 +47,17 @@ public class CounselingGroupController {
  * ----------------------
  */
     private final GroupCounselingInfoService groupCounselingInfoService;
-    private final MemberUtil memberUtil;
-    private final GroupCounselingStatusService counselingStatusService;
     private final GroupCounselingApplyService groupCounselingApplyService;
-
+    private final GroupCounselingCancelService groupCounselingCancelService;
     private final Utils utils;
 
     @Operation(summary = "집단 상담(프로그램) 정보 단일 조회", method = "GET")
     @ApiResponse(responseCode = "200")
-    @Parameter(name="pgmSeq", required = true, description = "경로변수, 집단 상담 정보 등록 번호")
+    @Parameter(name = "pgmSeq", required = true, description = "경로변수, 집단 상담 정보 등록 번호")
     @GetMapping("/program/info/{pgmSeq}")
     public JSONData groupInfo(@PathVariable("pgmSeq") Long pgmSeq) {
 
-        GroupProgram groupProgram = groupCounselingInfoService.getProgram(pgmSeq);
-
-        return new JSONData(groupProgram);
+        return null;
     }
 
     @Operation(summary = "집단 상담(프로그램) 정보 목록", method="GET")
@@ -74,7 +65,7 @@ public class CounselingGroupController {
     @GetMapping("/program/info")
     public JSONData groupList(@ModelAttribute GroupCounselingSearch search) {
 
-        ListData<GroupProgram> listData = groupCounselingInfoService.getGroupProgramList(search);
+        ListData<GroupProgram> listData = groupCounselingInfoService.getGroupCounselingList(search);
 
         return new JSONData(listData);
 
@@ -105,66 +96,63 @@ public class CounselingGroupController {
     //집단 상담 프로그램 취소(사용자)
     @Operation(summary = "집단 상담 프로그램 취소(사용자)", method="DELETE")
     @ApiResponse(responseCode = "200")
-    @DeleteMapping("program/cancel/{pgmRegSeq}")
-    public ResponseEntity<JSONData> groupDelete(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
+    @Parameters({
+            @Parameter(name="pgmSeq", required = true, description = "집단 상담 프로그램 번호", example = "1111"),
+    })
+    @DeleteMapping("program/cancel/{pgmSeq}")
+    public JSONData groupDelete(@PathVariable("pgmSeq") Long pgmSeq) {
 
-        return null;
+        GroupCounseling groupCounseling = groupCounselingCancelService.cancel(pgmSeq);
+
+        return new JSONData(groupCounseling);
     }
 
     //집단 상담 예약 조회(사용자)(다중)
     @Operation(summary = "집단 상담 예약 조회 목록 (사용자)", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("program/res/info")
-    public JSONData groupApplyList(@ModelAttribute GroupCounselingSearch search) {
+    @DeleteMapping("program/res/info")
+    public ResponseEntity<JSONData> groupApplyList(@Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
 
-        Member member = memberUtil.getMember();
-        search.setEmail(List.of(member.getEmail()));
-        ListData<GroupCounseling> CounselinglistData = groupCounselingInfoService.getGroupCounselingList(search);
-
-        return new JSONData(CounselinglistData);
+        return null;
     }
 
-    /* 집단 상담의 상담사 S */
-    @Operation(summary = "편성된 프로그램의 신청내역 목록(프로그램번호를 경로변수로 받아서 조회)", method="GET")
+
+    @Operation(summary = "편성된 프로그램의 신청내역 목록", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/list/{pgmSeq}")
+    @GetMapping("/cs/group/list")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public JSONData csList(@PathVariable("pgmSeq") Long pgmSeq,@ModelAttribute GroupCounselingSearch search) {
+    public JSONData csList(@ModelAttribute CounselingSearch search) {
 
-        ListData<GroupCounseling> listData = groupCounselingInfoService.getCounselorGroupList(search);
-
-        return new JSONData(listData);
+        return null;
     }
 
     // 편성된 프로그램의 신청내역 단일 조회 - GET /cs/group/info/{schdlSeq}
-    @Operation(summary="편성된 프로그램의 신청내역 단일 조회(신청번호로)", method="GET")
+    @Operation(summary="편성된 프로그램의 신청내역 단일 조회", method="GET")
     @ApiResponse(responseCode = "200")
-    @GetMapping("/cs/group/info/{pgmRegSeq}")
-    public JSONData csListOne(@PathVariable("pgmRegSeq") Long pgmRegSeq) {
-
-        GroupCounseling counseling = groupCounselingInfoService.getGroupCounselingById(pgmRegSeq);
-
-        return new JSONData(counseling);
+    @GetMapping("/cs/group/info/{schdlSeq}")
+    public void csListOne() { // 메서드명 수정 각
     }
 
     // 편성된 프로그램의 변경 처리(참석 여부, 일지) - PATCH /cs/group/change
     @Operation(summary = "편성된 프로그램의 변경 처리",  description = "참석 여부 업데이트, 일지 작성", method = "PATCH")
     @ApiResponse(responseCode = "200")
-    @PatchMapping("/cs/group/change/{pgmRegSeq}")
+    @PatchMapping("/cs/group/change")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public void csGroupChange(@PathVariable("pgmRegSeq") Long pgmRegSeq, @ModelAttribute RequestProgramUpdate programUpdate) {
-
-        counselingStatusService.updateAttendAndLog(pgmRegSeq, programUpdate);
+    public void csGroupChange() {
 
     }
-    /* 집단 상담의 상담사 E */
 
-    @Operation(summary = "상담사 평점 - 집단 상담")
-    @GetMapping("/group/rating")
+    // 편성된 상담 변경 처리  PATCH /cs/change
+    @Operation(summary="편성된 상담 변경 처리", method="PATCH")
+    @ApiResponse(responseCode = "200")
+    @PatchMapping("/cs/change")
+    public void csChange() {
+    }
+
+    @Operation(summary = "상담사 평점 - 개인 상담, 집단 상담")
+    @GetMapping("/rating")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData getRating() {
-
-
 
         return null;
     }

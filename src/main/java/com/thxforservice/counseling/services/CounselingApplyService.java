@@ -27,8 +27,6 @@ public class CounselingApplyService {
     private final CounselingRepository counselingRepository;
     private final MemberUtil memberUtil;
     private final CounselingStatusService counselingStatusService;
-    private final CounselingInfoService CounselingInfoService;
-
 
     @Transactional
     public Counseling apply(RequestCounselingApply form) {
@@ -62,14 +60,14 @@ public class CounselingApplyService {
         // 새로운 상담 예약 생성
         Counseling counseling = Counseling.builder()
                 .gid(gid)  // GID 설정
-                .email(form.getEmail())
-                .mobile(mobile)
+                .username(form.getUsername()) // 내담자 이름
                 .studentNo(studentNo) // 학번 설정
                 .cCase(form.getCCase()) // 상담 유형
                 .cReason(form.getCReason()) // 상담 경위
-                .username(form.getUsername()) // 내담자 이름
                 .rDate(form.getRDate()) // 예약일
                 .rTime(form.getRTime()) // 예약 시간
+                .email(form.getEmail()) // 이메일
+                .mobile(mobile) // 전화번호
                 .build();
 
         // DB에 저장 및 플러시
