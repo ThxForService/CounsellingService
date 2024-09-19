@@ -32,4 +32,8 @@ public class GroupCounseling { // 신청 결과
     private String mobile;
     /* 새로운 요청이 아니라 로그인 정보를 가지고 출력 E*/
 
+    private String counselorLog; // 상담 일지
+
+    private Integer rating;  // 별점 (1-5 사이의 값)
+
 }

@@ -5,6 +5,7 @@ import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.repositories.CounselingRepository;
 import com.thxforservice.counseling.services.GroupCounselingApplyService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
+import com.thxforservice.counseling.services.GroupCounselingStatusService;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
@@ -52,7 +53,8 @@ public class CounselingGroupController {
  */
     private final GroupCounselingInfoService groupCounselingInfoService;
     private final MemberUtil memberUtil;
-    private GroupCounselingApplyService groupCounselingApplyService;
+    private final GroupCounselingStatusService counselingStatusService;
+    private final GroupCounselingApplyService groupCounselingApplyService;
 
     private final Utils utils;
 
@@ -150,7 +152,9 @@ public class CounselingGroupController {
     @ApiResponse(responseCode = "200")
     @PatchMapping("/cs/group/change/{pgmRegSeq}")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
-    public void csGroupChange() {
+    public void csGroupChange(@PathVariable("pgmRegSeq") Long pgmRegSeq, @ModelAttribute RequestProgramUpdate programUpdate) {
+
+        counselingStatusService.updateAttendAndLog(pgmRegSeq, programUpdate);
 
     }
     /* 집단 상담의 상담사 E */
@@ -159,6 +163,8 @@ public class CounselingGroupController {
     @GetMapping("/group/rating")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData getRating() {
+
+
 
         return null;
     }
