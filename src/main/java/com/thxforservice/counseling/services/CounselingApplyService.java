@@ -32,6 +32,7 @@ public class CounselingApplyService {
     private final CounselingRepository counselingRepository;
     private final MemberUtil memberUtil;
     private final CounselingStatusService counselingStatusService;
+    private final ApiRequest apiRequest;
 
     @Transactional
     public Counseling apply(RequestCounselingApply form) {
@@ -88,47 +89,45 @@ public class CounselingApplyService {
         return UUID.randomUUID().toString();
     }
 
+    @Transactional
+    public void applyRandom(Long cSeq) {
+        // 상담 예약 정보 조회
+        Counseling counseling = counselingRepository.findById(cSeq)
+                .orElseThrow(() -> new CounselingNotFoundException());
 
-        private final ApiRequest apiRequest;
-
-        @Transactional
-        public void applyRandom(Long cSeq) {
-            // 상담 예약 정보 조회
-            Counseling counseling = counselingRepository.findById(cSeq)
-                    .orElseThrow(() -> new CounselingNotFoundException());
-
-            // 상담사가 이미 배정된 경우 배정 생략
-            if (counseling.getEmpNo() != null) {
-                return;
-            }
-
-            // 상담사 목록 API 호출
-            List<Member> counselors = apiRequest.request("/account/counselors", "member-service")
-                    .toList(new TypeReference<List<Member>>() {});
-
-            // 상담사 목록이 비어있으면 예외 처리
-            if (counselors == null || counselors.isEmpty()) {
-                throw new CounselingNotFoundException();
-            }
-
-            // 상담사 상태 (휴직, 퇴직) 필터링
-            counselors = counselors.stream()
-                    .filter(counselor -> counselor.getStatus() == com.thxforservice.member.constants.Status.EMPLOYED) // member.constants.Status로 변경
-                    .collect(Collectors.toList());
-
-            // 상담사 목록이 비어있으면 예외 처리
-            if (counselors.isEmpty()) {
-                throw new CounselingNotFoundException();
-            }
-
-            // 랜덤으로 상담사 선택
-            Random random = new Random();
-            Member selectedCounselor = counselors.get(random.nextInt(counselors.size()));
-
-            // 상담 예약에 선택된 상담사 배정
-            counseling.setEmpNo(String.valueOf(selectedCounselor.getEmpNo()));
-
-            // 예약 정보 저장
-            counselingRepository.saveAndFlush(counseling);
+        // 상담사가 이미 배정된 경우 배정 생략
+        if (counseling.getEmpNo() != null) {
+            return;
         }
+
+        // 상담사 목록 API 호출
+        List<Member> counselors = apiRequest.request("/account/counselors", "member-service")
+                .toList(new TypeReference<List<Member>>() {
+                });
+
+        // 상담사 목록이 비어있으면 예외 처리
+        if (counselors == null || counselors.isEmpty()) {
+            throw new CounselingNotFoundException();
+        }
+
+        // 상담사 상태 (휴직, 퇴직) 필터링
+        counselors = counselors.stream()
+                .filter(counselor -> counselor.getStatus() == com.thxforservice.member.constants.Status.EMPLOYED) // member.constants.Status로 변경
+                .collect(Collectors.toList());
+
+        // 상담사 목록이 비어있으면 예외 처리
+        if (counselors.isEmpty()) {
+            throw new CounselingNotFoundException();
+        }
+
+        // 랜덤으로 상담사 선택
+        Random random = new Random();
+        Member selectedCounselor = counselors.get(random.nextInt(counselors.size()));
+
+        // 상담 예약에 선택된 상담사 배정
+        counseling.setEmpNo(String.valueOf(selectedCounselor.getEmpNo()));
+
+        // 예약 정보 저장
+        counselingRepository.saveAndFlush(counseling);
     }
+}
