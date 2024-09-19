@@ -21,7 +21,6 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
     private final GroupProgramRepository programRepository;
     private final MemberUtil memberUtil;
     private final GroupCounselingRepository counselingRepository;
-    private final GroupCounselingResInfoService counselingResInfoService;
 
     public GroupCounseling apply(RequestGroupCounselingApply form) {
 

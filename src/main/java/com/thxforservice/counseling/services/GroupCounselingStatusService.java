@@ -4,7 +4,6 @@ package com.thxforservice.counseling.services;
 import com.thxforservice.counseling.constants.ProgramStatus;
 import com.thxforservice.counseling.controllers.RequestProgramUpdate;
 import com.thxforservice.counseling.entities.GroupCounseling;
-import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.exceptions.GroupCounselingNotFoundException;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import lombok.RequiredArgsConstructor;
