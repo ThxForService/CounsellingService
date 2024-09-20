@@ -31,7 +31,7 @@ import java.util.List;
 @Tag(name = "GroupCounseling", description = "그룹 상담 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/Group")
+@RequestMapping("/group")
 public class CounselingGroupController {
     /**
      * ------사용자---------
