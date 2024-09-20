@@ -24,10 +24,12 @@ public class CorsFilterConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedMethod("*"); // 모든 요청 메서드 허용
         config.addAllowedHeader("*"); // 모든 요청 헤더 허용
-        if (!allowedOrigins.equals("*")) {
-            config.setAllowCredentials(true);
-        }
-        config.addAllowedOrigin(allowedOrigins);
+
+//        if (!allowedOrigins.equals("*")) {
+//            config.setAllowCredentials(true);
+//        }
+//        config.addAllowedOrigin(allowedOrigins);
+
         config.addExposedHeader("*");
 
         source.registerCorsConfiguration("/**", config);

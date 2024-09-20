@@ -1,22 +1,18 @@
 package com.thxforservice.counseling.services;
 
 import com.querydsl.core.BooleanBuilder;
-import com.thxforservice.counseling.controllers.CounselingSearch;
 import com.thxforservice.counseling.controllers.GroupCounselingSearch;
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.entities.QGroupCounseling;
 import com.thxforservice.counseling.entities.QGroupProgram;
-import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.exceptions.GroupCounselingNotFoundException;
 import com.thxforservice.counseling.exceptions.GroupProgramNotFoundException;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Pagination;
-import com.thxforservice.global.exceptions.UnAuthorizedException;
 import com.thxforservice.member.MemberUtil;
-import com.thxforservice.member.entities.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +33,9 @@ import static org.springframework.data.domain.Sort.Order.desc;
 @RequiredArgsConstructor
 public class GroupCounselingInfoService {
 
-    private final GroupCounselingApplyService applyService;
     private final GroupProgramRepository programRepository;
     private final GroupCounselingRepository counselingRepository;
     private final HttpServletRequest request;
-    private final MemberUtil memberUtil;
 
     /**
      * 프로그램 상세 정보

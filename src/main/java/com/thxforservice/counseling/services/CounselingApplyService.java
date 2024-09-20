@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CounselingApplyService {
-    //
+
     private final CounselingRepository counselingRepository;
     private final MemberUtil memberUtil;
     private final CounselingStatusService counselingStatusService;
