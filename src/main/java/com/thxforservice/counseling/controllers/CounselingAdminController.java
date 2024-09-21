@@ -63,7 +63,7 @@ public class CounselingAdminController {
 
     /* 집단 상담 S */
     @Operation(summary = "집단 상담 프로그램 추가", method = "POST")
-    @PostMapping("/group")
+    @PostMapping("/group/register")
     public ResponseEntity<Void> register(@ModelAttribute RequestGroupCounselingSave form, Errors errors) {
 
         groupCounselingValidator.validate(form, errors);
