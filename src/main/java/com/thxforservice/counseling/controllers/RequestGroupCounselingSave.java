@@ -1,6 +1,7 @@
 package com.thxforservice.counseling.controllers;
 
 import com.thxforservice.counseling.constants.ProgramStatus;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -13,10 +14,13 @@ public class RequestGroupCounselingSave {
     private LocalDate programStartDate;  //프로그램 수행 날자.
     private LocalDate startDate; // 신청 시작일자
     private LocalDate endDate; // 신청 종료일자
+
+    @NotNull
     private Integer capacity; // 신청 정원
     private ProgramStatus status; // 접수상태
 
-    private String empNo;
+    @NotNull
+    private Long empNo;
 
 }
 
