@@ -64,7 +64,7 @@ public class CounselingAdminController {
     /* 집단 상담 S */
     @Operation(summary = "집단 상담 프로그램 추가", method = "POST")
     @PostMapping("/group/register")
-    public ResponseEntity<Void> register(@ModelAttribute RequestGroupCounselingSave form, Errors errors) {
+    public ResponseEntity<Void> register(@RequestBody @Valid RequestGroupCounselingSave form, Errors errors) {
 
         groupCounselingValidator.validate(form, errors);
 
@@ -79,7 +79,7 @@ public class CounselingAdminController {
 
     @Operation(summary = "집단 상담 프로그램 수정", method = "PATCH")
     @PatchMapping("/group/update/{pgmSeq}")
-    public ResponseEntity<Void> update(@PathVariable("pgmSeq") Long pgmSeq, @ModelAttribute RequestGroupCounselingSave form, Model model) {
+    public ResponseEntity<Void> update(@PathVariable("pgmSeq") Long pgmSeq, @RequestBody @Valid RequestGroupCounselingSave form, Model model) {
 
         groupCounselingSaveService.updateProgram(pgmSeq, form);
 

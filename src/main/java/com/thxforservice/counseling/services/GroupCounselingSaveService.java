@@ -21,8 +21,9 @@ public class GroupCounselingSaveService {
                 .Description(form.getDescription())
                 .startDate(form.getStartDate())
                 .endDate(form.getEndDate())
-                .capacity(Math.min(Math.max(form.getCapacity(), 5), 30))
+                .capacity(form.getCapacity() == null? 5 : form.getCapacity())
                 .status(form.getStatus())
+                .empNo(form.getEmpNo())
                 .build();
 
         programRepository.saveAndFlush(program);
