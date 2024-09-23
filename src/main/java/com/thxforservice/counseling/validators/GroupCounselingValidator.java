@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class GroupCounselingValidator implements Validator {
@@ -21,7 +23,7 @@ public class GroupCounselingValidator implements Validator {
         }
 
         RequestGroupCounselingSave form = (RequestGroupCounselingSave) target;
-        int capacity = form.getCapacity();
+        int capacity = Objects.requireNonNullElse(form.getCapacity(), 5);
 
 //      1. 집단 상담 프로그램 정원 5명~30명
         if (capacity < 5 || capacity > 30) {
