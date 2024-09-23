@@ -7,6 +7,8 @@ import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class GroupCounselingSaveService {
@@ -19,6 +21,7 @@ public class GroupCounselingSaveService {
         GroupProgram program = GroupProgram.builder()
                 .pgmNm(form.getPgmNm())
                 .Description(form.getDescription())
+                .pgmStartDate(LocalDateTime.of(form.getProgramStartDate(), form.getProgramStartTime()))
                 .startDate(form.getStartDate())
                 .endDate(form.getEndDate())
                 .capacity(form.getCapacity() == null? 5 : form.getCapacity())
