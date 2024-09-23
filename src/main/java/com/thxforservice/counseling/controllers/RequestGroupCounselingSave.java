@@ -16,6 +16,8 @@ public class RequestGroupCounselingSave {
     private Integer capacity; // 신청 정원
     private ProgramStatus status; // 접수상태
 
+    private String empNo;
+
 }
 
 
