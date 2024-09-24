@@ -28,14 +28,13 @@ public class CorsFilterConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedMethod("*"); // 모든 요청 메서드 허용
         config.addAllowedHeader("*"); // 모든 요청 헤더 허용
-        config.addAllowedOrigin("*");
-//        if (StringUtils.hasText(allowedOrigins)) {
-//            List<String> origins = Arrays.stream(allowedOrigins.split(",")).toList();
-//            config.setAllowedOrigins(origins);
-//            config.setAllowCredentials(true);
-//        } else {
-//            config.addAllowedOrigin("*");
-//        }
+        if (StringUtils.hasText(allowedOrigins)) {
+            List<String> origins = Arrays.stream(allowedOrigins.split(",")).toList();
+            config.setAllowedOrigins(origins);
+            config.setAllowCredentials(true);
+        } else {
+            config.addAllowedOrigin("*");
+        }
         config.addExposedHeader("*");
 
         source.registerCorsConfiguration("/**", config);
