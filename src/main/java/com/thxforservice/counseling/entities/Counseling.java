@@ -41,6 +41,8 @@ public class Counseling extends BaseEntity {
     @Column(nullable = false)
     private CCase cCase;  //상담유형
 
+    private String customCase;
+
     @Column(nullable = false, length = 45)
     private String username; // 이름
 

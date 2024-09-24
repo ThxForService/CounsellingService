@@ -3,6 +3,7 @@ package com.thxforservice.counseling.services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.thxforservice.counseling.constants.CCase;
 import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.controllers.RequestCounselingApply;
 import com.thxforservice.counseling.entities.Counseling;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CounselingApplyService {
-    //
+
     private final CounselingRepository counselingRepository;
     private final MemberUtil memberUtil;
     private final CounselingStatusService counselingStatusService;
@@ -75,6 +76,11 @@ public class CounselingApplyService {
                 .email(form.getEmail()) // 이메일
                 .mobile(mobile) // 전화번호
                 .build();
+
+        // '기타' 상담 유형을 선택한 경우 customCase 값 설정
+        if (form.getCCase() == CCase.OTHER) {
+            counseling.setCustomCase(form.getCustomCase()); // customCase 설정
+        }
 
         // DB에 저장 및 플러시
         counselingRepository.saveAndFlush(counseling);

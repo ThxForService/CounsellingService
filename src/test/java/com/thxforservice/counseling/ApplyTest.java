@@ -68,7 +68,7 @@ public class ApplyTest {
         form.setUsername("홍길동");
         form.setRDate(LocalDate.of(2024, 10, 1));
         form.setRTime(LocalTime.of(10, 0));
-        form.setCCase(CCase.PSYCHOLOGICAL);
+        form.setCCase(CCase.ACADEMIC);
         form.setCReason(CReason.VOLUNTARY);
 
         Counseling counseling = applyService.apply(form);
