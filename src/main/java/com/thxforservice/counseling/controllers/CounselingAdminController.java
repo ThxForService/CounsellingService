@@ -137,7 +137,7 @@ public class CounselingAdminController {
         counselingStatusService.change(form.getCSeq(), Status.valueOf(form.getStatus()));
     }
 
-
     /* 개별 상담 E */
+
 
 }
