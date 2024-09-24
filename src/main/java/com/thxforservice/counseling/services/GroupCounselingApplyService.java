@@ -43,8 +43,6 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
         //3. 이미 예약을 했는지 확인(추후 넣어야함)
 
 
-
-
         Member member = memberUtil.getMember();
         Student student = memberUtil.getMember();
 

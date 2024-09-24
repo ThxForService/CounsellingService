@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@Profile("!test") // 테스트에선 사용 X
+//@Profile("!test") // 테스트에선 사용 X
 public class CorsFilterConfig {
 
 
@@ -28,7 +28,6 @@ public class CorsFilterConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedMethod("*"); // 모든 요청 메서드 허용
         config.addAllowedHeader("*"); // 모든 요청 헤더 허용
-
         if (StringUtils.hasText(allowedOrigins)) {
             List<String> origins = Arrays.stream(allowedOrigins.split(",")).toList();
             config.setAllowedOrigins(origins);
