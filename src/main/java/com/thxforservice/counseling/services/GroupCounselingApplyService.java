@@ -8,7 +8,6 @@ import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.member.MemberUtil;
 import com.thxforservice.member.entities.Member;
-import com.thxforservice.member.entities.Student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,15 +43,14 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
 
 
         Member member = memberUtil.getMember();
-        Student student = memberUtil.getMember();
 
 
         GroupCounseling groupCounseling = GroupCounseling.builder()
                 .program(program)
-                .studentNo(student.getStudentNo())
+                .studentNo(member.getStudentNo())
                 .username(member.getUserName())
-                .grade(student.getGrade())
-                .department(student.getDepartment())
+                .grade(member.getGrade())
+                .department(member.getDepartment())
                 .email(member.getEmail())
                 .mobile(member.getMobile()).build();
 
