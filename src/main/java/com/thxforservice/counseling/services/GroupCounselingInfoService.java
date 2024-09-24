@@ -12,7 +12,6 @@ import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import com.thxforservice.counseling.repositories.GroupProgramRepository;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Pagination;
-import com.thxforservice.member.MemberUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +32,11 @@ import static org.springframework.data.domain.Sort.Order.desc;
 @RequiredArgsConstructor
 public class GroupCounselingInfoService {
 
+
     private final GroupProgramRepository programRepository;
     private final GroupCounselingRepository counselingRepository;
     private final HttpServletRequest request;
+
 
     /**
      * 프로그램 상세 정보

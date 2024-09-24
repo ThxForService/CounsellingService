@@ -44,5 +44,5 @@ public class GroupProgram extends BaseMemberEntity { //상담 프로그램 정�
     @Column(length = 20)
     private ProgramStatus status; // 접수상태
 
-
+    private Long empNo; // 사번 - 상담사 번호 필요
 }

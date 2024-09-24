@@ -34,6 +34,8 @@ public class QGroupProgram extends EntityPathBase<GroupProgram> {
 
     public final StringPath Description = createString("Description");
 
+    public final NumberPath<Long> empNo = createNumber("empNo", Long.class);
+
     public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
 
     //inherited

@@ -1,6 +1,5 @@
 package com.thxforservice.counseling.services;
 
-import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +7,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GroupCounselingResInfoService {
 
+//    private final GroupCounselingInfoService service;
+//    private final GroupCounselingRepository repository;
 
     //현재 취소상태가 아닌 정상적인 예약 갯수.
     public int count(Long pgmSeq){
