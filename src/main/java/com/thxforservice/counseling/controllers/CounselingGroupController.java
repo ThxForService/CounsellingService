@@ -85,7 +85,7 @@ public class CounselingGroupController {
     @Parameters({
             @Parameter(name = "pgmSeq", required = true, description = "집단 상담 프로그램 번호", example = "1111"),
     })
-    @PostMapping("/program/apply/{pgmSeq}")
+    @GetMapping("/program/apply/{pgmSeq}")
     public ResponseEntity<JSONData> groupApply(@PathVariable("pgmSeq") Long pgmSeq, @Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
 
         // 추가 검증 - validator
