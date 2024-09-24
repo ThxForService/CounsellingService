@@ -107,7 +107,7 @@ public class CounselingApplyService {
         }
 
         // 상담사 목록 API 호출
-        List<Member> counselors = apiRequest.request("/account/counselors", "member-service")
+        List<Member> counselors = apiRequest.request("/account/counselors", "memberservice")
                 .toList(new TypeReference<List<Member>>() {
                 });
 
