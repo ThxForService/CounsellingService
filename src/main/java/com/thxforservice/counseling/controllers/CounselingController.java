@@ -64,7 +64,7 @@ public class CounselingController {
         Counseling counseling = applyService.apply(form);
 
         // 예약 완료 후 상담사 배정
-        applyService.applyRandom(counseling.getCSeq());
+//        applyService.applyRandom(counseling.getCSeq());
 
         // HTTP 응답 상태를 생성 - 상담 신청이 성공했음을 나타내기 위해 201(Created) 상태 코드를 설정
         HttpStatus status = HttpStatus.CREATED;
