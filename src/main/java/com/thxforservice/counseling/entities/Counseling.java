@@ -61,7 +61,7 @@ public class Counseling extends BaseEntity {
     private String email; // 이메일
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column()
     private Status status; // 예약 상태
 
     @Lob
