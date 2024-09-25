@@ -22,7 +22,6 @@ public class RequestCounselingApply extends RequestGroupCounselingApply{
     @NotBlank
     private CReason cReason; // 상담 경위
 
-    @NotBlank
     private CCase cCase; // 상담 유형
 
     private String customCase; // 기타 선택시 값 입력

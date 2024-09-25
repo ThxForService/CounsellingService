@@ -94,6 +94,7 @@ public class CounselingController {
 
     }
 
+    /* 예약 화인시에도 사용 */
     @Operation(summary = "개인 상담 상세 조회", description = "개인 상담의 상세 정보를 조회합니다.", method = "GET")
     @ApiResponse(responseCode = "200", description = "개인 상담 상세 조회 성공")
     @Parameter(name = "cSeq", description = "상담 ID", required = true, example = "1")
@@ -109,6 +110,7 @@ public class CounselingController {
     @ApiResponse(responseCode = "200", description = "개인 상담 예약 취소 성공")
     @PatchMapping("/cancel/{cSeq}")
     public JSONData cancel(@PathVariable("cSeq") Long cSeq) {
+
         Counseling item = cancelService.cancel(cSeq);
 
         return new JSONData(item);
