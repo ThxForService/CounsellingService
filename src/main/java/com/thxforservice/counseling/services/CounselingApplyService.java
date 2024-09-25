@@ -45,10 +45,12 @@ public class CounselingApplyService {
 
         // studentNo로 기존 상담이 있는지 확인
         Long studentNo = form.getStudentNo();
-        Counseling findCounseling = counselingRepository.findById(studentNo).orElseThrow(CounselingNotFoundException::new);
+//        Counseling findCounseling = counselingRepository.findById(studentNo).orElseThrow(CounselingNotFoundException::new);
 
         // 상담 이력이 있으면 기존 Gid, 없으면 Gid 생성
-        String gid = (findCounseling != null) ? findCounseling.getGid() : generateGID(studentNo);
+//        String gid = (findCounseling != null) ? findCounseling.getGid() : generateGID(studentNo);
+
+        String gid = generateGID(studentNo);
 
         /* 잊지마라 너의 부족함을 S */
 //        if (findCounseling != null) {
@@ -68,7 +70,7 @@ public class CounselingApplyService {
         Counseling counseling = Counseling.builder()
                 .gid(gid)  // GID 설정
                 .username(form.getUsername()) // 내담자 이름
-                .studentNo(studentNo) // 학번 설정
+                .studentNo(form.getStudentNo()) // 학번 설정
                 .cCase(form.getCCase()) // 상담 유형
                 .customCase(form.getCustomCase()) // 기타 선택시 입력
                 .cReason(form.getCReason()) // 상담 경위
@@ -111,6 +113,9 @@ public class CounselingApplyService {
         List<Member> counselors = apiRequest.request("/account/counselors", "memberservice")
                 .toList(new TypeReference<List<Member>>() {
                 });
+
+        // 로그 추가
+        System.out.printf("상담사 목록 API 응답: {}", counselors);
 
         // 상담사 목록이 비어있으면 예외 처리
         if (counselors == null || counselors.isEmpty()) {

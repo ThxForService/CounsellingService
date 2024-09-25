@@ -17,17 +17,19 @@ import java.time.LocalTime;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RequestCounselingApply extends RequestGroupCounselingApply{
-
-    // 상담 번호 - 수정시 필요함, Validator, 개인상담땐 필요없음 집단커맨드에는 있어야함
-    private Long cSeq;
+public class RequestCounselingApply{
 
     @NotNull
-    private CReason cReason; // 상담 경위
+    private Long studentNo;
 
-    private CCase cCase; // 상담 유형
+    @NotBlank
+    private String username;
 
-    private String customCase; // 기타 선택시 값 입력
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String mobile;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate rDate;
@@ -35,4 +37,9 @@ public class RequestCounselingApply extends RequestGroupCounselingApply{
     @JsonFormat(pattern = "HH:mm")
     private LocalTime rTime;
 
+    private CReason cReason;
+
+    private CCase cCase;
+
+    private String customCase;
 }
