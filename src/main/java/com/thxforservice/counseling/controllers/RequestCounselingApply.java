@@ -18,8 +18,9 @@ import java.time.LocalTime;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestCounselingApply{
+
     @NotBlank
-    private String studentNo;
+    private Long studentNo;
 
     @NotBlank
     private String username;
