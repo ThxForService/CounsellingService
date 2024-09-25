@@ -52,7 +52,7 @@ public class CounselingController {
     @PostMapping("/apply")
     public ResponseEntity<Void> apply(@Valid @RequestBody RequestCounselingApply form, Errors errors) {
         System.out.println(form.getCReason());
-
+        System.out.println(form.toString());
         // 추가 검증 - validator
         validate.validate(form, errors);
 
