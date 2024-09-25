@@ -51,7 +51,8 @@ public class CounselingController {
     @Parameter(name = "RequestCounselingApply", description = "상담 신청 양식", required = true)
     @PostMapping("/apply")
     public ResponseEntity<Void> apply(@Valid @RequestBody RequestCounselingApply form, Errors errors) {
-
+        System.out.println(form.getCReason());
+        System.out.println(form.toString());
         // 추가 검증 - validator
         validate.validate(form, errors);
 
