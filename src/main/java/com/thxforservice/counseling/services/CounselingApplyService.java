@@ -70,6 +70,7 @@ public class CounselingApplyService {
                 .username(form.getUsername()) // 내담자 이름
                 .studentNo(studentNo) // 학번 설정
                 .cCase(form.getCCase()) // 상담 유형
+                .customCase(form.getCustomCase()) // 기타 선택시 입력
                 .cReason(form.getCReason()) // 상담 경위
                 .rDate(form.getRDate()) // 예약일
                 .rTime(form.getRTime()) // 예약 시간
