@@ -32,7 +32,23 @@ public class CounselingValidator implements Validator {
         // 커맨드 객체를 타겟으로 지정
         RequestCounselingApply form = (RequestCounselingApply) target;
 
-        // 예약일, 시간 검증 S
+        // 예약일이 현재보다 과거인지 확인
+        LocalDate today = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+
+
+        String errorCode = "NotAvailable.reservation";
+        // 예약일 검증: 과거 날짜에 예약 불가
+        if (form.getRDate().isBefore(today)) {
+            errors.rejectValue("rDate", errorCode);
+        }
+
+        // 예약일이 오늘인 경우, 예약 시간이 현재 시간 이후여야 함
+        if (form.getRDate().isEqual(today) && form.getRTime().isBefore(currentTime)) {
+            errors.rejectValue("rTime",errorCode);
+        }
+
+        // 중복 예약 검증
         QCounseling counseling = QCounseling.counseling;
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(counseling.rDate.eq(form.getRDate()))
@@ -41,11 +57,10 @@ public class CounselingValidator implements Validator {
         List<Counseling> dateVerification = queryFactory.selectFrom(counseling)
                 .where(builder)
                 .fetch();
-        // 예약일 검증 E
 
         if (!dateVerification.isEmpty()) {
             // 중복인 경우 오류 처리
-            errors.rejectValue("rTime", "duplicate.counseling", "해당 시간대에 이미 예약이 존재합니다.");
+            errors.rejectValue("rTime", errorCode);
         }
     }
 }

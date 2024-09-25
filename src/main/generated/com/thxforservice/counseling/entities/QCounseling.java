@@ -32,6 +32,8 @@ public class QCounseling extends EntityPathBase<Counseling> {
 
     public final NumberPath<Long> cSeq = createNumber("cSeq", Long.class);
 
+    public final StringPath customCase = createString("customCase");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 

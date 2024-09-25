@@ -3,10 +3,6 @@ package com.thxforservice.member.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.thxforservice.member.constants.Authority;
 import com.thxforservice.member.constants.Status;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import com.thxforservice.member.constants.Authority;
 import lombok.Data;
 
 @Data
@@ -38,5 +34,4 @@ public class Member {
     private Status status; // 휴직재직퇴직
     private Double rating; // 별점
     /* 상담사 정보 E */
-
 }

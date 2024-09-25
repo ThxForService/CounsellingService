@@ -28,13 +28,13 @@ public class MemberUtil {
     }
 
 
-    public <T extends Member> T getMember() {
+    public Member getMember() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof MemberInfo memberInfo) {
 
-            return (T)memberInfo.getMember();
+            return memberInfo.getMember();
         }
 
         return null;

@@ -10,6 +10,7 @@ import com.thxforservice.global.rests.JSONData;
 import com.thxforservice.member.MemberUtil;
 import com.thxforservice.member.entities.Member;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,10 +47,8 @@ public class CounselingController {
     private final CounselingCancelService cancelService;
 
     @Operation(summary = "개인 상담 신청", description = "개인 상담 신청을 처리합니다.", method = "POST")
-    @Parameters({
-
-    })
     @ApiResponse(responseCode = "201", description = "개인 상담 신청 성공")
+    @Parameter(name = "RequestCounselingApply", description = "상담 신청 양식", required = true)
     @PostMapping("/apply")
     public ResponseEntity<Void> apply(@Valid @RequestBody RequestCounselingApply form, Errors errors) {
 
@@ -70,7 +69,7 @@ public class CounselingController {
         // HTTP 응답 상태를 생성 - 상담 신청이 성공했음을 나타내기 위해 201(Created) 상태 코드를 설정
         HttpStatus status = HttpStatus.CREATED;
 
-        // JSON 응답 생성 - counseling 데이터를 JSON으로 변환하여 응답 본문에 포함합니다.
+        // JSON 응답 생성 - counseling 데이터를 JSON으로 변환하여 응답 본문에 포함
         JSONData jsonData = new JSONData(counseling);
 
         // 응답 상태를 설정 (201 Created 상태 코드로 설정)
@@ -81,6 +80,7 @@ public class CounselingController {
     }
 
     @Operation(summary = "개인 상담 목록 조회", description = "로그인한 사용자의 개인 상담 목록을 조회합니다.", method = "GET")
+    @Parameter(name = "CounselingSearch", description = "검색 조건", required = false)
     @ApiResponse(responseCode = "200", description = "개인 상담 목록 조회 성공")
     @GetMapping("/list")
     public JSONData List(CounselingSearch search) {
@@ -96,7 +96,8 @@ public class CounselingController {
 
     @Operation(summary = "개인 상담 상세 조회", description = "개인 상담의 상세 정보를 조회합니다.", method = "GET")
     @ApiResponse(responseCode = "200", description = "개인 상담 상세 조회 성공")
-    @GetMapping("/cs/info")
+    @Parameter(name = "cSeq", description = "상담 ID", required = true, example = "1")
+    @GetMapping("/list/{cSeq}")
     public JSONData info(@PathVariable("cSeq") Long cSeq) {
 
         Counseling counseling = infoService.get(cSeq, true);
@@ -115,6 +116,7 @@ public class CounselingController {
 
     @Operation(summary = "상담사 평점 조회", description = "상담사의 평점을 조회합니다.", method = "GET")
     @ApiResponse(responseCode = "200", description = "상담사 평점 조회 성공")
+    @Parameter(name = "cSeq", description = "상담 ID", required = true, example = "1")
     @GetMapping("/rating")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData getRating() {

@@ -12,6 +12,7 @@ import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.JSONData;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -104,6 +105,7 @@ public class CounselingAdminController {
     /* 개별 상담 S */
     @Operation(summary = "상담사 예약 조회", method = "GET")
     @GetMapping("/cs/list")
+    @Parameter(name = "CounselingSearch", description = "상담 검색 조건", required = false)
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData csList(CounselingSearch search) {
 
@@ -114,6 +116,7 @@ public class CounselingAdminController {
 
     @Operation(summary = "상담사 예약 상세 조회", method = "GET")
     @ApiResponse(responseCode = "201")
+    @Parameter(name = "cSeq", description = "상담 ID", required = true, example = "1")
     @GetMapping("/cs/info/{cSeq}")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData csInfo(@PathVariable("cSeq") Long cSeq) {
@@ -124,6 +127,7 @@ public class CounselingAdminController {
     }
 
     @Operation(summary = "상담사 예약 상태 변경", method = "POST")
+    @Parameter(name = "RequestCsChange", description = "상담 상태 변경 요청 폼", required = true)
     @PostMapping("/cs/status")
     @PreAuthorize("hasAnyAuthority(('COUNSELOR'))")
     public void CsChangeStatus(@Valid @RequestBody RequestCsChange form, Errors errors) {
@@ -133,7 +137,7 @@ public class CounselingAdminController {
         counselingStatusService.change(form.getCSeq(), Status.valueOf(form.getStatus()));
     }
 
-
     /* 개별 상담 E */
+
 
 }
