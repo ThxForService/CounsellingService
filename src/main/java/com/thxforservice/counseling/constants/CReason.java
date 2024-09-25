@@ -1,5 +1,7 @@
 package com.thxforservice.counseling.constants;
 
+
+
 public enum CReason {
     VOLUNTARY("자발적"),
     RECOMMENDED("권유");
