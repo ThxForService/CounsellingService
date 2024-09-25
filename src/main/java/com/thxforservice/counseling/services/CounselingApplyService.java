@@ -44,13 +44,13 @@ public class CounselingApplyService {
         }
 
         // studentNo로 기존 상담이 있는지 확인
-        Long studentNo = form.getStudentNo();
+//        Long studentNo = form.getStudentNo();
 //        Counseling findCounseling = counselingRepository.findById(studentNo).orElseThrow(CounselingNotFoundException::new);
 
         // 상담 이력이 있으면 기존 Gid, 없으면 Gid 생성
 //        String gid = (findCounseling != null) ? findCounseling.getGid() : generateGID(studentNo);
 
-        String gid = generateGID(studentNo);
+//        String gid = generateGID(studentNo);
 
         /* 잊지마라 너의 부족함을 S */
 //        if (findCounseling != null) {
@@ -68,7 +68,7 @@ public class CounselingApplyService {
 
         // 새로운 상담 예약 생성
         Counseling counseling = Counseling.builder()
-                .gid(gid)  // GID 설정
+//                .gid(gid)  // GID 설정
                 .username(form.getUsername()) // 내담자 이름
                 .studentNo(form.getStudentNo()) // 학번 설정
                 .cCase(form.getCCase()) // 상담 유형
