@@ -25,7 +25,7 @@ public class Counseling extends BaseEntity {
     @GeneratedValue
     private Long cSeq;
 
-    @Column(length = 45, nullable = false)
+    @Column(length = 45)
     private String gid; // 회기
 
     @Column(nullable = false)
