@@ -6,6 +6,7 @@ import com.thxforservice.counseling.controllers.RequestCounselingApply;
 import com.thxforservice.counseling.entities.Counseling;
 import com.thxforservice.counseling.entities.QCounseling;
 import com.thxforservice.counseling.repositories.CounselingRepository;
+import com.thxforservice.counseling.repositories.GroupCounselingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class CounselingValidator implements Validator {
 
     private final JPAQueryFactory queryFactory;
+    private final GroupCounselingRepository repository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -52,7 +54,8 @@ public class CounselingValidator implements Validator {
         QCounseling counseling = QCounseling.counseling;
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(counseling.rDate.eq(form.getRDate()))
-                .and(counseling.rTime.eq(form.getRTime()));
+                .and(counseling.rTime.eq(form.getRTime()))
+                .and(counseling.studentNo.eq(form.getStudentNo()));
 
         List<Counseling> dateVerification = queryFactory.selectFrom(counseling)
                 .where(builder)
