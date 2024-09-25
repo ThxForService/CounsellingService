@@ -68,7 +68,7 @@ public class CounselingApplyService {
         Counseling counseling = Counseling.builder()
                 .gid(gid)  // GID 설정
                 .username(form.getUsername()) // 내담자 이름
-                .studentNo(studentNo) // 학번 설정
+                .studentNo(form.getStudentNo()) // 학번 설정
                 .cCase(form.getCCase()) // 상담 유형
                 .customCase(form.getCustomCase()) // 기타 선택시 입력
                 .cReason(form.getCReason()) // 상담 경위
