@@ -45,7 +45,7 @@ public class CounselingController {
     private final MemberUtil memberUtil;
     private final CounselingStatusService statusService;
     private final CounselingCancelService cancelService;
-//
+
     @Operation(summary = "개인 상담 신청", description = "개인 상담 신청을 처리합니다.", method = "POST")
     @ApiResponse(responseCode = "201", description = "개인 상담 신청 성공")
     @Parameter(name = "RequestCounselingApply", description = "상담 신청 양식", required = true)
