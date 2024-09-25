@@ -37,7 +37,6 @@ public class RequestCounselingApply{
     @JsonFormat(pattern = "HH:mm")
     private LocalTime rTime;
 
-    @NotNull
     private CReason cReason;
 
     private CCase cCase;
