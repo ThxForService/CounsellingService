@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thxforservice.global.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,8 @@ public class GroupCounseling extends BaseEntity { // 신청 결과
     @GeneratedValue
     private Long pgmRegSeq; // 신청 일련 번호
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(name="pgmSeq")
     private GroupProgram program;
 
