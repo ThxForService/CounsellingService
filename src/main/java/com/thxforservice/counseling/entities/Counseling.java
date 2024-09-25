@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thxforservice.counseling.constants.CCase;
 import com.thxforservice.counseling.constants.CReason;
 import com.thxforservice.counseling.constants.Status;
@@ -28,9 +29,11 @@ public class Counseling extends BaseEntity {
     private String gid; // 회기
 
     @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate rDate; // 예약 일자
 
     @Column(nullable = false)
+    @JsonFormat(pattern="HH:mm")
     private LocalTime rTime; // 예약 시간
 
     @Enumerated(EnumType.STRING)
