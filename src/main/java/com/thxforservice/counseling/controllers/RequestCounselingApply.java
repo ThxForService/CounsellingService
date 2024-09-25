@@ -17,7 +17,7 @@ import java.time.LocalTime;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RequestCounselingApply extends RequestGroupCounselingApply{
+public class RequestCounselingApply{
     @NotBlank
     private String studentNo;
 
