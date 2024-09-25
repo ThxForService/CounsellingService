@@ -166,7 +166,7 @@ public class CounselingGroupController {
     /* 집단 상담의 상담사 E */
 
     @Operation(summary = "상담사 평점 - 집단 상담")
-    @GetMapping("/group/rating/")
+    @GetMapping("/group/rating")
     @PreAuthorize("hasAnyAuthority('COUNSELOR')")
     public JSONData getRating() {
 
