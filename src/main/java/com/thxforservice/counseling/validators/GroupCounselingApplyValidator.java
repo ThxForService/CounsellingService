@@ -27,6 +27,7 @@ public class GroupCounselingApplyValidator implements Validator {
             return;
         }
 
+        // 한 사람의 중복 신청 통제
         RequestGroupCounselingApply form = (RequestGroupCounselingApply) target;
         Long pgmSeq = form.getPgmSeq();
         Long studentNo = form.getStudentNo();
@@ -39,5 +40,7 @@ public class GroupCounselingApplyValidator implements Validator {
         if (repository.exists(builder)) {
             errors.reject("Exists");
         }
+
+        //
     }
 }
