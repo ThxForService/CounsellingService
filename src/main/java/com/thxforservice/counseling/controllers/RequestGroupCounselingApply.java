@@ -27,5 +27,8 @@ public class RequestGroupCounselingApply {
     private String department; // 학과
 
     private String email;
+
     private String mobile;
+
+    private String status;
 }

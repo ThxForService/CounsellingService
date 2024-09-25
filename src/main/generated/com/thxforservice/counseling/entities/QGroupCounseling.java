@@ -51,6 +51,8 @@ public class QGroupCounseling extends EntityPathBase<GroupCounseling> {
 
     public final NumberPath<Integer> rating = createNumber("rating", Integer.class);
 
+    public final EnumPath<com.thxforservice.counseling.constants.Status> status = createEnum("status", com.thxforservice.counseling.constants.Status.class);
+
     public final NumberPath<Long> studentNo = createNumber("studentNo", Long.class);
 
     public final StringPath username = createString("username");

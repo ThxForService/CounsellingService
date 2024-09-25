@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.thxforservice.counseling.constants.CCase;
 import com.thxforservice.counseling.constants.CReason;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,18 +16,20 @@ import java.time.LocalTime;
  *
  */
 @Data
-@JsonIgnoreProperties
-public class RequestCounselingApply extends RequestGroupCounselingApply{
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class RequestCounselingApply{
 
-    // 상담 번호 - 수정시 필요함, Validator, 개인상담땐 필요없음 집단커맨드에는 있어야함
-    private Long cSeq;
+    @NotNull
+    private Long studentNo;
 
     @NotBlank
-    private CReason cReason; // 상담 경위
+    private String username;
 
-    private CCase cCase; // 상담 유형
+    @NotBlank
+    private String email;
 
-    private String customCase; // 기타 선택시 값 입력
+    @NotBlank
+    private String mobile;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate rDate;
@@ -34,4 +37,9 @@ public class RequestCounselingApply extends RequestGroupCounselingApply{
     @JsonFormat(pattern = "HH:mm")
     private LocalTime rTime;
 
+    private CReason cReason;
+
+    private CCase cCase;
+
+    private String customCase;
 }
