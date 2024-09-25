@@ -41,7 +41,6 @@ public class Counseling extends BaseEntity {
     private CReason cReason; //상담경위
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private CCase cCase;  //상담유형
 
     private String customCase;
