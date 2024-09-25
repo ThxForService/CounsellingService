@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.services;
 
+import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.controllers.RequestGroupCounselingApply;
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
@@ -20,6 +21,7 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
     private final GroupProgramRepository programRepository;
     private final MemberUtil memberUtil;
     private final GroupCounselingRepository counselingRepository;
+    private final GroupCounselingStatusService statusService;
 
     public GroupCounseling apply(RequestGroupCounselingApply form) {
 
@@ -44,7 +46,6 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
 
         Member member = memberUtil.getMember();
 
-
         GroupCounseling groupCounseling = GroupCounseling.builder()
                 .program(program)
                 .studentNo(member.getStudentNo())
@@ -52,12 +53,17 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
                 .grade(member.getGrade())
                 .department(member.getDepartment())
                 .email(member.getEmail())
-                .mobile(member.getMobile()).build();
+                .mobile(member.getMobile())
+                        .status(Status.valueOf(form.getStatus())).
+                build();
+
 
 
         counselingRepository.saveAndFlush(groupCounseling);
 
         programRepository.saveAndFlush(program);
+
+        statusService.change2(groupCounseling.getPgmRegSeq(), Status.APPLY);
 
 
         return groupCounseling;

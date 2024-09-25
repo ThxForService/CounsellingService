@@ -2,6 +2,7 @@ package com.thxforservice.counseling.services;
 
 
 import com.thxforservice.counseling.constants.ProgramStatus;
+import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.controllers.RequestProgramUpdate;
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.exceptions.GroupCounselingNotFoundException;
@@ -27,6 +28,16 @@ public class GroupCounselingStatusService {
         counseling.getProgram().setStatus(status);
         counselingRepository.saveAndFlush(counseling);
 
+    }
+
+    public void change2(Long pgmRegSeq, Status status) {
+        GroupCounseling counseling = infoService.getCounseling(pgmRegSeq);
+        Status prevStatus = counseling.getStatus();
+
+        if (prevStatus != status) { //기존 상태와 동일하면 처리 x
+            counseling.setStatus(status);
+            counselingRepository.saveAndFlush(counseling);
+        }
     }
 
     // 상담사 - 참석 여부 수정 + 상담 일지

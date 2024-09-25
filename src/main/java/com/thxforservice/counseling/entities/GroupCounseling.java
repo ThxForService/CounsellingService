@@ -1,6 +1,7 @@
 package com.thxforservice.counseling.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.global.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,5 +39,9 @@ public class GroupCounseling extends BaseEntity { // 신청 결과
     private String counselorLog; // 상담 일지
 
     private Integer rating;  // 별점 (1-5 사이의 값)
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status; // 예약 상태
 
 }
