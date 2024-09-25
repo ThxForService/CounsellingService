@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.controllers;
 
+import com.thxforservice.counseling.constants.ProgramStatus;
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
 import com.thxforservice.counseling.services.GroupCounselingApplyService;
@@ -61,6 +62,7 @@ public class CounselingGroupController {
     private final GroupCounselingApplyValidator applyValidator;
     private final Utils utils;
 
+
     @Operation(summary = "집단 상담(프로그램) 정보 단일 조회", method = "GET")
     @ApiResponse(responseCode = "200")
     @Parameter(name = "pgmSeq", required = true, description = "경로변수, 집단 상담 정보 등록 번호")
@@ -76,6 +78,9 @@ public class CounselingGroupController {
     @ApiResponse(responseCode = "200")
     @GetMapping("/program/info")
     public JSONData groupList(@ModelAttribute GroupCounselingSearch search) {
+        if (!memberUtil.isAdmin()) {
+            search.setProgramStatus(List.of(ProgramStatus.READY.name()));
+        }
 
         ListData<GroupProgram> listData = groupCounselingInfoService.getGroupProgramList(search);
 
