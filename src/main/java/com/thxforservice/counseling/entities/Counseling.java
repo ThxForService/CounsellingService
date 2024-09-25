@@ -51,7 +51,7 @@ public class Counseling extends BaseEntity {
     @Column(nullable = false, length = 65)
     private Long studentNo; // 학번
 
-    @Column(nullable = false, length = 65)
+    @Column( length = 65)
     private String empNo; // 사번
 
     @Column(nullable = false, length = 65)
