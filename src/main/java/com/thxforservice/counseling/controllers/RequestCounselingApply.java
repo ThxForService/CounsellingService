@@ -19,7 +19,7 @@ import java.time.LocalTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestCounselingApply{
 
-    @NotBlank
+    @NotNull
     private Long studentNo;
 
     @NotBlank
