@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.thxforservice.counseling.constants.CCase;
 import com.thxforservice.counseling.constants.CReason;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ public class RequestCounselingApply extends RequestGroupCounselingApply{
     // 상담 번호 - 수정시 필요함, Validator, 개인상담땐 필요없음 집단커맨드에는 있어야함
     private Long cSeq;
 
-    @NotBlank
+    @NotNull
     private CReason cReason; // 상담 경위
 
     private CCase cCase; // 상담 유형
