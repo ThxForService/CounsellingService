@@ -6,6 +6,7 @@ import com.thxforservice.counseling.services.GroupCounselingApplyService;
 import com.thxforservice.counseling.services.GroupCounselingCancelService;
 import com.thxforservice.counseling.services.GroupCounselingInfoService;
 import com.thxforservice.counseling.services.GroupCounselingStatusService;
+import com.thxforservice.counseling.validators.GroupCounselingApplyValidator;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
 import com.thxforservice.global.exceptions.BadRequestException;
@@ -33,6 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/group")
 public class CounselingGroupController {
+
     /**
      * ------사용자---------
      * 1. 집단 상담 프로그램 신청(예약) - POST program/apply
@@ -56,6 +58,7 @@ public class CounselingGroupController {
     private final GroupCounselingStatusService counselingStatusService;
     private final GroupCounselingApplyService groupCounselingApplyService;
     private final GroupCounselingCancelService groupCounselingCancelService;
+    private final GroupCounselingApplyValidator applyValidator;
     private final Utils utils;
 
     @Operation(summary = "집단 상담(프로그램) 정보 단일 조회", method = "GET")
@@ -88,7 +91,8 @@ public class CounselingGroupController {
     @PostMapping("/program/apply/{pgmSeq}")
     public ResponseEntity<JSONData> groupApply(@PathVariable("pgmSeq") Long pgmSeq, @Valid @RequestBody RequestGroupCounselingApply form, Errors errors) {
 
-        // 추가 검증 - validator
+        applyValidator.validate(form, errors);
+
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
