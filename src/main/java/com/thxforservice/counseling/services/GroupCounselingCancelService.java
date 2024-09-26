@@ -1,5 +1,7 @@
 package com.thxforservice.counseling.services;
 
+import com.thxforservice.counseling.constants.Status;
+import com.thxforservice.counseling.entities.Counseling;
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.exceptions.GroupCounselingNotFoundException;
 import com.thxforservice.counseling.repositories.GroupCounselingRepository;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 public class GroupCounselingCancelService {
     private final GroupCounselingRepository repository;
     private final MemberUtil memberUtil;
+    private final GroupCounselingStatusService statusService;
     public GroupCounseling cancel(Long pgmRegSeq) {
 
         /**
@@ -34,10 +37,12 @@ public class GroupCounselingCancelService {
         //3. 해당 예약이 본인이 예약 했는지 확인
         if(counseling.getEmail() != memberUtil.getMember().getEmail()) throw new UnAuthorizedException();
 
-
-        counseling.setDeletedAt(LocalDateTime.now());
+        repository.deleteById(counseling.getPgmRegSeq());
         repository.saveAndFlush(counseling);
+
+
 
         return counseling;
     }
+
 }
