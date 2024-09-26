@@ -1,6 +1,7 @@
 package com.thxforservice.counseling.services;
 
 import com.querydsl.core.BooleanBuilder;
+import com.thxforservice.counseling.constants.ProgramStatus;
 import com.thxforservice.counseling.controllers.GroupCounselingSearch;
 import com.thxforservice.counseling.entities.GroupCounseling;
 import com.thxforservice.counseling.entities.GroupProgram;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.domain.Sort.Order.desc;
@@ -99,6 +101,12 @@ public class GroupCounselingInfoService {
 
         if (programStartDate != null) {
             andBuilder.and(groupProgram.pgmStartDate.goe(programStartDate));
+        }
+
+        List<String> programStatus = search.getProgramStatus();
+        if (programStatus != null && !programStatus.isEmpty()) {
+            List<ProgramStatus> statuses = programStatus.stream().map(ProgramStatus::valueOf).toList();
+            andBuilder.and(groupProgram.status.in(statuses));
         }
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
