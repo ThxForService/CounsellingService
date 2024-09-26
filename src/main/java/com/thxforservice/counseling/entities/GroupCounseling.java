@@ -1,5 +1,6 @@
 package com.thxforservice.counseling.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.global.entities.BaseEntity;
@@ -8,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -43,5 +46,12 @@ public class GroupCounseling extends BaseEntity { // 신청 결과
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status; // 예약 상태
+
+    @Transient
+    private String pgmNm;
+
+    @Transient
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
+    private LocalDateTime pgmStartDate;
 
 }

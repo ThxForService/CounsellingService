@@ -75,7 +75,9 @@ public class GroupCounselingInfoService {
     }
 
     private void addInfoCounseling(GroupCounseling counseling) {
-
+        GroupProgram groupProgram = counseling.getProgram();
+        counseling.setPgmNm(groupProgram.getPgmNm());
+        counseling.setPgmStartDate(groupProgram.getPgmStartDate());
     }
 
     // 집단 상담 프로그램 목록 + 페이지네이션 + 검색
@@ -148,7 +150,10 @@ public class GroupCounselingInfoService {
 
         Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
 
-        return new ListData<>(data.getContent(), pagination);
+        List<GroupCounseling> items = data.getContent();
+        items.forEach(this::addCounselorInfo);
+
+        return new ListData<>(items, pagination);
     }
 
     // 집단 상담 프로그램 삭제
