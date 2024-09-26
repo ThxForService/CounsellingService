@@ -48,7 +48,7 @@ public class GroupCounselingInfoService {
         QGroupProgram groupProgram= QGroupProgram.groupProgram;
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(groupProgram.pgmSeq.eq(pgmSeq))
-                .and(groupProgram.isNull());
+                .and(groupProgram.deletedAt.isNull());
 
         GroupProgram program = programRepository.findById(pgmSeq)
                 .orElseThrow(GroupProgramNotFoundException::new);
@@ -89,7 +89,7 @@ public class GroupCounselingInfoService {
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         QGroupProgram groupProgram = QGroupProgram.groupProgram;
-        andBuilder.and(groupProgram.isNull());
+        andBuilder.and(groupProgram.deletedAt.isNull());
 
         String skey = search.getSkey(); // 검색 키워드
         if (StringUtils.hasText(skey)) {
