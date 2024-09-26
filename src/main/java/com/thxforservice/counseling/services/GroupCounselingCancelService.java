@@ -30,6 +30,7 @@ public class GroupCounselingCancelService {
 
         //1. 해당 예약이 존재 하는지 조회
         GroupCounseling counseling = repository.findById(pgmRegSeq).orElseThrow(GroupCounselingNotFoundException::new);
+        System.out.println(counseling);
 
         //2. 해당 예약이 이미 취소상태인지 확인
         if(counseling.getDeletedAt() != null) throw new GroupCounselingNotFoundException();
@@ -38,8 +39,6 @@ public class GroupCounselingCancelService {
         //if(counseling.getEmail() != memberUtil.getMember().getEmail()) throw new UnAuthorizedException();
 
         repository.deleteById(counseling.getPgmRegSeq());
-        repository.saveAndFlush(counseling);
-
 
 
         return counseling;
