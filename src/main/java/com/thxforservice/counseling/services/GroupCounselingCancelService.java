@@ -35,7 +35,7 @@ public class GroupCounselingCancelService {
         if(counseling.getDeletedAt() != null) throw new GroupCounselingNotFoundException();
 
         //3. 해당 예약이 본인이 예약 했는지 확인
-        if(counseling.getEmail() != memberUtil.getMember().getEmail()) throw new UnAuthorizedException();
+        //if(counseling.getEmail() != memberUtil.getMember().getEmail()) throw new UnAuthorizedException();
 
         repository.deleteById(counseling.getPgmRegSeq());
         repository.saveAndFlush(counseling);
