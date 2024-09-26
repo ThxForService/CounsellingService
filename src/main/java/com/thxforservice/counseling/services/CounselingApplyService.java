@@ -1,20 +1,16 @@
 package com.thxforservice.counseling.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.thxforservice.counseling.constants.CCase;
 import com.thxforservice.counseling.constants.Status;
 import com.thxforservice.counseling.controllers.RequestCounselingApply;
 import com.thxforservice.counseling.entities.Counseling;
-import com.thxforservice.counseling.entities.QCounseling;
 import com.thxforservice.counseling.exceptions.CounselingNotFoundException;
 import com.thxforservice.counseling.repositories.CounselingRepository;
 import com.thxforservice.global.exceptions.BadRequestException;
 import com.thxforservice.global.rests.ApiRequest;
 import com.thxforservice.member.MemberUtil;
 import com.thxforservice.member.entities.Member;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

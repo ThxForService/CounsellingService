@@ -1,7 +1,10 @@
 package com.thxforservice.counseling.controllers;
 
 import com.thxforservice.counseling.entities.Counseling;
-import com.thxforservice.counseling.services.*;
+import com.thxforservice.counseling.services.CounselingApplyService;
+import com.thxforservice.counseling.services.CounselingCancelService;
+import com.thxforservice.counseling.services.CounselingInfoService;
+import com.thxforservice.counseling.services.CounselingStatusService;
 import com.thxforservice.counseling.validators.CounselingValidator;
 import com.thxforservice.global.ListData;
 import com.thxforservice.global.Utils;
@@ -11,7 +14,6 @@ import com.thxforservice.member.MemberUtil;
 import com.thxforservice.member.entities.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -64,7 +66,7 @@ public class CounselingController {
         Counseling counseling = applyService.apply(form);
 
         // 예약 완료 후 상담사 배정
-//        applyService.applyRandom(counseling.getCSeq());
+        applyService.applyRandom(counseling.getCSeq());
 
         // HTTP 응답 상태를 생성 - 상담 신청이 성공했음을 나타내기 위해 201(Created) 상태 코드를 설정
         HttpStatus status = HttpStatus.CREATED;

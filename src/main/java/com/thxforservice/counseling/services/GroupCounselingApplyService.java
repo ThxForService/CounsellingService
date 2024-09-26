@@ -54,9 +54,8 @@ public class GroupCounselingApplyService { //신청하는 거 + 신청목록 조
                 .department(member.getDepartment())
                 .email(member.getEmail())
                 .mobile(member.getMobile())
-                        .status(Status.valueOf(form.getStatus())).
+                .status(Status.valueOf(form.getStatus())).
                 build();
-
 
 
         counselingRepository.saveAndFlush(groupCounseling);
