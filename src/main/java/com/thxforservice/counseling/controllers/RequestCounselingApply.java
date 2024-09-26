@@ -32,9 +32,11 @@ public class RequestCounselingApply{
     private String mobile;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private LocalDate rDate;
 
     @JsonFormat(pattern = "HH:mm")
+    @NotNull
     private LocalTime rTime;
 
     private CReason cReason;

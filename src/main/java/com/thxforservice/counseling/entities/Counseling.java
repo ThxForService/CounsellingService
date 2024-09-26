@@ -25,7 +25,7 @@ public class Counseling extends BaseEntity {
     @GeneratedValue
     private Long cSeq;
 
-    @Column(length = 45, nullable = false)
+    @Column(length = 45)
     private String gid; // 회기
 
     @Column(nullable = false)
@@ -51,7 +51,7 @@ public class Counseling extends BaseEntity {
     @Column(nullable = false, length = 65)
     private Long studentNo; // 학번
 
-    @Column(nullable = false, length = 65)
+    @Column(length = 65)
     private String empNo; // 사번
 
     @Column(nullable = false, length = 65)
@@ -61,7 +61,7 @@ public class Counseling extends BaseEntity {
     private String email; // 이메일
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column()
     private Status status; // 예약 상태
 
     @Lob
